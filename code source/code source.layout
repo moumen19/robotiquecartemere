@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_layout_file>
+	<ActiveTarget name="Release" />
+	<File name="BusI2C.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="16" topLine="0" />
+	</File>
+	<File name="BusI2C.hpp" open="1" top="0" tabpos="8">
+		<Cursor position="40" topLine="0" />
+	</File>
+	<File name="BusRS232.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="18" topLine="0" />
+	</File>
+	<File name="BusRS232.hpp" open="1" top="0" tabpos="7">
+		<Cursor position="89" topLine="0" />
+	</File>
+	<File name="Communication.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="23" topLine="0" />
+	</File>
+	<File name="Communication.hpp" open="0" top="0" tabpos="0">
+		<Cursor position="488" topLine="0" />
+	</File>
+	<File name="Constraint.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="20" topLine="0" />
+	</File>
+	<File name="Constraint.hpp" open="1" top="1" tabpos="6">
+		<Cursor position="103" topLine="0" />
+	</File>
+	<File name="Data.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="14" topLine="0" />
+	</File>
+	<File name="Data.hpp" open="1" top="0" tabpos="5">
+		<Cursor position="59" topLine="0" />
+	</File>
+	<File name="DataFusion.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="20" topLine="0" />
+	</File>
+	<File name="DataFusion.hpp" open="1" top="0" tabpos="4">
+		<Cursor position="75" topLine="0" />
+	</File>
+	<File name="Planning.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="18" topLine="0" />
+	</File>
+	<File name="Planning.hpp" open="1" top="0" tabpos="9">
+		<Cursor position="618" topLine="0" />
+	</File>
+	<File name="Robot.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="15" topLine="0" />
+	</File>
+	<File name="Robot.hpp" open="1" top="0" tabpos="3">
+		<Cursor position="282" topLine="0" />
+	</File>
+	<File name="Strategy.cpp" open="0" top="0" tabpos="0">
+		<Cursor position="18" topLine="0" />
+	</File>
+	<File name="Strategy.hpp" open="1" top="0" tabpos="2">
+		<Cursor position="170" topLine="0" />
+	</File>
+	<File name="main.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="177" topLine="0" />
+	</File>
+</CodeBlocks_layout_file>
