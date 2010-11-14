@@ -32,6 +32,24 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="BusI2C.cpp" />
+		<Unit filename="BusI2C.hpp" />
+		<Unit filename="BusRS232.cpp" />
+		<Unit filename="BusRS232.hpp" />
+		<Unit filename="Communication.cpp" />
+		<Unit filename="Communication.hpp" />
+		<Unit filename="Constraint.cpp" />
+		<Unit filename="Constraint.hpp" />
+		<Unit filename="Data.cpp" />
+		<Unit filename="Data.hpp" />
+		<Unit filename="DataFusion.cpp" />
+		<Unit filename="DataFusion.hpp" />
+		<Unit filename="Planning.cpp" />
+		<Unit filename="Planning.hpp" />
+		<Unit filename="Robot.cpp" />
+		<Unit filename="Robot.hpp" />
+		<Unit filename="Strategy.cpp" />
+		<Unit filename="Strategy.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

@@ -1,6 +1,0 @@
-
-Petit test du bon fonctionnement du SVN :)
-
-bien lu : olivier
-
-pareil (julien)
