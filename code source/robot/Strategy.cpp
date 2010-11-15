@@ -5,8 +5,7 @@ Strategy::Strategy(Data *environment, Constraint *constraint)
     a_constraint = constraint;
     a_environmentData = environment;
 
-    if(_DEBUG_MODE)
-        _DEBUG::addMessage("Strategy.cpp", "Initialisation du module de strategie", INFORMATION);
+    _DEBUG("Strategy.cpp", "Initialisation du module de strategie", INFORMATION);
 }
 
 Strategy::~Strategy()

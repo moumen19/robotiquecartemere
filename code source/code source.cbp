@@ -32,6 +32,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Debug.cpp" />
+		<Unit filename="Debug.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="robot\BusI2C.cpp" />
 		<Unit filename="robot\BusI2C.hpp" />

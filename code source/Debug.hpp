@@ -1,15 +1,45 @@
+/*
+ *
+ * Bureau d'étude Robotique M2 ISEN 2010-2011
+ *
+ * DELBERGUE Julien
+ * JACQUEL Olivier
+ * PIETTE Ferdinand (ferdinand.piette@gmail.com)
+ *
+ * Fichier Debug.hpp
+ *
+ */
+
 #ifndef DEF_DEBUG
 #define DEF_DEBUG
 
-    #define _DEBUG_MODE 1
-
+    // Inclusion des bibliothèques
     #include <iostream>
     #include <vector>
 
+
+//*************************************************************************************************
+
+    // Activation du mode debug
+    #define _DEBUG_MODE true
+
+//*************************************************************************************************
+
+
+    // Définition d'une macro ajoutant un message
+    #define _DEBUG(title, message, priority)    if(_DEBUG_MODE == true) \
+                                                    _DEBUG::addMessage(title, message, priority);
+
+    // Définition d'une macro exécutant une méthode statique
+    #define _DEBUG_EXEC(f)  if(_DEBUG_MODE == true) \
+                                _DEBUG::f;
+
+    // Définition des constantes de configurations
     typedef int Debug_Configuration;
     #define CONSOLE_DISPLAY 1
     #define FILE_DISPLAY 2
 
+    // Définition des constantes de priorités de messages
     enum Debug_Priority
     {
         FATAL,
@@ -17,14 +47,16 @@
         INFORMATION
     };
 
+    // Structure d'un message
     struct Message
     {
-        std::string title;
-        std::string content;
-        Debug_Priority priority;
-        bool isEmpty;
+        std::string title;          // Titre du message
+        std::string content;        // Contenu du message
+        Debug_Priority priority;    // Priorité du message
+        bool isEmpty;               // Validité du message
     } typedef Message;
 
+    // Classe de débuggage
     class _DEBUG
     {
         public:

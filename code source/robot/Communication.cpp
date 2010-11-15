@@ -7,8 +7,7 @@ Communication::Communication(Data *sensors, Data *environment, Constraint *const
     a_constraint = constraint;
     a_planning = planning;
 
-    if(_DEBUG_MODE)
-        _DEBUG::addMessage("Communication.cpp", "Initialisation du module de communication", INFORMATION);
+    _DEBUG("Communication.cpp", "Initialisation du module de communication", INFORMATION);
 }
 
 Communication::~Communication()
