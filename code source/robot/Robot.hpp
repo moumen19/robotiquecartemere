@@ -1,6 +1,8 @@
 #ifndef DEF_ROBOT
 #define DEF_ROBOT
 
+    #include "../Debug.hpp"
+
     #include "Data.hpp"
     #include "Planning.hpp"
     #include "Constraint.hpp"
@@ -14,7 +16,6 @@
             Robot();
             ~Robot();
 
-            void init();
             void interruptuion_arret_urgence();
 
             void run();

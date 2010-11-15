@@ -32,25 +32,25 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="BusI2C.cpp" />
-		<Unit filename="BusI2C.hpp" />
-		<Unit filename="BusRS232.cpp" />
-		<Unit filename="BusRS232.hpp" />
-		<Unit filename="Communication.cpp" />
-		<Unit filename="Communication.hpp" />
-		<Unit filename="Constraint.cpp" />
-		<Unit filename="Constraint.hpp" />
-		<Unit filename="Data.cpp" />
-		<Unit filename="Data.hpp" />
-		<Unit filename="DataFusion.cpp" />
-		<Unit filename="DataFusion.hpp" />
-		<Unit filename="Planning.cpp" />
-		<Unit filename="Planning.hpp" />
-		<Unit filename="Robot.cpp" />
-		<Unit filename="Robot.hpp" />
-		<Unit filename="Strategy.cpp" />
-		<Unit filename="Strategy.hpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="robot\BusI2C.cpp" />
+		<Unit filename="robot\BusI2C.hpp" />
+		<Unit filename="robot\BusRS232.cpp" />
+		<Unit filename="robot\BusRS232.hpp" />
+		<Unit filename="robot\Communication.cpp" />
+		<Unit filename="robot\Communication.hpp" />
+		<Unit filename="robot\Constraint.cpp" />
+		<Unit filename="robot\Constraint.hpp" />
+		<Unit filename="robot\Data.cpp" />
+		<Unit filename="robot\Data.hpp" />
+		<Unit filename="robot\DataFusion.cpp" />
+		<Unit filename="robot\DataFusion.hpp" />
+		<Unit filename="robot\Planning.cpp" />
+		<Unit filename="robot\Planning.hpp" />
+		<Unit filename="robot\Robot.cpp" />
+		<Unit filename="robot\Robot.hpp" />
+		<Unit filename="robot\Strategy.cpp" />
+		<Unit filename="robot\Strategy.hpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />

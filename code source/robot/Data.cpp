@@ -2,7 +2,8 @@
 
 Data::Data()
 {
-
+    if(_DEBUG_MODE)
+        _DEBUG::addMessage("Data.cpp", "Initialisation du module de stockage de donnees", INFORMATION);
 }
 
 Data::~Data()
