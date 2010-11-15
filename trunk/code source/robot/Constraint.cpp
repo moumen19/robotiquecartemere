@@ -2,8 +2,7 @@
 
 Constraint::Constraint()
 {
-    if(_DEBUG_MODE)
-        _DEBUG::addMessage("Constraint.cpp", "Initialisation du module de stockage des contraintes", INFORMATION);
+    _DEBUG("Constraint.cpp", "Initialisation du module de stockage des contraintes", INFORMATION);
 }
 
 Constraint::~Constraint()

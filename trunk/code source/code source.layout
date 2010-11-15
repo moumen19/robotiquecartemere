@@ -1,7 +1,67 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="main.cpp" open="1" top="1" tabpos="1">
-		<Cursor position="203" topLine="0" />
+	<File name="Debug.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="171" topLine="0" />
+	</File>
+	<File name="Debug.hpp" open="1" top="1" tabpos="2">
+		<Cursor position="173" topLine="0" />
+	</File>
+	<File name="main.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="183" topLine="0" />
+	</File>
+	<File name="robot\BusI2C.cpp" open="1" top="0" tabpos="12">
+		<Cursor position="50" topLine="0" />
+	</File>
+	<File name="robot\BusI2C.hpp" open="0" top="0" tabpos="0">
+		<Cursor position="94" topLine="0" />
+	</File>
+	<File name="robot\BusRS232.cpp" open="1" top="0" tabpos="11">
+		<Cursor position="56" topLine="0" />
+	</File>
+	<File name="robot\BusRS232.hpp" open="0" top="0" tabpos="0">
+		<Cursor position="69" topLine="0" />
+	</File>
+	<File name="robot\Communication.cpp" open="1" top="0" tabpos="10">
+		<Cursor position="277" topLine="0" />
+	</File>
+	<File name="robot\Communication.hpp" open="0" top="0" tabpos="0">
+		<Cursor position="79" topLine="0" />
+	</File>
+	<File name="robot\Constraint.cpp" open="1" top="0" tabpos="9">
+		<Cursor position="62" topLine="0" />
+	</File>
+	<File name="robot\Constraint.hpp" open="0" top="0" tabpos="0">
+		<Cursor position="73" topLine="0" />
+	</File>
+	<File name="robot\Data.cpp" open="1" top="0" tabpos="8">
+		<Cursor position="44" topLine="0" />
+	</File>
+	<File name="robot\Data.hpp" open="0" top="0" tabpos="0">
+		<Cursor position="90" topLine="0" />
+	</File>
+	<File name="robot\DataFusion.cpp" open="1" top="0" tabpos="7">
+		<Cursor position="168" topLine="0" />
+	</File>
+	<File name="robot\DataFusion.hpp" open="0" top="0" tabpos="0">
+		<Cursor position="46" topLine="0" />
+	</File>
+	<File name="robot\Planning.cpp" open="1" top="0" tabpos="6">
+		<Cursor position="223" topLine="0" />
+	</File>
+	<File name="robot\Planning.hpp" open="0" top="0" tabpos="0">
+		<Cursor position="69" topLine="0" />
+	</File>
+	<File name="robot\Robot.cpp" open="1" top="0" tabpos="5">
+		<Cursor position="469" topLine="0" />
+	</File>
+	<File name="robot\Robot.hpp" open="0" top="0" tabpos="0">
+		<Cursor position="38" topLine="0" />
+	</File>
+	<File name="robot\Strategy.cpp" open="1" top="0" tabpos="4">
+		<Cursor position="169" topLine="0" />
+	</File>
+	<File name="robot\Strategy.hpp" open="0" top="0" tabpos="0">
+		<Cursor position="42" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>

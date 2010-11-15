@@ -11,8 +11,7 @@ Robot::Robot()
     a_planning = new Planning(a_environmentData, a_constraint, a_strategy);
     a_communication = new Communication(a_sensorsData, a_environmentData, a_constraint, a_planning);
 
-    if(_DEBUG_MODE)
-        _DEBUG::addMessage("Robot.cpp", "Initialisation du robot", INFORMATION);
+    _DEBUG("Robot.cpp", "Initialisation du robot", INFORMATION);
 }
 
 Robot::~Robot()

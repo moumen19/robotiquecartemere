@@ -1,3 +1,15 @@
+/*
+ *
+ * Bureau d'étude Robotique M2 ISEN 2010-2011
+ *
+ * DELBERGUE Julien
+ * JACQUEL Olivier
+ * PIETTE Ferdinand (ferdinand.piette@gmail.com)
+ *
+ * Fichier main.cpp
+ *
+ */
+
 #include <iostream>
 
 #include "Debug.hpp"
@@ -8,15 +20,13 @@ using namespace std;
 int main()
 {
     // Configuration du mode Debug
-    if(_DEBUG_MODE)
-    {
-        _DEBUG::configuration(CONSOLE_DISPLAY | FILE_DISPLAY, "logs.txt");
-        _DEBUG::addMessage("Main.cpp", "Lancement du programme", INFORMATION);
-    }
+    _DEBUG_EXEC(configuration(CONSOLE_DISPLAY | FILE_DISPLAY, "logs.txt"));
+
+
+    _DEBUG("Main.cpp", "Lancement du programme", INFORMATION);
 
     // Création du robot
     Robot robot2010;
-
     // Lancement du calcul du robot
     while(1)
         robot2010.run();
