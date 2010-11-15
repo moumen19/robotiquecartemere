@@ -20,13 +20,13 @@
             void run();
 
         private:
-            Data a_sensorsData;
-            Data a_environmentData;
-            Planning a_planning;
-            Constraint a_constraint;
-            Strategy a_strategy;
-            DataFusion a_dataFusion;
-            Communication a_communication;
+            Data *a_sensorsData;
+            Data *a_environmentData;
+            Planning *a_planning;
+            Constraint *a_constraint;
+            Strategy *a_strategy;
+            DataFusion *a_dataFusion;
+            Communication *a_communication;
     };
 
 #endif

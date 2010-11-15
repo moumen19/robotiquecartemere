@@ -1,61 +1,61 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
-	<ActiveTarget name="Release" />
-	<File name="BusI2C.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="16" topLine="0" />
+	<ActiveTarget name="Debug" />
+	<File name="BusI2C.cpp" open="1" top="0" tabpos="19">
+		<Cursor position="116" topLine="0" />
 	</File>
-	<File name="BusI2C.hpp" open="1" top="0" tabpos="8">
+	<File name="BusI2C.hpp" open="1" top="0" tabpos="18">
+		<Cursor position="378" topLine="0" />
+	</File>
+	<File name="BusRS232.cpp" open="1" top="0" tabpos="17">
+		<Cursor position="57" topLine="0" />
+	</File>
+	<File name="BusRS232.hpp" open="1" top="0" tabpos="16">
+		<Cursor position="69" topLine="0" />
+	</File>
+	<File name="Communication.cpp" open="1" top="0" tabpos="15">
+		<Cursor position="355" topLine="0" />
+	</File>
+	<File name="Communication.hpp" open="1" top="0" tabpos="14">
+		<Cursor position="412" topLine="0" />
+	</File>
+	<File name="Constraint.cpp" open="1" top="0" tabpos="11">
+		<Cursor position="253" topLine="0" />
+	</File>
+	<File name="Constraint.hpp" open="1" top="0" tabpos="10">
+		<Cursor position="298" topLine="0" />
+	</File>
+	<File name="Data.cpp" open="1" top="0" tabpos="9">
 		<Cursor position="40" topLine="0" />
 	</File>
-	<File name="BusRS232.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="18" topLine="0" />
+	<File name="Data.hpp" open="1" top="1" tabpos="8">
+		<Cursor position="113" topLine="0" />
 	</File>
-	<File name="BusRS232.hpp" open="1" top="0" tabpos="7">
-		<Cursor position="89" topLine="0" />
-	</File>
-	<File name="Communication.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="23" topLine="0" />
-	</File>
-	<File name="Communication.hpp" open="0" top="0" tabpos="0">
-		<Cursor position="488" topLine="0" />
-	</File>
-	<File name="Constraint.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="20" topLine="0" />
-	</File>
-	<File name="Constraint.hpp" open="1" top="1" tabpos="6">
-		<Cursor position="103" topLine="0" />
-	</File>
-	<File name="Data.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="14" topLine="0" />
-	</File>
-	<File name="Data.hpp" open="1" top="0" tabpos="5">
-		<Cursor position="59" topLine="0" />
-	</File>
-	<File name="DataFusion.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="20" topLine="0" />
+	<File name="DataFusion.cpp" open="1" top="0" tabpos="5">
+		<Cursor position="86" topLine="0" />
 	</File>
 	<File name="DataFusion.hpp" open="1" top="0" tabpos="4">
-		<Cursor position="75" topLine="0" />
+		<Cursor position="270" topLine="0" />
 	</File>
-	<File name="Planning.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="18" topLine="0" />
+	<File name="Planning.cpp" open="1" top="0" tabpos="13">
+		<Cursor position="189" topLine="0" />
 	</File>
-	<File name="Planning.hpp" open="1" top="0" tabpos="9">
-		<Cursor position="618" topLine="0" />
+	<File name="Planning.hpp" open="1" top="0" tabpos="12">
+		<Cursor position="599" topLine="0" />
 	</File>
-	<File name="Robot.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="15" topLine="0" />
+	<File name="Robot.cpp" open="1" top="0" tabpos="3">
+		<Cursor position="82" topLine="0" />
 	</File>
-	<File name="Robot.hpp" open="1" top="0" tabpos="3">
-		<Cursor position="282" topLine="0" />
+	<File name="Robot.hpp" open="1" top="0" tabpos="2">
+		<Cursor position="649" topLine="0" />
 	</File>
-	<File name="Strategy.cpp" open="0" top="0" tabpos="0">
-		<Cursor position="18" topLine="0" />
+	<File name="Strategy.cpp" open="1" top="0" tabpos="7">
+		<Cursor position="147" topLine="0" />
 	</File>
-	<File name="Strategy.hpp" open="1" top="0" tabpos="2">
-		<Cursor position="170" topLine="0" />
+	<File name="Strategy.hpp" open="1" top="0" tabpos="6">
+		<Cursor position="200" topLine="0" />
 	</File>
 	<File name="main.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="177" topLine="0" />
+		<Cursor position="108" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>

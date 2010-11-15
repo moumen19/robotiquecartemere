@@ -6,12 +6,12 @@ using namespace std;
 
 int main()
 {
-    /*Robot robot2010;
+    Robot robot2010;
 
     robot2010.init();
 
     while(1)
-        robot2010.run();*/
+        robot2010.run();
 
     return 0;
 }
