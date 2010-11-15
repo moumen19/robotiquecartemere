@@ -1,30 +1,30 @@
 # depslib dependency file v1.0
-1289751819 source:d:\cours m2\robotique avancée\be\subversion\code source\busi2c.cpp
+1289823142 source:d:\cours m2\robotique avancée\be\subversion\code source\busi2c.cpp
 	"BusI2C.hpp"
 
 1289752176 d:\cours m2\robotique avancée\be\subversion\code source\busi2c.hpp
 	<string>
 
-1289751826 source:d:\cours m2\robotique avancée\be\subversion\code source\busrs232.cpp
+1289823159 source:d:\cours m2\robotique avancée\be\subversion\code source\busrs232.cpp
 	"BusRS232.hpp"
 
 1289752179 d:\cours m2\robotique avancée\be\subversion\code source\busrs232.hpp
 	<string>
 
-1289751832 source:d:\cours m2\robotique avancée\be\subversion\code source\communication.cpp
+1289854802 source:d:\cours m2\robotique avancée\be\subversion\code source\communication.cpp
 	"Communication.hpp"
 
-1289752230 d:\cours m2\robotique avancée\be\subversion\code source\communication.hpp
+1289854757 d:\cours m2\robotique avancée\be\subversion\code source\communication.hpp
 	<string>
 	"Data.hpp"
 	"Planning.hpp"
 	"BusRS232.hpp"
 	"BusI2C.hpp"
 
-1289752196 d:\cours m2\robotique avancée\be\subversion\code source\data.hpp
+1289855106 d:\cours m2\robotique avancée\be\subversion\code source\data.hpp
 	<vector>
 
-1289752278 d:\cours m2\robotique avancée\be\subversion\code source\planning.hpp
+1289854654 d:\cours m2\robotique avancée\be\subversion\code source\planning.hpp
 	<vector>
 	"Data.hpp"
 	"Constraint.hpp"
@@ -33,29 +33,29 @@
 1289752193 d:\cours m2\robotique avancée\be\subversion\code source\constraint.hpp
 	<vector>
 
-1289752205 d:\cours m2\robotique avancée\be\subversion\code source\strategy.hpp
+1289854608 d:\cours m2\robotique avancée\be\subversion\code source\strategy.hpp
 	"Constraint.hpp"
 	"Data.hpp"
 
-1289751838 source:d:\cours m2\robotique avancée\be\subversion\code source\constraint.cpp
+1289821563 source:d:\cours m2\robotique avancée\be\subversion\code source\constraint.cpp
 	"Constraint.hpp"
 
-1289751842 source:d:\cours m2\robotique avancée\be\subversion\code source\data.cpp
+1289821582 source:d:\cours m2\robotique avancée\be\subversion\code source\data.cpp
 	"Data.hpp"
 
-1289751846 source:d:\cours m2\robotique avancée\be\subversion\code source\datafusion.cpp
+1289854596 source:d:\cours m2\robotique avancée\be\subversion\code source\datafusion.cpp
 	"DataFusion.hpp"
 
-1289752198 d:\cours m2\robotique avancée\be\subversion\code source\datafusion.hpp
+1289854568 d:\cours m2\robotique avancée\be\subversion\code source\datafusion.hpp
 	"Data.hpp"
 
-1289751852 source:d:\cours m2\robotique avancée\be\subversion\code source\planning.cpp
+1289854689 source:d:\cours m2\robotique avancée\be\subversion\code source\planning.cpp
 	"Planning.hpp"
 
-1289751856 source:d:\cours m2\robotique avancée\be\subversion\code source\robot.cpp
+1289854559 source:d:\cours m2\robotique avancée\be\subversion\code source\robot.cpp
 	"Robot.hpp"
 
-1289752202 d:\cours m2\robotique avancée\be\subversion\code source\robot.hpp
+1289821835 d:\cours m2\robotique avancée\be\subversion\code source\robot.hpp
 	"Data.hpp"
 	"Planning.hpp"
 	"Constraint.hpp"
@@ -63,6 +63,10 @@
 	"DataFusion.hpp"
 	"Communication.hpp"
 
-1289751859 source:d:\cours m2\robotique avancée\be\subversion\code source\strategy.cpp
+1289854635 source:d:\cours m2\robotique avancée\be\subversion\code source\strategy.cpp
 	"Strategy.hpp"
+
+1289820690 source:d:\cours m2\robotique avancée\be\subversion\code source\main.cpp
+	<iostream>
+	"Robot.hpp"
 

@@ -20,7 +20,7 @@
     class Communication
     {
         public:
-            Communication(Data &, Data &, Planning &);
+            Communication(Data *, Data *, Constraint *, Planning *);
             ~Communication();
 
             void send(Port::Port, std::string);
@@ -29,9 +29,10 @@
         private:
             BusRS232 a_rs232;
             BusI2C a_i2c;
-            Data &a_sensorsData;
-            Data &a_environmentData;
-            Planning &a_planning;
+            Data *a_sensorsData;
+            Data *a_environmentData;
+            Constraint *a_constraint;
+            Planning *a_planning;
     };
 
 #endif
