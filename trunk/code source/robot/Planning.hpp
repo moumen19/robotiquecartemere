@@ -3,6 +3,8 @@
 
     #include <vector>
 
+    #include "../Debug.hpp"
+
     #include "Data.hpp"
     #include "Constraint.hpp"
     #include "Strategy.hpp"

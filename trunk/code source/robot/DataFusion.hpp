@@ -1,6 +1,8 @@
 #ifndef DEF_DATAFUSION
 #define DEF_DATAFUSION
 
+    #include "../Debug.hpp"
+
     #include "Data.hpp"
 
     class DataFusion

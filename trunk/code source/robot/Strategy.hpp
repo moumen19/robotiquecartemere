@@ -1,6 +1,8 @@
 #ifndef DEF_STRATEGY
 #define DEF_STRATEGY
 
+    #include "../Debug.hpp"
+
     #include "Constraint.hpp"
     #include "Data.hpp"
 

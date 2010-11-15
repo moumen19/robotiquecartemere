@@ -3,6 +3,8 @@
 
     #include <vector>
 
+    #include "../Debug.hpp"
+
     class Constraint
     {
         public:

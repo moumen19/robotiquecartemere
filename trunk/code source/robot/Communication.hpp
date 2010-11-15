@@ -3,6 +3,8 @@
 
     #include <string>
 
+    #include "../Debug.hpp"
+
     #include "Data.hpp"
     #include "Planning.hpp"
     #include "BusRS232.hpp"

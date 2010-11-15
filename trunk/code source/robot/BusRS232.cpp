@@ -2,7 +2,8 @@
 
 BusRS232::BusRS232()
 {
-
+    if(_DEBUG_MODE)
+        _DEBUG::addMessage("BusRS232.cpp", "Initialisation du module de communication par bus RS232", INFORMATION);
 }
 
 BusRS232::BusRS232(std::string port)

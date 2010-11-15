@@ -1,26 +1,25 @@
-#ifndef DEF_BUSI2C
-#define DEF_BUSI2C
+#ifndef DEF_BUSRS232
+#define DEF_BUSRS232
 
     #include <string>
 
-    class BusI2C
+    #include "../Debug.hpp"
+
+    class BusRS232
     {
         public:
-            BusI2C();
-            ~BusI2C();
+            BusRS232();
+            BusRS232(std::string);
+            ~BusRS232();
 
             bool open(std::string);
             void close();
-
-            int getSlave();
-            void setSlave(int);
 
             std::string receive();
             void send(std::string);
 
         private:
             int a_bus;
-            int a_slave;
     };
 
 #endif
