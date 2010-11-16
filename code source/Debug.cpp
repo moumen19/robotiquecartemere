@@ -16,10 +16,12 @@
 
     #include <fstream>
 
+    // Définition des Attributs statiques
     std::vector<Message> _DEBUG::a_messages;
     unsigned int _DEBUG::a_cursor = 0;
     Debug_Configuration _DEBUG::a_configuration = CONSOLE_DISPLAY;
     std::string _DEBUG::a_filename = "";
+    pthread_mutex_t _DEBUG::a_mutex = PTHREAD_MUTEX_INITIALIZER;
 
     void _DEBUG::addMessage(std::string title, std::string content, Debug_Priority priority)
     {
@@ -111,6 +113,16 @@
     int _DEBUG::getNumMessages()
     {
         return a_messages.size();
+    }
+
+    void _DEBUG::lock()
+    {
+         pthread_mutex_lock(&a_mutex);
+    }
+
+    void _DEBUG::unlock()
+    {
+         pthread_mutex_unlock(&a_mutex);
     }
 
 #endif

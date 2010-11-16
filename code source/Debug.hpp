@@ -16,6 +16,7 @@
     // Inclusion des bibliothèques
     #include <iostream>
     #include <vector>
+    #include <pthread.h>
 
 
 //*************************************************************************************************
@@ -28,7 +29,11 @@
 
     // Définition d'une macro ajoutant un message
     #define _DEBUG(title, message, priority)    if(_DEBUG_MODE == true) \
-                                                    _DEBUG::addMessage(title, message, priority);
+                                                { \
+                                                    _DEBUG::lock(); \
+                                                    _DEBUG::addMessage(title, message, priority); \
+                                                    _DEBUG::unlock(); \
+                                                }
 
     // Définition d'une macro exécutant une méthode statique
     #define _DEBUG_EXEC(f)  if(_DEBUG_MODE == true) \
@@ -66,12 +71,16 @@
             static Message getMessage(unsigned int);
             static Message getNextMessage();
             static int getNumMessages();
+            static void lock();
+            static void unlock();
 
         private:
             static std::vector<Message> a_messages;
             static unsigned int a_cursor;
             static Debug_Configuration a_configuration;
             static std::string a_filename;
+            static pthread_mutex_t a_mutex;
+
     };
 
 #endif
