@@ -1,3 +1,15 @@
+/*
+ *
+ * Bureau d'étude Robotique M2 ISEN 2010-2011
+ *
+ * DELBERGUE Julien
+ * JACQUEL Olivier
+ * PIETTE Ferdinand (ferdinand.piette@gmail.com)
+ *
+ * Fichier Communication.hpp
+ *
+ */
+
 #ifndef DEF_COMMUNICATION
 #define DEF_COMMUNICATION
 

@@ -2,13 +2,13 @@
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release" />
 	<File name="Debug.cpp" open="1" top="0" tabpos="3">
-		<Cursor position="2387" topLine="2" />
+		<Cursor position="184" topLine="0" />
 	</File>
 	<File name="Debug.hpp" open="1" top="0" tabpos="2">
-		<Cursor position="1039" topLine="21" />
+		<Cursor position="1039" topLine="0" />
 	</File>
 	<File name="main.cpp" open="1" top="0" tabpos="1">
-		<Cursor position="587" topLine="0" />
+		<Cursor position="602" topLine="0" />
 	</File>
 	<File name="robot\BusI2C.cpp" open="0" top="0" tabpos="12">
 		<Cursor position="50" topLine="0" />
@@ -23,10 +23,10 @@
 		<Cursor position="69" topLine="0" />
 	</File>
 	<File name="robot\Communication.cpp" open="1" top="0" tabpos="5">
-		<Cursor position="979" topLine="22" />
+		<Cursor position="179" topLine="0" />
 	</File>
 	<File name="robot\Communication.hpp" open="1" top="0" tabpos="4">
-		<Cursor position="515" topLine="5" />
+		<Cursor position="181" topLine="0" />
 	</File>
 	<File name="robot\Constraint.cpp" open="0" top="0" tabpos="9">
 		<Cursor position="62" topLine="0" />
@@ -34,11 +34,11 @@
 	<File name="robot\Constraint.hpp" open="0" top="0" tabpos="0">
 		<Cursor position="73" topLine="0" />
 	</File>
-	<File name="robot\Data.cpp" open="0" top="0" tabpos="8">
+	<File name="robot\Data.cpp" open="1" top="0" tabpos="9">
 		<Cursor position="44" topLine="0" />
 	</File>
-	<File name="robot\Data.hpp" open="0" top="0" tabpos="0">
-		<Cursor position="90" topLine="0" />
+	<File name="robot\Data.hpp" open="1" top="1" tabpos="8">
+		<Cursor position="485" topLine="0" />
 	</File>
 	<File name="robot\DataFusion.cpp" open="0" top="0" tabpos="7">
 		<Cursor position="168" topLine="0" />
@@ -52,11 +52,11 @@
 	<File name="robot\Planning.hpp" open="0" top="0" tabpos="0">
 		<Cursor position="69" topLine="0" />
 	</File>
-	<File name="robot\Robot.cpp" open="1" top="1" tabpos="6">
-		<Cursor position="1359" topLine="18" />
+	<File name="robot\Robot.cpp" open="1" top="0" tabpos="6">
+		<Cursor position="171" topLine="0" />
 	</File>
 	<File name="robot\Robot.hpp" open="1" top="0" tabpos="7">
-		<Cursor position="792" topLine="0" />
+		<Cursor position="173" topLine="0" />
 	</File>
 	<File name="robot\Strategy.cpp" open="0" top="0" tabpos="4">
 		<Cursor position="169" topLine="0" />

@@ -1,3 +1,15 @@
+/*
+ *
+ * Bureau d'étude Robotique M2 ISEN 2010-2011
+ *
+ * DELBERGUE Julien
+ * JACQUEL Olivier
+ * PIETTE Ferdinand (ferdinand.piette@gmail.com)
+ *
+ * Fichier Robot.hpp
+ *
+ */
+
 #ifndef DEF_ROBOT
 #define DEF_ROBOT
 
