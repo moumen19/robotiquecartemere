@@ -28,9 +28,8 @@ int main()
     // Création du robot
     Robot robot2010;
     // Lancement du calcul du robot
-    while(1)
-        robot2010.run();
-
+    robot2010.start();
+    robot2010.wait();
 
     return 0;
 }

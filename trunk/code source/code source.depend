@@ -66,7 +66,7 @@
 1289854635 source:d:\cours m2\robotique avancée\be\subversion\code source\strategy.cpp
 	"Strategy.hpp"
 
-1289862494 source:d:\cours m2\robotique avancée\be\subversion\code source\main.cpp
+1289929994 source:d:\cours m2\robotique avancée\be\subversion\code source\main.cpp
 	<iostream>
 	"Debug.hpp"
 	"./robot/Robot.hpp"
@@ -85,11 +85,13 @@
 	<string>
 	"../Debug.hpp"
 
-1289862173 source:d:\cours m2\robotique avancée\be\subversion\code source\robot\communication.cpp
+1289929836 source:d:\cours m2\robotique avancée\be\subversion\code source\robot\communication.cpp
 	"Communication.hpp"
+	<sstream>
 
-1289860797 d:\cours m2\robotique avancée\be\subversion\code source\robot\communication.hpp
+1289929549 d:\cours m2\robotique avancée\be\subversion\code source\robot\communication.hpp
 	<string>
+	<pthread.h>
 	"../Debug.hpp"
 	"Data.hpp"
 	"Planning.hpp"
@@ -132,10 +134,11 @@
 1289862146 source:d:\cours m2\robotique avancée\be\subversion\code source\robot\planning.cpp
 	"Planning.hpp"
 
-1289862136 source:d:\cours m2\robotique avancée\be\subversion\code source\robot\robot.cpp
+1289929245 source:d:\cours m2\robotique avancée\be\subversion\code source\robot\robot.cpp
 	"Robot.hpp"
+	<sstream>
 
-1289860576 d:\cours m2\robotique avancée\be\subversion\code source\robot\robot.hpp
+1289930377 d:\cours m2\robotique avancée\be\subversion\code source\robot\robot.hpp
 	"../Debug.hpp"
 	"Data.hpp"
 	"Planning.hpp"
@@ -147,11 +150,12 @@
 1289862140 source:d:\cours m2\robotique avancée\be\subversion\code source\robot\strategy.cpp
 	"Strategy.hpp"
 
-1289862719 d:\cours m2\robotique avancée\be\subversion\code source\debug.hpp
+1289912138 d:\cours m2\robotique avancée\be\subversion\code source\debug.hpp
 	<iostream>
 	<vector>
+	<pthread.h>
 
-1289859819 source:d:\cours m2\robotique avancée\be\subversion\code source\debug.cpp
+1289912193 source:d:\cours m2\robotique avancée\be\subversion\code source\debug.cpp
 	"Debug.hpp"
 	<fstream>
 

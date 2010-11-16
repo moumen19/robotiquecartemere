@@ -2,6 +2,7 @@
 #define DEF_COMMUNICATION
 
     #include <string>
+    #include <pthread.h>
 
     #include "../Debug.hpp"
 
@@ -28,6 +29,14 @@
             void send(Port::Port, std::string);
             void receive();
 
+            // Gestion du thread
+            bool isActive();
+            void start();
+            void stop();
+
+        protected:
+            static void * run(void *);
+
         private:
             BusRS232 a_rs232;
             BusI2C a_i2c;
@@ -35,6 +44,9 @@
             Data *a_environmentData;
             Constraint *a_constraint;
             Planning *a_planning;
+
+            pthread_t a_thread;
+            bool a_thread_active;
     };
 
 #endif

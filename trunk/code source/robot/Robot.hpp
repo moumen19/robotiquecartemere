@@ -1,6 +1,8 @@
 #ifndef DEF_ROBOT
 #define DEF_ROBOT
 
+    #include <pthread.h>
+
     #include "../Debug.hpp"
 
     #include "Data.hpp"
@@ -18,7 +20,14 @@
 
             void interruptuion_arret_urgence();
 
-            void run();
+            // Gestion du thread
+            bool isActive();
+            void start();
+            void stop();
+            void wait();
+
+        protected:
+            static void * run(void *);
 
         private:
             Data *a_sensorsData;
@@ -28,6 +37,9 @@
             Strategy *a_strategy;
             DataFusion *a_dataFusion;
             Communication *a_communication;
+
+            pthread_t a_thread;
+            bool a_thread_active;
     };
 
 #endif
