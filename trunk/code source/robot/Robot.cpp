@@ -1,3 +1,15 @@
+/*
+ *
+ * Bureau d'étude Robotique M2 ISEN 2010-2011
+ *
+ * DELBERGUE Julien
+ * JACQUEL Olivier
+ * PIETTE Ferdinand (ferdinand.piette@gmail.com)
+ *
+ * Fichier Robot.cpp
+ *
+ */
+
 #include "Robot.hpp"
 #include <sstream>
 
@@ -24,7 +36,7 @@ Robot::~Robot()
     if(a_communication->isActive())
         a_communication->stop();
     stop();
-    pthread_join(a_thread);
+    pthread_join(a_thread, NULL);
 }
 
 bool Robot::isActive()
@@ -36,6 +48,7 @@ void Robot::start()
 {
     a_thread_active = true;
     pthread_create(&a_thread, NULL, &Robot::run, (void *)this);
+    //run((void *)this);
 }
 
 void Robot::stop()

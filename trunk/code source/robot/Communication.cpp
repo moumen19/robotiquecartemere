@@ -1,3 +1,15 @@
+/*
+ *
+ * Bureau d'étude Robotique M2 ISEN 2010-2011
+ *
+ * DELBERGUE Julien
+ * JACQUEL Olivier
+ * PIETTE Ferdinand (ferdinand.piette@gmail.com)
+ *
+ * Fichier Communication.cpp
+ *
+ */
+
 #include "Communication.hpp"
 #include <sstream>
 
@@ -16,7 +28,7 @@ Communication::Communication(Data *sensors, Data *environment, Constraint *const
 Communication::~Communication()
 {
     stop();
-    pthread_join(a_thread);
+    pthread_join(a_thread, NULL);
 }
 
 void Communication::send(Port::Port port, std::string msg)
