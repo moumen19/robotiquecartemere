@@ -22,7 +22,7 @@ Communication::Communication(Data *sensors, Data *environment, Constraint *const
 
     a_thread_active = false;
 
-    _DEBUG("Communication.cpp", "Initialisation du module de communication", INFORMATION);
+    _DEBUG("Initialisation du module de communication", INFORMATION);
 }
 
 Communication::~Communication()
@@ -59,19 +59,18 @@ void Communication::stop()
 
 void * Communication::run(void * data)
 {
-    _DEBUG("Communication.cpp", "Debut de la routine d'ecoute des ports de communications", INFORMATION);
-
     Communication* This = static_cast<Communication*>(data);
     int i = 0;
+
+    _DEBUG("Debut de la routine d'ecoute des ports de communications", INFORMATION);
+
     while(This->a_thread_active)
     {
         i++;
-        std::ostringstream oss;
-        oss << "run : " << i;
-        _DEBUG("Communication.cpp", oss.str(), INFORMATION);
+        //_DEBUG(oss.str(), INFORMATION);
     }
 
-    _DEBUG("Communication.cpp", "Fin de la routine d'ecoute des ports de communications", INFORMATION);
+    _DEBUG("Fin de la routine d'ecoute des ports de communications", INFORMATION);
 
     return NULL;
 }

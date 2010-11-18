@@ -28,7 +28,7 @@ Robot::Robot()
 
     a_communication->start();
 
-    _DEBUG("Robot.cpp", "Initialisation du robot", INFORMATION);
+    _DEBUG("Initialisation du robot", INFORMATION);
 }
 
 Robot::~Robot()
@@ -63,19 +63,25 @@ void Robot::wait()
 
 void * Robot::run(void * data)
 {
-    _DEBUG("Robot.cpp", "Debut de la routine de calcul des trajectoires", INFORMATION);
-
     Robot* This = static_cast<Robot*>(data);
+
+    _DEBUG("Debut de la routine de calcul des trajectoires", INFORMATION);
+
+    /*double donnee = 20.01;
+    This->a_sensorsData->set(0, &donnee);
+    donnee = 10.2;
+    This->a_sensorsData->set(0, &donnee);
+    std::cout << *((double *)This->a_sensorsData->get(0, DataOption::LAST)) << std::endl;
+    std::cout << *((double *)This->a_sensorsData->get(0, DataOption::FIRST)) << std::endl;*/
+
     int i = 0;
     while(This->a_thread_active)
     {
         i++;
-        std::ostringstream oss;
-        oss << "run : " << i;
-        _DEBUG("Robot.cpp", oss.str(), INFORMATION);
+        //_DEBUG("Robot.cpp", oss.str(), INFORMATION);
     }
 
-    _DEBUG("Robot.cpp", "Fin de la routine de calcul des trajectoires", INFORMATION);
+    _DEBUG("Fin de la routine de calcul des trajectoires", INFORMATION);
 
     return NULL;
 }

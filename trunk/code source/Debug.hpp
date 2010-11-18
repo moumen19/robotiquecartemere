@@ -17,6 +17,7 @@
     #include <iostream>
     #include <vector>
     #include <pthread.h>
+    #include <sstream>
 
 
 //*************************************************************************************************
@@ -28,12 +29,19 @@
 
 
     // Définition d'une macro ajoutant un message
-    #define _DEBUG(title, message, priority)    if(_DEBUG_MODE == true) \
+    #define _DEBUG(message, priority)    if(_DEBUG_MODE == true) \
                                                 { \
+                                                    std::ostringstream oss; \
+                                                    oss << __FILE__ << " (" << __LINE__ << ")"; \
                                                     _DEBUG::lock(); \
-                                                    _DEBUG::addMessage(title, message, priority); \
+                                                    _DEBUG::addMessage(oss.str(), message, priority); \
                                                     _DEBUG::unlock(); \
                                                 }
+
+    /*#define _DEBUG(title, message, priority)    if(_DEBUG_MODE == true) \
+                                                { \
+                                                    throw Message(title, message, priority); \
+                                                }*/
 
     // Définition d'une macro exécutant une méthode statique
     #define _DEBUG_EXEC(f)  if(_DEBUG_MODE == true) \
@@ -58,8 +66,21 @@
         std::string title;          // Titre du message
         std::string content;        // Contenu du message
         Debug_Priority priority;    // Priorité du message
-        bool isEmpty;               // Validité du message
+        bool isEmpty;               // Définie si le message à ubn sens
     } typedef Message;
+
+    /*class Message : public std::exception
+    {
+        public:
+            Message(std::string , std::string , Debug_Priority) throw();
+            virtual ~Message() throw();
+            virtual const char * what()const throw();
+
+        private:
+            std::string a_title;          // Titre du message
+            std::string a_content;        // Contenu du message
+            Debug_Priority a_priority;    // Priorité du message
+    };*/
 
     // Classe de débuggage
     class _DEBUG

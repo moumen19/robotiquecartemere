@@ -6,7 +6,7 @@ Planning::Planning(Data *environment, Constraint *constraint, Strategy *strategy
     a_constraint = constraint;
     a_strategy = strategy;
 
-    _DEBUG("Planning.cpp", "Initialisation du module de planification", INFORMATION);
+    _DEBUG("Initialisation du module de planification", INFORMATION);
 }
 
 Planning::~Planning()
