@@ -2,7 +2,7 @@
 
 BusI2C::BusI2C()
 {
-    _DEBUG("BusI2c.cpp", "Initialisation du module de communication par bus I2C", INFORMATION);
+    _DEBUG("Initialisation du module de communication par bus I2C", INFORMATION);
 }
 
 BusI2C::~BusI2C()

@@ -20,12 +20,12 @@
             Data();
             ~Data();
 
-            double get(int, DataOption::Place);
-            double get(int, int);
-            void set(int, double);
+            void* get(int, DataOption::Place);
+            void* get(int, int);
+            void set(int, void*);
 
         private:
-            std::vector< std::vector<double> > a_data;
+            std::vector< std::vector<void*> > a_data;
             std::vector<int> a_bufferSize;
     };
 

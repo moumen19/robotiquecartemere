@@ -23,7 +23,7 @@ int main()
     _DEBUG_EXEC(configuration(CONSOLE_DISPLAY, "logs.txt"));
 
 
-    _DEBUG("Main.cpp", "Lancement du programme", INFORMATION);
+    _DEBUG("Lancement du programme", INFORMATION);
 
     // Création du robot
     Robot robot2010;

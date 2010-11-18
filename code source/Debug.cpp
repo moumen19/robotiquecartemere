@@ -16,6 +16,27 @@
 
     #include <fstream>
 
+    /*Message::Message(std::string  title, std::string  content, Debug_Priority priority) throw()
+    {
+        a_title = title;
+        a_content = content;
+        a_priority = priority;
+
+        std::cout << "Envoi d'une exeption" << std::endl;
+    }
+
+    Message::~Message() throw()
+    {
+
+    }
+
+    const char * Message::what()const throw()
+    {
+        return a_content.c_str();
+    }*/
+
+
+
     // Définition des Attributs statiques
     std::vector<Message> _DEBUG::a_messages;
     unsigned int _DEBUG::a_cursor = 0;
@@ -37,19 +58,20 @@
         switch(m.priority)
         {
             case FATAL:
-                msg = "(Fatal error) | ";
+                msg = "(Fatal error)";
                 break;
             case WARNING:
-                msg = "(Warning) | ";
+                msg = "(Warning)";
                 break;
             case INFORMATION:
-                msg = "(Information) | ";
+                msg = "(Information)";
                 break;
             default:
-                msg = "(?) | ";
+                msg = "(?)";
         }
+        msg += "\n\t";
         msg += m.title;
-        msg += " :\t";
+        msg += " :\n\t";
         msg += m.content;
 
 
