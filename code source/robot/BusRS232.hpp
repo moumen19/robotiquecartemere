@@ -2,6 +2,7 @@
 #define DEF_BUSRS232
 
     #include <string>
+    #include <fstream>
 
     #include "../Debug.hpp"
 
@@ -9,17 +10,18 @@
     {
         public:
             BusRS232();
-            BusRS232(std::string);
             ~BusRS232();
 
-            bool open(std::string);
+            bool open(std::string port = "/dev/ttyS0");
             void close();
 
             std::string receive();
             void send(std::string);
 
         private:
-            int a_bus;
+            std::string a_port;
+            bool a_isOpen;
+            std::fstream a_file;
     };
 
 #endif

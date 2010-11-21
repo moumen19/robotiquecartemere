@@ -50,8 +50,8 @@
             static void * run(void *);
 
         private:
-            BusRS232 a_rs232;
-            BusI2C a_i2c;
+            BusRS232 *a_rs232;
+            BusI2C *a_i2c;
             Data *a_sensorsData;
             Data *a_environmentData;
             Constraint *a_constraint;

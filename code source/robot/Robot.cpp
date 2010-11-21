@@ -26,8 +26,6 @@ Robot::Robot()
 
     this->a_thread_active = false;
 
-    this->a_communication->start();
-
     _DEBUG("Initialisation du robot", INFORMATION);
 }
 
@@ -37,6 +35,21 @@ Robot::~Robot()
         this->a_communication->stop();
     this->stop();
     pthread_join(this->a_thread, NULL);
+}
+
+bool Robot::isCommunicationActive()
+{
+    return this->a_communication->isActive();
+}
+
+void Robot::startCommunication()
+{
+    this->a_communication->start();
+}
+
+void Robot::stopCommunication()
+{
+    this->a_communication->stop();
 }
 
 bool Robot::isActive()

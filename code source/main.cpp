@@ -28,6 +28,7 @@ int main()
     // Création du robot
     Robot robot2010;
     // Lancement du calcul du robot
+    robot2010.startCommunication();
     robot2010.start();
     robot2010.wait();
 
