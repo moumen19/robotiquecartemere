@@ -16,7 +16,7 @@
 Communication::Communication(Data *sensors, Data *environment, Constraint *constraint, Planning *planning)
 {
     this->a_rs232 = new BusRS232();
-    this->a_rs232->open();//this->a_rs232->open("COM1");
+    this->a_rs232->open();  //this->a_rs232->open("COM1");
     this->a_i2c = new BusI2C();
 
     this->a_sensorsData = sensors;
