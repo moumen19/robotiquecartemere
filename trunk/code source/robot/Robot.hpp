@@ -32,6 +32,10 @@
 
             void interruptuion_arret_urgence();
 
+            bool isCommunicationActive();
+            void startCommunication();
+            void stopCommunication();
+
             // Gestion du thread
             bool isActive();
             void start();

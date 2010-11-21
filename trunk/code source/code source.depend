@@ -66,7 +66,7 @@
 1289854635 source:d:\cours m2\robotique avancée\be\subversion\code source\strategy.cpp
 	"Strategy.hpp"
 
-1290085660 source:d:\cours m2\robotique avancée\be\subversion\code source\main.cpp
+1290345751 source:d:\cours m2\robotique avancée\be\subversion\code source\main.cpp
 	<iostream>
 	"Debug.hpp"
 	"./robot/Robot.hpp"
@@ -78,18 +78,19 @@
 	<string>
 	"../Debug.hpp"
 
-1290085737 source:d:\cours m2\robotique avancée\be\subversion\code source\robot\busrs232.cpp
+1290347591 source:d:\cours m2\robotique avancée\be\subversion\code source\robot\busrs232.cpp
 	"BusRS232.hpp"
 
-1289860830 d:\cours m2\robotique avancée\be\subversion\code source\robot\busrs232.hpp
+1290347498 d:\cours m2\robotique avancée\be\subversion\code source\robot\busrs232.hpp
 	<string>
+	<fstream>
 	"../Debug.hpp"
 
-1290338551 source:d:\cours m2\robotique avancée\be\subversion\code source\robot\communication.cpp
+1290345895 source:d:\cours m2\robotique avancée\be\subversion\code source\robot\communication.cpp
 	"Communication.hpp"
 	<sstream>
 
-1289941889 d:\cours m2\robotique avancée\be\subversion\code source\robot\communication.hpp
+1290345853 d:\cours m2\robotique avancée\be\subversion\code source\robot\communication.hpp
 	<string>
 	<pthread.h>
 	"../Debug.hpp"
@@ -98,9 +99,9 @@
 	"BusRS232.hpp"
 	"BusI2C.hpp"
 
-1290338938 d:\cours m2\robotique avancée\be\subversion\code source\robot\data.hpp
+1290339237 d:\cours m2\robotique avancée\be\subversion\code source\robot\data.hpp
 	<vector>
-	"./boost/any.hpp"
+	<boost/any.hpp>
 	"../Debug.hpp"
 
 1289860655 d:\cours m2\robotique avancée\be\subversion\code source\robot\planning.hpp
@@ -135,11 +136,11 @@
 1290338607 source:d:\cours m2\robotique avancée\be\subversion\code source\robot\planning.cpp
 	"Planning.hpp"
 
-1290338539 source:d:\cours m2\robotique avancée\be\subversion\code source\robot\robot.cpp
+1290345724 source:d:\cours m2\robotique avancée\be\subversion\code source\robot\robot.cpp
 	"Robot.hpp"
 	<sstream>
 
-1289941886 d:\cours m2\robotique avancée\be\subversion\code source\robot\robot.hpp
+1290345625 d:\cours m2\robotique avancée\be\subversion\code source\robot\robot.hpp
 	<pthread.h>
 	"../Debug.hpp"
 	"Data.hpp"
