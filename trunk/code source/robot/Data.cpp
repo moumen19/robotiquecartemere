@@ -2,7 +2,7 @@
 
 Data::Data()
 {
-    a_data.resize(4);
+    this->a_data.resize(4);
     _DEBUG("Initialisation du module de stockage de donnees", INFORMATION);
 }
 
@@ -11,21 +11,21 @@ Data::~Data()
 
 }
 
-void* Data::get(int nb, DataOption::Place place)
+boost::any Data::get(int nb, DataOption::Place place)
 {
     if(place == DataOption::FIRST)
-        return get(nb, 0);
+        return this->get(nb, 0);
     else
-        return get(nb, a_data[nb].size()-1);
+        return this->get(nb, this->a_data[nb].size()-1);
 }
 
-void* Data::get(int nb, int index)
+boost::any Data::get(int nb, int index)
 {
-    return a_data[nb][index];
+    return this->a_data[nb][index];
 }
 
-void Data::set(int nb, void* value)
+void Data::set(int nb, boost::any value)
 {
-    a_data[nb].push_back(value);
-    _DEBUG("Ajout d'une donnée au module de stockage de donnees", INFORMATION);
+    this->a_data[nb].push_back(value);
+    _DEBUG("Ajout d'une donnee au module de stockage de donnees", INFORMATION);
 }

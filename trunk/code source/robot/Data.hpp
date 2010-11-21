@@ -2,6 +2,7 @@
 #define DEF_DATA
 
     #include <vector>
+    #include <boost/any.hpp>
 
     #include "../Debug.hpp"
 
@@ -20,13 +21,12 @@
             Data();
             ~Data();
 
-            void* get(int, DataOption::Place);
-            void* get(int, int);
-            void set(int, void*);
+            boost::any get(int, DataOption::Place);
+            boost::any get(int, int);
+            void set(int, boost::any);
 
         private:
-            std::vector< std::vector<void*> > a_data;
-            std::vector<int> a_bufferSize;
+            std::vector< std::vector<boost::any> > a_data;
     };
 
 #endif

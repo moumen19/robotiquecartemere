@@ -12,10 +12,10 @@ Constraint::~Constraint()
 
 double Constraint::get(int nb)
 {
-    return a_data[nb];
+    return this->a_data[nb];
 }
 
 void Constraint::set(int nb, double value)
 {
-    a_data[nb] = value;
+    this->a_data[nb] = value;
 }
