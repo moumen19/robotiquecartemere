@@ -90,9 +90,9 @@
 	"Communication.hpp"
 	<sstream>
 
-1290348558 d:\cours m2\robotique avancée\be\subversion\code source\robot\communication.hpp
+1290350648 d:\cours m2\robotique avancée\be\subversion\code source\robot\communication.hpp
 	<string>
-	<boost/thread.hpp>
+	<pthread.h>
 	"../Debug.hpp"
 	"Data.hpp"
 	"Planning.hpp"
