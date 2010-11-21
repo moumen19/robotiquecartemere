@@ -14,7 +14,8 @@
 #define DEF_COMMUNICATION
 
     #include <string>
-    #include <pthread.h>
+//    #include <pthread.h>
+#include <boost/thread.hpp>
 
     #include "../Debug.hpp"
 
@@ -57,7 +58,7 @@
             Constraint *a_constraint;
             Planning *a_planning;
 
-            pthread_t a_thread;
+            boost::thread *a_thread; //pthread_t
             bool a_thread_active;
     };
 
