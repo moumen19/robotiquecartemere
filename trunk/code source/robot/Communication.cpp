@@ -32,7 +32,7 @@ Communication::Communication(Data *sensors, Data *environment, Constraint *const
 Communication::~Communication()
 {
     this->stop();
-    pthread_join(this->a_thread, NULL);
+    //pthread_join(this->a_thread, NULL);
 
     delete this->a_rs232;
     delete this->a_i2c;
@@ -56,7 +56,8 @@ bool Communication::isActive()
 void Communication::start()
 {
     this->a_thread_active = true;
-    pthread_create(&(this->a_thread), NULL, &Communication::run, (void *)this);
+    a_thread = new boost::thread(&Communication::run, this);
+    //pthread_create(&(this->a_thread), NULL, &Communication::run, (void *)this);
 }
 
 void Communication::stop()
