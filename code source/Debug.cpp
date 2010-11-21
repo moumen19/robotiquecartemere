@@ -51,7 +51,7 @@
         m.content = content;
         m.priority = priority;
         m.isEmpty = false;
-        a_messages.push_back(m);
+        _DEBUG::a_messages.push_back(m);
 
 
         std::string msg;
@@ -71,18 +71,18 @@
         }
         msg += "\n\t";
         msg += m.title;
-        msg += " :\n\t";
+        msg += " :\n\t* ";
         msg += m.content;
 
 
-        if((a_configuration & CONSOLE_DISPLAY) == CONSOLE_DISPLAY)
+        if((_DEBUG::a_configuration & CONSOLE_DISPLAY) == CONSOLE_DISPLAY)
         {
             std::cout << "DEBUG MODE " << msg << std::endl;
         }
 
-        if((a_configuration & FILE_DISPLAY) == FILE_DISPLAY)
+        if((_DEBUG::a_configuration & FILE_DISPLAY) == FILE_DISPLAY)
         {
-            std::ofstream file(a_filename.c_str(), std::ios::out | std::ios::app);
+            std::ofstream file(_DEBUG::a_filename.c_str(), std::ios::out | std::ios::app);
 
             if(file)
             {
@@ -99,20 +99,20 @@
 
     void _DEBUG::clearAllMessage()
     {
-        a_cursor = 0;
-        a_messages.clear();
+        _DEBUG::a_cursor = 0;
+        _DEBUG::a_messages.clear();
     }
 
     void _DEBUG::configuration(Debug_Configuration configuration, std::string filename = "")
     {
-        a_configuration = configuration;
-        a_filename = filename;
+        _DEBUG::a_configuration = configuration;
+        _DEBUG::a_filename = filename;
     }
 
     Message _DEBUG::getMessage(unsigned int index)
     {
-        if(index < a_messages.size())
-            return a_messages[index];
+        if(index < _DEBUG::a_messages.size())
+            return _DEBUG::a_messages[index];
 
         Message m;
         m.isEmpty = true;
@@ -121,10 +121,10 @@
 
     Message _DEBUG::getNextMessage()
     {
-        if(a_cursor < a_messages.size())
+        if(_DEBUG::a_cursor < _DEBUG::a_messages.size())
         {
-            a_cursor++;
-            return a_messages[a_cursor-1];
+            _DEBUG::a_cursor++;
+            return _DEBUG::a_messages[a_cursor-1];
         }
 
         Message m;
@@ -134,17 +134,17 @@
 
     int _DEBUG::getNumMessages()
     {
-        return a_messages.size();
+        return _DEBUG::a_messages.size();
     }
 
     void _DEBUG::lock()
     {
-         pthread_mutex_lock(&a_mutex);
+         pthread_mutex_lock(&_DEBUG::a_mutex);
     }
 
     void _DEBUG::unlock()
     {
-         pthread_mutex_unlock(&a_mutex);
+         pthread_mutex_unlock(&_DEBUG::a_mutex);
     }
 
 #endif
