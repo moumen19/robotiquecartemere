@@ -15,7 +15,29 @@
 
 Communication::Communication(Data *sensors, Data *environment, Constraint *constraint, Planning *planning)
 {
-    a_rs232Asservissement.Open("/dev/ttyUSB0");
+    this->a_rs232Asservissement.Open("/dev/ttyUSB0");
+    if(this->a_rs232Asservissement.IsOpen())
+    {
+        this->a_rs232Asservissement.SetBaudRate(LibSerial::SerialStreamBuf::BAUD_9600);
+        this->a_rs232Asservissement.SetCharSize(LibSerial::SerialStreamBuf::CHAR_SIZE_8);
+        this->a_rs232Asservissement.SetNumOfStopBits(1);
+        this->a_rs232Asservissement.SetParity(LibSerial::SerialStreamBuf::PARITY_ODD);
+        this->a_rs232Asservissement.SetFlowControl(LibSerial::SerialStreamBuf::FLOW_CONTROL_HARD);
+    }
+    else
+	_DEBUG("Echec de l'ouverture du port RS232 avec l'asservissement", WARNING);
+
+    if(this->a_rs232Sensor.IsOpen())
+    {
+        this->a_rs232Sensor.Open("/dev/ttyUSB1");
+        this->a_rs232Sensor.SetBaudRate(LibSerial::SerialStreamBuf::BAUD_9600);
+        this->a_rs232Sensor.SetCharSize(LibSerial::SerialStreamBuf::CHAR_SIZE_8);
+        this->a_rs232Sensor.SetNumOfStopBits(1);
+        this->a_rs232Sensor.SetParity(LibSerial::SerialStreamBuf::PARITY_ODD);
+        this->a_rs232Sensor.SetFlowControl(LibSerial::SerialStreamBuf::FLOW_CONTROL_HARD);
+    }
+    else
+	_DEBUG("Echec de l'ouverture du port RS232 avec les capteurs", WARNING);
 
     this->a_sensorsData = sensors;
     this->a_environmentData = environment;
@@ -66,14 +88,20 @@ void Communication::stop()
 void * Communication::run(void * data)
 {
     Communication* This = static_cast<Communication*>(data);
-    int i = 0;
 
     _DEBUG("Debut de la routine d'ecoute des ports de communications", INFORMATION);
 
     while(This->a_thread_active)
     {
-        i++;
-        //_DEBUG(oss.str(), INFORMATION);
+	if(This->a_rs232Asservissement.IsOpen() && This->a_rs232Asservissement.rdbuf()->in_avail())
+	{
+	    _DEBUG("Reception de donnees de la part de l'asservissement", INFORMATION);
+	}
+
+	if(This->a_rs232Sensor.IsOpen() && This->a_rs232Sensor.rdbuf()->in_avail())
+	{
+	    _DEBUG("Reception de donnees de la part des capteurs", INFORMATION);
+	}
     }
 
     _DEBUG("Fin de la routine d'ecoute des ports de communications", INFORMATION);

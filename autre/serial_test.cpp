@@ -32,10 +32,10 @@ int main()
 
    while(1)
    {
-       usleep(1000);
+       usleep(10000);
 
        //if(1)
-      if(my_serial_port.IsOpen())// && serial_port.good())
+      if(my_serial_port.IsOpen() && my_serial_port.rdbuf()->in_avail())// && serial_port.good())
        {
            //f(my_serial_stream.available() > 0)
 
