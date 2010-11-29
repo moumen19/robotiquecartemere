@@ -25,7 +25,7 @@ Communication::Communication(Data *sensors, Data *environment, Constraint *const
         this->a_rs232Asservissement.SetFlowControl(LibSerial::SerialStreamBuf::FLOW_CONTROL_HARD);
     }
     else
-	_DEBUG("Echec de l'ouverture du port RS232 avec l'asservissement", WARNING);
+        _DEBUG("Echec de l'ouverture du port RS232 avec l'asservissement", WARNING);
 
     if(this->a_rs232Sensor.IsOpen())
     {
@@ -37,7 +37,10 @@ Communication::Communication(Data *sensors, Data *environment, Constraint *const
         this->a_rs232Sensor.SetFlowControl(LibSerial::SerialStreamBuf::FLOW_CONTROL_HARD);
     }
     else
-	_DEBUG("Echec de l'ouverture du port RS232 avec les capteurs", WARNING);
+        _DEBUG("Echec de l'ouverture du port RS232 avec les capteurs", WARNING);
+
+    a_bufferAsservissementCursor = 0;
+    a_bufferSensorCursor = 0;
 
     this->a_sensorsData = sensors;
     this->a_environmentData = environment;
@@ -101,23 +104,57 @@ void * Communication::run(void * data)
     _DEBUG("Debut de la routine d'ecoute des ports de communications", INFORMATION);
 
     char m;
-    char s[256];
+    char s[256] = "";
 
     while(This->a_thread_active)
     {
-	if(This->a_rs232Asservissement.IsOpen() && This->a_rs232Asservissement.rdbuf()->in_avail())
-	{
-            This->a_rs232Asservissement >> m;
-	    sprintf(s, "Reception de donnees de la part de l'asservissement : %c", m);
-	    _DEBUG(s, INFORMATION);
-	}
+        if(This->a_rs232Asservissement.IsOpen())
+        {
+            while(This->a_rs232Asservissement.rdbuf()->in_avail())
+            {
+                This->a_rs232Asservissement >> m;
+                if(m = 42)
+                {
+                    sprintf(s, "Reception de donnees de la part de l'asservissement : %s", This->a_bufferAsservissement);
+                    _DEBUG(s, INFORMATION);
+                    This->a_bufferAsservissementCursor = 0;
+                }
 
-	if(This->a_rs232Sensor.IsOpen() && This->a_rs232Sensor.rdbuf()->in_avail())
-	{
-	    This->a_rs232Asservissement >> m;
-	    sprintf(s, "Reception de donnees de la part des capteurs : %c", m);
-	    _DEBUG(s, INFORMATION);
-	}
+                if(This->a_bufferAsservissementCursor <= _BUFFER_ASSERVISSEMENT_SIZE)
+                {
+                    This->a_bufferAsservissement[This->a_bufferAsservissementCursor] = m;
+                    This->a_bufferAsservissementCursor++;
+                }
+                else
+                    _DEBUG("Debordement du buffer de reception de donnees asservissement...", WARNING);
+            }
+        }
+        else
+            _DEBUG("Erreur de communication avec l'asservissement", WARNING);
+
+        if(This->a_rs232Sensor.IsOpen())
+        {
+            while(This->a_rs232Sensor.rdbuf()->in_avail())
+            {
+                This->a_rs232Sensor >> m;
+                if(m = 53)
+                {
+                    sprintf(s, "Reception de donnees de la part de l'asservissement : %s", This->a_bufferSensor);
+                    _DEBUG(s, INFORMATION);
+                    This->a_bufferSensorCursor = 0;
+                }
+
+                if(This->a_bufferSensorCursor <= _BUFFER_SENSOR_SIZE)
+                {
+                    This->a_bufferSensor[This->a_bufferAsservissementCursor] = m;
+                    This->a_bufferSensorCursor++;
+                }
+                else
+                    _DEBUG("Debordement du buffer de reception de donnees asservissement...", WARNING);
+            }
+        }
+        else
+            _DEBUG("Erreur de communication avec les capteurs", WARNING);
     }
 
     _DEBUG("Fin de la routine d'ecoute des ports de communications", INFORMATION);
