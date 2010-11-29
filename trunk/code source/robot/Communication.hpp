@@ -15,14 +15,15 @@
 
     #include <string>
     #include <pthread.h>
+    #include <SerialStream.h>
     //#include <boost/thread.hpp>
 
     #include "../Debug.hpp"
 
     #include "Data.hpp"
     #include "Planning.hpp"
-    #include "BusRS232.hpp"
-    #include "BusI2C.hpp"
+    //#include "BusRS232.hpp"
+    //#include "BusI2C.hpp"
 
     namespace Port
     {
@@ -51,8 +52,11 @@
             static void * run(void *);
 
         private:
-            BusRS232 *a_rs232;
-            BusI2C *a_i2c;
+            //BusRS232 *a_rs232;
+            //BusI2C *a_i2c;
+            LibSerial::SerialStream a_rs232Asservissement;
+            LibSerial::SerialStream a_rs232Sensor;
+
             Data *a_sensorsData;
             Data *a_environmentData;
             Constraint *a_constraint;
