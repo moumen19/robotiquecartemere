@@ -25,6 +25,9 @@
     //#include "BusRS232.hpp"
     //#include "BusI2C.hpp"
 
+    #define _BUFFER_ASSERVISSEMENT_SIZE 13
+    #define _BUFFER_SENSOR_SIZE 5
+
     namespace Port
     {
         enum Port
@@ -56,6 +59,10 @@
             //BusI2C *a_i2c;
             LibSerial::SerialStream a_rs232Asservissement;
             LibSerial::SerialStream a_rs232Sensor;
+            char a_bufferAsservissement[_BUFFER_ASSERVISSEMENT_SIZE];
+            char a_bufferSensor[_BUFFER_SENSOR_SIZE];
+            int a_bufferAsservissementCursor;
+            int a_bufferSensorCursor;
 
             Data *a_sensorsData;
             Data *a_environmentData;
