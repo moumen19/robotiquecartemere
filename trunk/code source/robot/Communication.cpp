@@ -91,11 +91,16 @@ void * Communication::run(void * data)
 
     _DEBUG("Debut de la routine d'ecoute des ports de communications", INFORMATION);
 
+    char m;
+    char s[256];
+
     while(This->a_thread_active)
     {
 	if(This->a_rs232Asservissement.IsOpen() && This->a_rs232Asservissement.rdbuf()->in_avail())
 	{
-	    _DEBUG("Reception de donnees de la part de l'asservissement", INFORMATION);
+            This->a_rs232Asservissement >> m;
+	    sprintf(s, "Reception de donnees de la part de l'asservissement : %c", m);
+	    _DEBUG(s, INFORMATION);
 	}
 
 	if(This->a_rs232Sensor.IsOpen() && This->a_rs232Sensor.rdbuf()->in_avail())
