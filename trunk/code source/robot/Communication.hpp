@@ -29,8 +29,8 @@
     {
         enum Port
         {
-            RS232,
-            I2C
+            ASSERVISSEMENT,
+            SENSOR
         };
     }
 
@@ -41,7 +41,7 @@
             ~Communication();
 
             void send(Port::Port, std::string);
-            void receive();
+            //void receive();
 
             // Gestion du thread
             bool isActive();

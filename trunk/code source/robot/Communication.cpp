@@ -60,13 +60,22 @@ Communication::~Communication()
 
 void Communication::send(Port::Port port, std::string msg)
 {
-
+    if(port == Port::ASSERVISSEMENT)
+    {
+	this->a_rs232Asservissement << msg.c_str();
+    }
+    else if(port == Port::SENSOR)
+    {
+	this->a_rs232Sensor << msg.c_str();
+    }
+    else
+	_DEBUG("Envoie des données à un port non existant !", WARNING);
 }
 
-void Communication::receive()
+/*void Communication::receive()
 {
 
-}
+}*/
 
 bool Communication::isActive()
 {
@@ -105,7 +114,9 @@ void * Communication::run(void * data)
 
 	if(This->a_rs232Sensor.IsOpen() && This->a_rs232Sensor.rdbuf()->in_avail())
 	{
-	    _DEBUG("Reception de donnees de la part des capteurs", INFORMATION);
+	    This->a_rs232Asservissement >> m;
+	    sprintf(s, "Reception de donnees de la part des capteurs : %c", m);
+	    _DEBUG(s, INFORMATION);
 	}
     }
 

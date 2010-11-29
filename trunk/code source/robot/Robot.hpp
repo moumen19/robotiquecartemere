@@ -58,4 +58,13 @@
             bool a_thread_active;
     };
 
+    enum Sensor
+    {
+        US1 = 0,
+        US2 = 1,
+	US3 = 2,
+	US4 = 3, 
+	US5 = 5
+    };
+
 #endif
