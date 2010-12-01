@@ -1,0 +1,23 @@
+# depslib dependency file v1.0
+1291114862 source:/home/robotique/Bureau/Shared_seven/Test_RS232/main.cpp
+	<SerialStream.h>
+	<iostream>
+	"OpeningAndChecks.cpp"
+
+1291114959 /home/robotique/Bureau/Shared_seven/Test_RS232/OpeningAndChecks.cpp
+	<SerialStream.h>
+	<iostream>
+	<cstdlib>
+
+1291140674 source:/home/julien/C++/Test_RS232/main.cpp
+	<SerialStream.h>
+	<iostream>
+	<stdint.h>
+	"OpeningAndChecks.cpp"
+
+1291138775 /home/julien/C++/Test_RS232/OpeningAndChecks.cpp
+	<SerialStream.h>
+	<iostream>
+	<unistd.h>
+	<cstdlib>
+

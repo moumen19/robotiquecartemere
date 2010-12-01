@@ -2,7 +2,7 @@
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release" />
 	<File name="Debug.cpp" open="1" top="0" tabpos="3">
-		<Cursor position="3521" topLine="97" />
+		<Cursor position="3521" topLine="92" />
 	</File>
 	<File name="Debug.hpp" open="1" top="0" tabpos="2">
 		<Cursor position="343" topLine="7" />
@@ -23,10 +23,10 @@
 		<Cursor position="265" topLine="0" />
 	</File>
 	<File name="robot\Communication.cpp" open="1" top="1" tabpos="5">
-		<Cursor position="2848" topLine="74" />
+		<Cursor position="4624" topLine="99" />
 	</File>
 	<File name="robot\Communication.hpp" open="1" top="0" tabpos="4">
-		<Cursor position="1183" topLine="28" />
+		<Cursor position="1617" topLine="31" />
 	</File>
 	<File name="robot\Constraint.cpp" open="1" top="0" tabpos="13">
 		<Cursor position="309" topLine="0" />
