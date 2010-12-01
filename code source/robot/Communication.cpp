@@ -15,32 +15,9 @@
 
 Communication::Communication(Data *sensors, Data *environment, Constraint *constraint, Planning *planning)
 {
-    this->a_rs232Asservissement.Open("/dev/ttyUSB0");
-    if(this->a_rs232Asservissement.IsOpen())
-    {
-        this->a_rs232Asservissement.SetBaudRate(LibSerial::SerialStreamBuf::BAUD_9600);
-        this->a_rs232Asservissement.SetCharSize(LibSerial::SerialStreamBuf::CHAR_SIZE_8);
-        this->a_rs232Asservissement.SetNumOfStopBits(1);
-        this->a_rs232Asservissement.SetParity(LibSerial::SerialStreamBuf::PARITY_ODD);
-        this->a_rs232Asservissement.SetFlowControl(LibSerial::SerialStreamBuf::FLOW_CONTROL_HARD);
-    }
-    else
-        _DEBUG("Echec de l'ouverture du port RS232 avec l'asservissement", WARNING);
-
-    if(this->a_rs232Sensor.IsOpen())
-    {
-        this->a_rs232Sensor.Open("/dev/ttyUSB1");
-        this->a_rs232Sensor.SetBaudRate(LibSerial::SerialStreamBuf::BAUD_9600);
-        this->a_rs232Sensor.SetCharSize(LibSerial::SerialStreamBuf::CHAR_SIZE_8);
-        this->a_rs232Sensor.SetNumOfStopBits(1);
-        this->a_rs232Sensor.SetParity(LibSerial::SerialStreamBuf::PARITY_ODD);
-        this->a_rs232Sensor.SetFlowControl(LibSerial::SerialStreamBuf::FLOW_CONTROL_HARD);
-    }
-    else
-        _DEBUG("Echec de l'ouverture du port RS232 avec les capteurs", WARNING);
-
-    a_bufferAsservissementCursor = 0;
-    a_bufferSensorCursor = 0;
+    
+    //a_bufferAsservissementCursor = 0;
+    //a_bufferSensorCursor = 0;
 
     this->a_sensorsData = sensors;
     this->a_environmentData = environment;
@@ -56,20 +33,17 @@ Communication::~Communication()
 {
     this->stop();
     pthread_join(this->a_thread, NULL);
-
-//    delete this->a_rs232;
-//    delete this->a_i2c;
 }
 
 void Communication::send(Port::Port port, std::string msg)
 {
     if(port == Port::ASSERVISSEMENT)
     {
-	this->a_rs232Asservissement << msg.c_str();
+	this->a_asservissement.send(msg);
     }
     else if(port == Port::SENSOR)
     {
-	this->a_rs232Sensor << msg.c_str();
+	this->a_sensor.send(msg);
     }
     else
 	_DEBUG("Envoie des données à un port non existant !", WARNING);
@@ -103,7 +77,7 @@ void * Communication::run(void * data)
 
     _DEBUG("Debut de la routine d'ecoute des ports de communications", INFORMATION);
 
-    char m;
+    /*char m;
     char s[256] = "";
 
     while(This->a_thread_active)
@@ -113,7 +87,7 @@ void * Communication::run(void * data)
             while(This->a_rs232Asservissement.rdbuf()->in_avail())
             {
                 This->a_rs232Asservissement >> m;
-                if(m = 42)
+                if(m == 42)
                 {
                     sprintf(s, "Reception de donnees de la part de l'asservissement : %s", This->a_bufferAsservissement);
                     _DEBUG(s, INFORMATION);
@@ -132,30 +106,8 @@ void * Communication::run(void * data)
         else
             _DEBUG("Erreur de communication avec l'asservissement", WARNING);
 
-        if(This->a_rs232Sensor.IsOpen())
-        {
-            while(This->a_rs232Sensor.rdbuf()->in_avail())
-            {
-                This->a_rs232Sensor >> m;
-                if(m = 53)
-                {
-                    sprintf(s, "Reception de donnees de la part de l'asservissement : %s", This->a_bufferSensor);
-                    _DEBUG(s, INFORMATION);
-                    This->a_bufferSensorCursor = 0;
-                }
 
-                if(This->a_bufferSensorCursor <= _BUFFER_SENSOR_SIZE)
-                {
-                    This->a_bufferSensor[This->a_bufferAsservissementCursor] = m;
-                    This->a_bufferSensorCursor++;
-                }
-                else
-                    _DEBUG("Debordement du buffer de reception de donnees asservissement...", WARNING);
-            }
-        }
-        else
-            _DEBUG("Erreur de communication avec les capteurs", WARNING);
-    }
+    }*/
 
     _DEBUG("Fin de la routine d'ecoute des ports de communications", INFORMATION);
 

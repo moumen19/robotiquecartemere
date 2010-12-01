@@ -6,7 +6,7 @@ EXEC=robot_prgm
 
 all: $(EXEC)
 
-$(EXEC): main.o Debug.o Communication.o Constraint.o Data.o DataFusion.o Planning.o Robot.o Strategy.o
+$(EXEC): main.o Debug.o BusRS232.o Communication.o Constraint.o Data.o DataFusion.o Planning.o Robot.o Strategy.o
 	$(CC) $^ $(LDFLAGS) -o $@
 
 main.o: main.cpp

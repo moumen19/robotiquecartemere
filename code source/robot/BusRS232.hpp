@@ -2,7 +2,8 @@
 #define DEF_BUSRS232
 
     #include <string>
-    #include <fstream>
+    #include <SerialStream.h>
+    #include <boost/any.hpp>
 
     #include "../Debug.hpp"
 
@@ -15,13 +16,17 @@
             bool open(std::string port = "/dev/ttyS0");
             void close();
 
-            std::string receive();
-            void send(std::string);
+            boost::any receive();
+            void send(boost::any);
+
+	protected:
+	    virtual char * onSend(const boost::any &, int *);
+	    virtual boost::any onReceive(const char *, int);
 
         private:
             std::string a_port;
-            bool a_isOpen;
             std::fstream a_file;
+	    LibSerial::SerialStream a_rs232;
     };
 
 #endif
