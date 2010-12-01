@@ -15,14 +15,13 @@
 
     #include <string>
     #include <pthread.h>
-    #include <SerialStream.h>
     //#include <boost/thread.hpp>
 
     #include "../Debug.hpp"
 
     #include "Data.hpp"
     #include "Planning.hpp"
-    //#include "BusRS232.hpp"
+    #include "BusRS232.hpp"
     //#include "BusI2C.hpp"
 
     #define _BUFFER_ASSERVISSEMENT_SIZE 13
@@ -36,6 +35,21 @@
             SENSOR
         };
     }
+
+    /*typedef union
+    {
+	float value;
+	unsigned char data[4];
+    } decoup_float;
+
+    typedef struct
+    {
+	unsigned char id;
+	float X;
+	float Y;
+	float Alpha;
+	unsigned char commande;
+    } messageAsservissement;*/
 
     class Communication
     {
@@ -55,15 +69,12 @@
             static void * run(void *);
 
         private:
-            //BusRS232 *a_rs232;
-            //BusI2C *a_i2c;
-            LibSerial::SerialStream a_rs232Asservissement;
-            LibSerial::SerialStream a_rs232Sensor;
-            char a_bufferAsservissement[_BUFFER_ASSERVISSEMENT_SIZE];
-            char a_bufferSensor[_BUFFER_SENSOR_SIZE];
-            int a_bufferAsservissementCursor;
-            int a_bufferSensorCursor;
+            BusRS232 a_asservissement; //RS232Asservissement
+            BusRS232 a_sensor;//RS232Sensor a_sensor;
 
+            //char a_bufferAsservissement[_BUFFER_ASSERVISSEMENT_SIZE];
+            //int a_bufferAsservissementCursor;
+            
             Data *a_sensorsData;
             Data *a_environmentData;
             Constraint *a_constraint;
