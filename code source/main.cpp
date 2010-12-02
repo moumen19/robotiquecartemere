@@ -11,6 +11,7 @@
  */
 
 #include <iostream>
+#include <signal.h>
 
 #include "Debug.hpp"
 #include "./robot/Robot.hpp"
@@ -24,6 +25,8 @@ int main()
 
 
     _DEBUG("Lancement du programme", INFORMATION);
+
+    signal(SIGIO, SIG_IGN); // IMPORTANT !! Sinon, le programme plante à la réception des données des ports COMs
 
     // Création du robot
     Robot robot2010;
