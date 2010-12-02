@@ -87,11 +87,9 @@ void * Robot::run(void * data)
     std::cout << boost::any_cast<double>(This->a_sensorsData->get(0, DataOption::LAST)) << std::endl;
     std::cout << boost::any_cast<double>(This->a_sensorsData->get(0, DataOption::FIRST)) << std::endl;
 
-    int i = 0;
     while(This->a_thread_active)
     {
-        i++;
-        //_DEBUG("Robot.cpp", oss.str(), INFORMATION);
+        //_DEBUG("Robot", INFORMATION);
     }
 
     _DEBUG("Fin de la routine de calcul des trajectoires", INFORMATION);

@@ -19,6 +19,12 @@ Communication::Communication(Data *sensors, Data *environment, Constraint *const
     //a_bufferAsservissementCursor = 0;
     //a_bufferSensorCursor = 0;
 
+    this->a_asservissement = new BusRS232();
+    this->a_asservissement->open();
+
+    //this->a_sensor = new BusRS232();
+    //this->a_sensor->open();
+
     this->a_sensorsData = sensors;
     this->a_environmentData = environment;
     this->a_constraint = constraint;
@@ -39,11 +45,11 @@ void Communication::send(Port::Port port, std::string msg)
 {
     if(port == Port::ASSERVISSEMENT)
     {
-	this->a_asservissement.send(msg);
+	this->a_asservissement->send(msg);
     }
     else if(port == Port::SENSOR)
     {
-	this->a_sensor.send(msg);
+	//this->a_sensor->send(msg);
     }
     else
 	_DEBUG("Envoie des données à un port non existant !", WARNING);
@@ -77,12 +83,19 @@ void * Communication::run(void * data)
 
     _DEBUG("Debut de la routine d'ecoute des ports de communications", INFORMATION);
 
-    /*char m;
-    char s[256] = "";
-
-    while(This->a_thread_active)
+    //char m;
+    //char s[256] = "";
+int i = 0;
+    while(This->a_thread_active && i < 26)
     {
-        if(This->a_rs232Asservissement.IsOpen())
+	char msg;
+	if(This->a_asservissement->isDataAvailable())
+	{
+i++;
+	    msg = boost::any_cast<char>(This->a_asservissement->getData());
+            std::cout << msg;
+	}
+        /*if(This->a_rs232Asservissement.IsOpen())
         {
             while(This->a_rs232Asservissement.rdbuf()->in_avail())
             {
@@ -105,10 +118,10 @@ void * Communication::run(void * data)
         }
         else
             _DEBUG("Erreur de communication avec l'asservissement", WARNING);
+*/
 
-
-    }*/
-
+    }
+This->a_asservissement->close();
     _DEBUG("Fin de la routine d'ecoute des ports de communications", INFORMATION);
 
     return NULL;
