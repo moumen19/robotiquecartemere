@@ -69,8 +69,8 @@
             static void * run(void *);
 
         private:
-            BusRS232 a_asservissement; //RS232Asservissement
-            BusRS232 a_sensor;//RS232Sensor a_sensor;
+            BusRS232 * a_asservissement; //RS232Asservissement
+            BusRS232 * a_sensor;//RS232Sensor a_sensor;
 
             //char a_bufferAsservissement[_BUFFER_ASSERVISSEMENT_SIZE];
             //int a_bufferAsservissementCursor;
