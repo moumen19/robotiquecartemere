@@ -14,8 +14,8 @@
 #define DEF_COMMUNICATION
 
     #include <string>
-    #include <pthread.h>
-    //#include <boost/thread.hpp>
+    //#include <pthread.h>
+    #include <boost/thread/thread.hpp>
 
     #include "../Debug.hpp"
 
@@ -66,7 +66,8 @@
             void stop();
 
         protected:
-            static void * run(void *);
+            //static void * run(void *);
+	    void run();
 
         private:
             BusRS232 * a_asservissement; //RS232Asservissement
@@ -80,8 +81,8 @@
             Constraint *a_constraint;
             Planning *a_planning;
 
-            //boost::thread *a_thread;
-            pthread_t a_thread;
+            boost::thread *a_thread;
+            //pthread_t a_thread;
             bool a_thread_active;
     };
 

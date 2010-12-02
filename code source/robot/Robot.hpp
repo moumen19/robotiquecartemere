@@ -13,7 +13,8 @@
 #ifndef DEF_ROBOT
 #define DEF_ROBOT
 
-    #include <pthread.h>
+    //#include <pthread.h>
+    #include <boost/thread/thread.hpp>
 
     #include "../Debug.hpp"
 
@@ -43,7 +44,8 @@
             void wait();
 
         protected:
-            static void * run(void *);
+            //static void * run(void *);
+	    void run();
 
         private:
             Data *a_sensorsData;
@@ -54,7 +56,8 @@
             DataFusion *a_dataFusion;
             Communication *a_communication;
 
-            pthread_t a_thread;
+            boost::thread *a_thread;
+            //pthread_t a_thread;
             bool a_thread_active;
     };
 

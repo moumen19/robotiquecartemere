@@ -5,14 +5,17 @@
     //#include <SerialStream.h>
     #include <SerialPort.h>
     #include <boost/any.hpp>
-    #include <pthread.h>
+    //#include <pthread.h>
+    #include <boost/thread/thread.hpp>
+    #include <boost/thread/mutex.hpp>
+
 
     #include "../Debug.hpp"
 
     class BusRS232
     {
         public:
-            BusRS232(std::string port = "/dev/ttyUSB1", int bufferSize = 1024);
+            BusRS232(std::string port = "/dev/ttyUSB0", int bufferSize = 1024);
             ~BusRS232();
 
             bool open();	// configure automatiquement la connexion
@@ -26,20 +29,25 @@
 	protected:
 	    virtual SerialPort::DataBuffer onSend(const boost::any &);
 	    virtual boost::any onReceive();
-            static void * receive(void *);
+            //static void * receive(void *);
+	    void receive();
 
         private:
             std::string a_port;
             //std::fstream a_file;
 	    SerialPort * a_rs232; //LibSerial::SerialStream
-            pthread_t a_thread;
+
+            //pthread_t a_thread;
+            boost::thread *a_thread;
+
             bool a_thread_active;
 	    char * a_buffer;
 	    int a_bufferSize;
 	    int a_bufferWriteCursor;
 	    int a_bufferReadCursor;
             
-	    static pthread_mutex_t a_mutex;
+	    //static pthread_mutex_t a_mutex;
+	    boost::mutex a_mutex;
     };
 
 #endif
