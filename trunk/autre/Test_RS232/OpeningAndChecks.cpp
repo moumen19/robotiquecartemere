@@ -3,8 +3,81 @@
 #include <unistd.h>
 #include <cstdlib>
 
+#define sizeTRAME 14
+
 
 using namespace LibSerial;
+
+SerialStream my_serial_port;
+
+typedef union
+{
+	float value;
+	unsigned char data[4];
+}Decoup_float;
+
+typedef struct
+{
+    unsigned char Id;
+	float X;
+	float Y;
+	float Alpha;
+	unsigned char commande;
+}StructPos;
+
+struct Position
+{
+    float X;
+    float Y;
+};
+
+void pointToData(StructPos point, unsigned char data[14])
+{
+	int i;
+	Decoup_float x,y,a;
+
+    data[0] = point.Id;
+
+	x.value = point.X;
+	for (i=0; i <4; i++)
+	{
+		data[i+1] =  x.data[i];
+	}
+	y.value = point.Y;
+	for (i=0; i <4; i++)
+	{
+		data[5+i] =  y.data[i];
+	}
+
+	a.value = point.Alpha;
+	for (i=0; i <4; i++)
+	{
+		data[9+i] =  a.data[i];
+	}
+	data[13] = point.commande;
+}
+
+void dataToConsigne(StructPos *point, unsigned char data[14])
+{
+	int i;
+	Decoup_float x;
+	for (i=0; i <4; i++)
+	{
+		x.data[i] = data[i+1];
+	}
+	point->X = x.value;
+	for (i=0; i <4; i++)
+	{
+		x.data[i] = data[5+i];
+	}
+	point->Y =x.value;
+	for (i=0; i <4; i++)
+	{
+		x.data[i] = data[9+i];
+	}
+	point->Alpha = x.value;
+	point->commande = data[13];
+}
 
 bool createCOMport(SerialStream &serial_port, std::string COMport_name, SerialStreamBuf::BaudRateEnum baudRate)
 {
@@ -68,84 +141,48 @@ bool createCOMport(SerialStream &serial_port, std::string COMport_name, SerialSt
         return true;
 }
 
+void sendMotorsSpeed(float leftWheel, float rightWheel)
+ {
+        StructPos Commande_position;
+        uint8_t buf[sizeTRAME] ;
 
-/*void testCOM()
-{
-    SerialStream serial_port ;
+        // just to initialize
+        Commande_position.Id = 42;
+        Commande_position.Alpha = 0;
 
-    //std::cout<< "isOpen ? : " << serial_port.IsOpen() <<std::endl;
+        // command to send
+        Commande_position.X = leftWheel;
+        Commande_position.Y = rightWheel;
+        Commande_position.commande = 4;
 
-    serial_port.Open( "/dev/ttyUSB0") ;
-
-    if ( !serial_port.good() )
-    {
-        std::cerr << "[" << __FILE__ << " \\Line:" << __LINE__ << "]\n "
-                  << "Error: Could not open serial port."
-                  << std::endl ;
-        exit(1) ;
-    }
-    //
-    // Set the baud rate of the serial port.
-    //
-    serial_port.SetBaudRate( SerialStreamBuf::BAUD_9600 ) ;
-    if ( ! serial_port.good() )
-    {
-        std::cerr << "Error: Could not set the baud rate." << std::endl ;
-        exit(1) ;
-    }
-    //
-    // Set the number of data bits.
-    //
-    serial_port.SetCharSize( SerialStreamBuf::CHAR_SIZE_8 ) ;
-    if ( ! serial_port.good() )
-    {
-        std::cerr << "Error: Could not set the character size." << std::endl ;
-        exit(1) ;
-    }
-    //
-    // Disable parity.
-    //
-    serial_port.SetParity( SerialStreamBuf::PARITY_NONE ) ;
-    if ( ! serial_port.good() )
-    {
-        std::cerr << "Error: Could not disable the parity." << std::endl ;
-        exit(1) ;
-    }
-    //
-    // Set the number of stop bits.
-    //
-    serial_port.SetNumOfStopBits( 1 ) ;
-    if ( ! serial_port.good() )
-    {
-        std::cerr << "Error: Could not set the number of stop bits."
-                  << std::endl ;
-        exit(1) ;
-    }
-    //
-    // Turn off hardware flow control.
-    //
-    serial_port.SetFlowControl( SerialStreamBuf::FLOW_CONTROL_NONE ) ; //FLOW_CONTROL_HARD // FLOW_CONTROL_NONE
-    if ( ! serial_port.good() )
-    {
-        std::cerr << "Error: Could not use hardware flow control."
-                  << std::endl ;
-        exit(1) ;
-    }
-
-    char next_char ='e';
-    while(getchar() != '\n')
-    {
-        sleep(1);
-       // if(serial_port.rdbuf()->in_avail()) // && serial_port.good())
+        pointToData(Commande_position, buf);
+        for(int i=0; i<sizeTRAME; i++)
         {
-            //if (my_serial_stream.available() > 0)
-
-            serial_port >> next_char ;
-            std::cout << next_char <<std::endl;
+            my_serial_port << buf[i];
         }
-        else
-            std::cout<<".";
-    }
+        usleep(100000);
+ }
 
-    serial_port.Close();
-}*/
+void sendStop()
+{
+        StructPos Commande_position;
+        uint8_t buf[sizeTRAME] ;
+
+        // just to initialize
+        Commande_position.Id = 42;
+        Commande_position.Alpha = 0;
+        Commande_position.X = 0;
+        Commande_position.Y = 0;
+
+        // command to send
+        Commande_position.commande = 3;
+
+        pointToData(Commande_position, buf);
+        for(int i=0; i<sizeTRAME; i++)
+        {
+            my_serial_port << buf[i];
+        }
+
+        usleep(100000);
+}
+

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="OpeningAndChecks.cpp" open="0" top="0" tabpos="2">
-		<Cursor position="518" topLine="6" />
+	<File name="OpeningAndChecks.cpp" open="1" top="1" tabpos="2">
+		<Cursor position="3290" topLine="108" />
 	</File>
-	<File name="main.cpp" open="0" top="0" tabpos="1">
-		<Cursor position="3804" topLine="147" />
+	<File name="main.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="1016" topLine="10" />
 	</File>
 </CodeBlocks_layout_file>
