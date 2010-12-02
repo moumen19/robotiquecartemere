@@ -1,6 +1,6 @@
 CC=g++
 CFLAGS=-W -Wall
-LDFLAGS=-lpthread -lserial
+LDFLAGS= -lserial -lboost_thread #-lpthread 
 EXEC=robot_prgm
 
 

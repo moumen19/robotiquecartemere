@@ -16,7 +16,8 @@
     // Inclusion des bibliothèques
     #include <iostream>
     #include <vector>
-    #include <pthread.h>
+    //#include <pthread.h>
+    #include <boost/thread/mutex.hpp>
     #include <sstream>
 
 
@@ -100,7 +101,8 @@
             static unsigned int a_cursor;
             static Debug_Configuration a_configuration;
             static std::string a_filename;
-            static pthread_mutex_t a_mutex;
+            //static pthread_mutex_t a_mutex;
+	    static boost::mutex a_mutex;
 
     };
 

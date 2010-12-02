@@ -38,7 +38,7 @@ Communication::Communication(Data *sensors, Data *environment, Constraint *const
 Communication::~Communication()
 {
     this->stop();
-    pthread_join(this->a_thread, NULL);
+    //pthread_join(this->a_thread, NULL);
 }
 
 void Communication::send(Port::Port port, std::string msg)
@@ -68,8 +68,8 @@ bool Communication::isActive()
 void Communication::start()
 {
     this->a_thread_active = true;
-    //a_thread = new boost::thread(&Communication::run, this);
-    pthread_create(&(this->a_thread), NULL, &Communication::run, (void *)this);
+    a_thread = new boost::thread(&Communication::run, this);
+    //pthread_create(&(this->a_thread), NULL, &Communication::run, (void *)this);
 }
 
 void Communication::stop()
@@ -77,22 +77,23 @@ void Communication::stop()
     this->a_thread_active = false;
 }
 
-void * Communication::run(void * data)
+//void * Communication::run(void * data)
+void Communication::run()
 {
-    Communication* This = static_cast<Communication*>(data);
+    //Communication* This = static_cast<Communication*>(data);
 
     _DEBUG("Debut de la routine d'ecoute des ports de communications", INFORMATION);
 
     //char m;
     //char s[256] = "";
 int i = 0;
-    while(This->a_thread_active && i < 26)
+    while(this->a_thread_active && i < 26)
     {
 	char msg;
-	if(This->a_asservissement->isDataAvailable())
+	if(this->a_asservissement->isDataAvailable())
 	{
 i++;
-	    msg = boost::any_cast<char>(This->a_asservissement->getData());
+	    msg = boost::any_cast<char>(this->a_asservissement->getData());
             //std::cout << msg;
 	}
 //sleep(1);
@@ -123,8 +124,9 @@ i++;
 */
 
     }
-This->a_asservissement->close();
+this->a_asservissement->close();
     _DEBUG("Fin de la routine d'ecoute des ports de communications", INFORMATION);
 
-    return NULL;
+    return;
 }
+

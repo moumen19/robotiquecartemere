@@ -34,7 +34,7 @@ Robot::~Robot()
     if(this->a_communication->isActive())
         this->a_communication->stop();
     this->stop();
-    pthread_join(this->a_thread, NULL);
+    //pthread_join(this->a_thread, NULL);
 }
 
 bool Robot::isCommunicationActive()
@@ -60,7 +60,8 @@ bool Robot::isActive()
 void Robot::start()
 {
     this->a_thread_active = true;
-    pthread_create(&(this->a_thread), NULL, &Robot::run, (void *)this);
+    a_thread = new boost::thread(&Robot::run, this);
+    //pthread_create(&(this->a_thread), NULL, &Robot::run, (void *)this);
     //run((void *)this);
 }
 
@@ -71,28 +72,30 @@ void Robot::stop()
 
 void Robot::wait()
 {
-    pthread_join(this->a_thread, NULL);
+    //pthread_join(this->a_thread, NULL);
+    this->a_thread->join();
 }
 
-void * Robot::run(void * data)
+//void * Robot::run(void * data)
+void Robot::run()
 {
-    Robot* This = static_cast<Robot*>(data);
+    //Robot* This = static_cast<Robot*>(data);
 
     _DEBUG("Debut de la routine de calcul des trajectoires", INFORMATION);
 
     double donnee = 20.01;
-    This->a_sensorsData->set(0, donnee);
+    this->a_sensorsData->set(0, donnee);
     donnee = 10.2;
-    This->a_sensorsData->set(0, donnee);
-    std::cout << boost::any_cast<double>(This->a_sensorsData->get(0, DataOption::LAST)) << std::endl;
-    std::cout << boost::any_cast<double>(This->a_sensorsData->get(0, DataOption::FIRST)) << std::endl;
+    this->a_sensorsData->set(0, donnee);
+    std::cout << boost::any_cast<double>(this->a_sensorsData->get(0, DataOption::LAST)) << std::endl;
+    std::cout << boost::any_cast<double>(this->a_sensorsData->get(0, DataOption::FIRST)) << std::endl;
 
-    while(This->a_thread_active)
+    while(this->a_thread_active)
     {
         //_DEBUG("Robot", INFORMATION);
     }
 
     _DEBUG("Fin de la routine de calcul des trajectoires", INFORMATION);
 
-    return NULL;
+    return;
 }

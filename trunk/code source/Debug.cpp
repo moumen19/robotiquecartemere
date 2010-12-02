@@ -42,7 +42,8 @@
     unsigned int _DEBUG::a_cursor = 0;
     Debug_Configuration _DEBUG::a_configuration = CONSOLE_DISPLAY;
     std::string _DEBUG::a_filename = "";
-    pthread_mutex_t _DEBUG::a_mutex = PTHREAD_MUTEX_INITIALIZER;
+    //pthread_mutex_t _DEBUG::a_mutex = PTHREAD_MUTEX_INITIALIZER;
+    boost::mutex _DEBUG::a_mutex;
 
     void _DEBUG::addMessage(std::string title, std::string content, Debug_Priority priority)
     {
@@ -139,12 +140,14 @@
 
     void _DEBUG::lock()
     {
-         pthread_mutex_lock(&_DEBUG::a_mutex);
+        //pthread_mutex_lock(&_DEBUG::a_mutex);
+	_DEBUG::a_mutex.lock();
     }
 
     void _DEBUG::unlock()
     {
-         pthread_mutex_unlock(&_DEBUG::a_mutex);
+        //pthread_mutex_unlock(&_DEBUG::a_mutex);
+	_DEBUG::a_mutex.unlock();
     }
 
 #endif
