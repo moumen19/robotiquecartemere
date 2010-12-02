@@ -18,9 +18,6 @@ Debug.o: Debug.cpp Debug.hpp
 BusRS232.o: ./robot/BusRS232.cpp ./robot/BusRS232.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-BusI2C.o: ./robot/BusI2C.cpp ./robot/BusI2C.hpp
-	$(CC) $(CFLAGS) -c $< -o $@
-
 Communication.o: ./robot/Communication.cpp ./robot/Communication.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
