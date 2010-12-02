@@ -24,7 +24,7 @@
 	    virtual bool isDataAvailable();	// Si j'ai au moins un octet en attente de lecture
 
 	protected:
-	    virtual char * onSend(const boost::any &, int *);
+	    virtual SerialPort::DataBuffer onSend(const boost::any &);
 	    virtual boost::any onReceive();
             static void * receive(void *);
 
@@ -38,6 +38,8 @@
 	    int a_bufferSize;
 	    int a_bufferWriteCursor;
 	    int a_bufferReadCursor;
+            
+	    static pthread_mutex_t a_mutex;
     };
 
 #endif

@@ -93,8 +93,10 @@ int i = 0;
 	{
 i++;
 	    msg = boost::any_cast<char>(This->a_asservissement->getData());
-            std::cout << msg;
+            //std::cout << msg;
 	}
+//sleep(1);
+
         /*if(This->a_rs232Asservissement.IsOpen())
         {
             while(This->a_rs232Asservissement.rdbuf()->in_avail())

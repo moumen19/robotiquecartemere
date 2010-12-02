@@ -2,6 +2,8 @@
 //#include <exception>
 #include <string.h>
 
+pthread_mutex_t  BusRS232::a_mutex = PTHREAD_MUTEX_INITIALIZER;
+
 BusRS232::BusRS232(std::string port, int bufferSize)
 {
     this->a_port = port;
@@ -31,7 +33,11 @@ bool BusRS232::open()
 
     try
     {
-	this->a_rs232->Open();
+	this->a_rs232->Open(SerialPort::BAUD_9600, 
+			    SerialPort::CHAR_SIZE_8, 
+			    SerialPort::PARITY_ODD, 
+			    SerialPort::STOP_BITS_1, 
+			    SerialPort::FLOW_CONTROL_NONE);
     }
     catch(const std::exception & e)
     {
@@ -40,20 +46,6 @@ bool BusRS232::open()
 
     if(this->a_rs232->IsOpen())
     {
-	try
-	{
-    	    this->a_rs232->SetBaudRate(SerialPort::BAUD_9600);
-            this->a_rs232->SetCharSize(SerialPort::CHAR_SIZE_8);
-            this->a_rs232->SetNumOfStopBits(SerialPort::STOP_BITS_1);
-            this->a_rs232->SetParity(SerialPort::PARITY_ODD);
-            this->a_rs232->SetFlowControl(SerialPort::FLOW_CONTROL_HARD);
-        }
-	catch(const std::exception & e)
-	{
-	    _DEBUG(e.what(), WARNING);
-	    return false;
-	}
-
 	_DEBUG("Ouverture du port RS232", INFORMATION);
 
 	this->a_thread_active = true;
@@ -74,11 +66,13 @@ void BusRS232::close()
 	{   
 	    this->a_thread_active = false;     
 	    this->a_rs232->Close();
+ 	    //pthread_join(this->a_thread, NULL);	// Attention blockage ici !
 	}
 	catch(const std::exception & e)
 	{	
 	    _DEBUG(e.what(), WARNING);
 	}
+
         _DEBUG("Fermerure du port RS232", INFORMATION);
     }
 }
@@ -86,11 +80,20 @@ void BusRS232::close()
 
 void BusRS232::send(boost::any msg)
 {
-    char * buffer;
-    int bufferSize = 0;
-    buffer = this->onSend(msg, &bufferSize);
+    SerialPort::DataBuffer buffer = this->onSend(msg);
 
-    //this->a_rs232->Write(buffer, bufferSize);
+    this->a_rs232->Write(buffer);
+}
+
+SerialPort::DataBuffer BusRS232::onSend(const boost::any & msg)
+{
+    std::string str_msg = boost::any_cast<std::string>(msg);
+    SerialPort::DataBuffer buffer;
+
+    for(unsigned int i = 0; i < str_msg.size(); i++)
+	buffer.push_back(str_msg[i]);
+
+    return buffer;
 }
 
 void * BusRS232::receive(void * data)
@@ -109,10 +112,22 @@ void * BusRS232::receive(void * data)
     	    try
 	    {
 		buffer = This->a_rs232->ReadByte(0);
+
+		pthread_mutex_lock(&BusRS232::a_mutex);
+
 		This->a_buffer[This->a_bufferWriteCursor] = buffer;
 		This->a_bufferWriteCursor++;
+		if(This->a_bufferWriteCursor >= This->a_bufferSize)
+		    This->a_bufferWriteCursor -= This->a_bufferSize;
+
 		if(This->a_bufferWriteCursor == This->a_bufferReadCursor)
+		{
 		    This->a_bufferReadCursor++;
+		    if(This->a_bufferReadCursor >= This->a_bufferSize)
+			This->a_bufferReadCursor -= This->a_bufferSize;
+		}
+
+		pthread_mutex_unlock(&BusRS232::a_mutex);
  	    }
 	    catch(const std::exception & e)
 	    {
@@ -130,25 +145,20 @@ void * BusRS232::receive(void * data)
 
 boost::any BusRS232::getData()
 {
+	//_DEBUG("RECEIVE", INFORMATION);
     return onReceive();
-}
-
-char * BusRS232::onSend(const boost::any & msg, int * bufferSize)
-{
-    std::string str_msg = boost::any_cast<std::string>(msg);
-    *bufferSize = (int)str_msg.size();
-    char * buffer = new char[*bufferSize];
-    strcpy(buffer, str_msg.c_str());
-
-    return buffer;
 }
 
 bool BusRS232::isDataAvailable()
 {
+    pthread_mutex_lock(&BusRS232::a_mutex);
+
     int bufferAvailable = this->a_bufferWriteCursor - this->a_bufferReadCursor;
     if(this->a_bufferWriteCursor < this->a_bufferReadCursor)
 	bufferAvailable += this->a_bufferSize;
 
+    pthread_mutex_unlock(&BusRS232::a_mutex);
+		
     if(bufferAvailable > 0)
     	return true;
 
@@ -160,8 +170,13 @@ boost::any BusRS232::onReceive()
     if(!this->isDataAvailable())
 	_DEBUG("Pas de donnée disponible...", WARNING);	// A remplacer par une vrai excpetion
 
+    pthread_mutex_lock(&BusRS232::a_mutex);
+		
     boost::any msg = this->a_buffer[this->a_bufferReadCursor];
     this->a_bufferReadCursor++;
+
+    pthread_mutex_unlock(&BusRS232::a_mutex);
+		
     return msg;
 
 }
