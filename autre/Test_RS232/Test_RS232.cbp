@@ -41,6 +41,10 @@
 			<Option compile="0" />
 			<Option link="0" />
 		</Unit>
+		<Unit filename="joystick.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="joystick.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

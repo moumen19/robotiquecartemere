@@ -21,30 +21,88 @@ using namespace LibSerial;
 
 extern SerialStream my_serial_port;
 
-int main()
+
+int main(int argc, char *argv[])
 {
+   int fd;
+   int done = 0;
+   int left,right;
+    left = 5;
+    right = 5;
+   fd = open_joystick("");
+   if (fd < 0) {
+      printf("open failed.\n");
+      exit(1);
+   }
 
-    //SerialStream my_serial_port;
-    cout<<"START\nOpening serial port...\n";
-
-    // Open Serial
+    //*/ Open Serial
     if(createCOMport(my_serial_port, "/dev/ttyUSB0", SerialStreamBuf::BAUD_9600) ){ // if(my_serial_port.IsOpen()){
-        cout<<":)";
+        cout<<":)"<<endl;
     }
     else{
-        cout<<":(";
-        return 0;
-    }
+        cout<<":("<<endl;
+        exit(1);
+    }//*/
 
-    while(1)
-    {
-            // coder get Postion
-        sendMotorsSpeed(2,4);
+   while (!done ) {
 
-    }
+        GetMotorSpeed(&left,&right);
+        printf("left : %d\nright : %d\n",left,right);
+        sendMotorsSpeed((float)left,(float)right);
+        usleep(10000);
+   }
 
-    // Close Serial
+   /*while (!done ) {
+
+        //GetMotorSpeed(&left,&right);
+        //printf("left : %d\nright : %d\n",left,right);
+        sendMotorsSpeed((float)left,(float)right);
+        sleep(1);
+   }*/
+
+     // Close Serial
     my_serial_port.Close();
     cout<<"\nEND\n";
     return 0;
 }
+
+
+/*int main(int argc, char *argv[])
+{
+   int fd;
+   int done = 0;
+   int left,right;
+    left = 0;
+    right = 0;
+
+     // Open Serial
+    if(createCOMport(my_serial_port, "/dev/ttyUSB0", SerialStreamBuf::BAUD_9600) ){ // if(my_serial_port.IsOpen()){
+        cout<<":)"<<endl;
+    }
+    else{
+        cout<<":("<<endl;
+        exit(1);
+    }
+
+    // Open Joy
+   fd = open_joystick("");
+   if (fd < 0) {
+      printf("open failed.\n");
+      exit(1);
+   }
+
+   while (!done) {
+
+        GetMotorSpeed(&left,&right);
+        //system("clear");
+        printf("left : %d\nright : %d\n",left,right);
+        sendMotorsSpeed(left,right);
+        //usleep(10000);
+   }
+
+     // Close Serial
+    my_serial_port.Close();
+    cout<<"\nEND\n";
+    return 0;
+}*/
+
