@@ -160,7 +160,7 @@ void sendMotorsSpeed(float leftWheel, float rightWheel)
         {
             my_serial_port << buf[i];
         }
-        usleep(100000);
+        usleep(10000);
  }
 
 void sendStop()
