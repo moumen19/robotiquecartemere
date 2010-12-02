@@ -15,13 +15,13 @@
             BusRS232(std::string port = "/dev/ttyUSB1", int bufferSize = 1024);
             ~BusRS232();
 
-            bool open();
+            bool open();	// configure automatiquement la connexion
             void close();
 
-            boost::any getData();
-            void send(boost::any);
+            boost::any getData();	// réception d'un char	//monChar = boost::any_cast<char>(monAny);
+            void send(boost::any);	// envoi d'un string
 
-	    virtual bool isDataAvailable();
+	    virtual bool isDataAvailable();	// Si j'ai au moins un octet en attente de lecture
 
 	protected:
 	    virtual char * onSend(const boost::any &, int *);
