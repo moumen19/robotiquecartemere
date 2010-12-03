@@ -21,6 +21,11 @@
 
 	#include "../Debug.hpp"
 
+	/**
+	 * Une classe générique de dialogue avec un bus RS232
+	 * Basé sur la bibliotheque libSerial
+	 * Il y a possibilité de faire hériter cette classe pour reimplementer les methodes onSend(), onReceive() et isDataAvailable() afin de formater les donnees à recevoir et a envoyer
+	 */
 	class BusRS232
 	{
 		public:

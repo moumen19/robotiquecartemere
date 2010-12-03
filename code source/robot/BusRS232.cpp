@@ -15,6 +15,8 @@
 
 /**
  * Constructeur indiquant le port COM a ouvrir ainsi que la taille du buffer circulaire
+ * @param port - Le nom du port COM à ouvrir (/dev/ttyUSB0 par defaut)
+ * @param bufferSize - La taille du buffer circulaire (1024 par defaut)
  */
 BusRS232::BusRS232(std::string port, int bufferSize)
 {
@@ -40,10 +42,11 @@ BusRS232::~BusRS232()
 
 /**
  * Ouvre la connexion
+ * @return true si la connexion est etablie, false sinon
  */
 bool BusRS232::open()
 {
-	this->close();
+	this->close();	// Si une connexion est deja ouverte, on la ferme
 
 	// Ouvre la connexion
 	try
@@ -100,6 +103,8 @@ void BusRS232::close()
 
 /**
  * Envoi une donnée au port COM
+ * @param msg - La donnee à envoyer (par defaut, ce parametre doit etre un std::string. Pour envoyer un autre type de donnee, il faudra creer une classe heritant de BusRS232 et reimplementer onSend())
+ * @see onSend()
  */
 void BusRS232::send(boost::any msg)
 {
@@ -108,7 +113,9 @@ void BusRS232::send(boost::any msg)
 }
 
 /**
- * Formate le msg en tableau de char
+ * Methode virtuelle qui formate le msg en tableau de char
+ * @param msg - la donnee a envoyer (par defaut, ce parametre doit etre un std::string. Pour envoyer un autre type de donnee, il faudra creer une classe heritant de BusRS232 et reimplementer onSend())
+ * @return Retourne le tableau de char sous la forme d'un DataBuffer de la bibliotheque LibSerial (un std::vector de char)
  */
 SerialPort::DataBuffer BusRS232::onSend(const boost::any & msg)
 {
@@ -170,6 +177,8 @@ void BusRS232::receive()
 
 /**
  * Retourne une donnée reçue (réception d'un char)
+ * @return La donnee recu (par defaut, ce parametre est un char. Pour recuperer un autre type de donnee, il faudra creer une classe heritant de BusRS232 et reimplementer onReceive())
+ * @see onReceive()
  */
 boost::any BusRS232::getData()
 {
@@ -177,7 +186,30 @@ boost::any BusRS232::getData()
 }
 
 /**
- * Teste si une donnée est présente dans le buffer circulaire 
+ * Methode virtuelle qui formate les donnees du buffer circulaire en donnee
+ * @return La donnee recu (par defaut, ce parametre est un char. Pour recuperer un autre type de donnee, il faudra creer une classe heritant de BusRS232 et reimplementer onReceive())
+ */
+boost::any BusRS232::onReceive()
+{
+	if(!this->isDataAvailable())
+		_DEBUG("Pas de donnée disponible...", WARNING);	// A remplacer par une vraie excpetion
+
+	a_mutex.lock();			// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
+	
+	// On recupere un octet
+	boost::any msg = this->a_buffer[this->a_bufferReadCursor];
+	this->a_bufferReadCursor++;	// On repositionne le curseur de lecture
+
+	a_mutex.unlock();		// On deverouille le mutex
+	
+	return msg;			// retourne un char
+}
+
+/**
+ * Methode virtuelle qui teste si une donnée est présente dans le buffer circulaire 
+ * Par defaut, cette methode teste si au moins un octet est present
+ * Si vous creez une classe heritant de BusRS232 et reimplementez onReceive(), il faudra adapter cette methode pour qu'elle retourne vrai si votre donnee est bien presente
+ * @return true si la donnee est disponible, false sinon
  */
 bool BusRS232::isDataAvailable()
 {
@@ -194,24 +226,5 @@ bool BusRS232::isDataAvailable()
 		return true;
 
 	return false;
-}
-
-/**
- * Formate les donnees du buffer circulaire en donnee
- */
-boost::any BusRS232::onReceive()
-{
-	if(!this->isDataAvailable())
-		_DEBUG("Pas de donnée disponible...", WARNING);	// A remplacer par une vraie excpetion
-
-	a_mutex.lock();	// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
-	
-	// On recupere un octet
-	boost::any msg = this->a_buffer[this->a_bufferReadCursor];
-	this->a_bufferReadCursor++;
-
-	a_mutex.unlock();	// On deverouille le mutex
-	
-	return msg;	// retourne un char
 }
 
