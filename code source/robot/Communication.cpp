@@ -87,14 +87,22 @@ void Communication::run()
     //char m;
     //char s[256] = "";
 int i = 0;
-    while(this->a_thread_active && i < 26)
+    while(this->a_thread_active && i < 10)
     {
-	char msg;
+	messageAsservissement msg;
 	if(this->a_asservissement->isDataAvailable())
 	{
 i++;
-	    msg = boost::any_cast<char>(this->a_asservissement->getData());
-            //std::cout << msg;
+	    msg = boost::any_cast<messageAsservissement>(this->a_asservissement->getData());
+            std::cout << std::endl << (int)msg.id << "  : " ;
+	    for(int i = 0; i < 4; i++)    
+		std::cout << msg.x.data[i] << "  : " ;
+	    for(int i = 0; i < 4; i++)    
+		std::cout << msg.y.data[i] << "  : " ;
+	    for(int i = 0; i < 4; i++)    
+		std::cout << msg.alpha.data[i] << "  : ";
+	    //std::cout << msg.x.value << "  : " << msg.y.value << "  : " << msg.alpha.value << "  : ";
+	    std::cout << (int)msg.commande << std::endl;
 	}
 //sleep(1);
 
