@@ -188,6 +188,8 @@ boost::any BusRS232::getData()
 /**
  * Methode virtuelle qui formate les donnees du buffer circulaire en donnee
  * @return La donnee recu (par defaut, ce parametre est un char. Pour recuperer un autre type de donnee, il faudra creer une classe heritant de BusRS232 et reimplementer onReceive())
+ * @see getData()
+ * @see isDataAvailable()
  */
 boost::any BusRS232::onReceive()
 {
@@ -210,6 +212,7 @@ boost::any BusRS232::onReceive()
  * Par defaut, cette methode teste si au moins un octet est present
  * Si vous creez une classe heritant de BusRS232 et reimplementez onReceive(), il faudra adapter cette methode pour qu'elle retourne vrai si votre donnee est bien presente
  * @return true si la donnee est disponible, false sinon
+ * @see onReceive()
  */
 bool BusRS232::isDataAvailable()
 {
