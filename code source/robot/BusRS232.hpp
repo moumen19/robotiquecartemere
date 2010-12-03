@@ -45,19 +45,19 @@
 			virtual boost::any onReceive();					// Methode appele a l'appel de getData() (transforme les octets du buffer en donnee)
 			void receive();							// Méthode thread qui écoute en permanance le port COM et qui stocke chaque octet reçu dans un buffer circulaire
 
-		private:
-			std::string a_port;		// Nom du port COM
-			SerialPort * a_rs232; 		// Le port COM
-
-			boost::thread *a_thread;	// Le thread
-			bool a_thread_active;		// Le flag de sorti du thread
-
 			char * a_buffer;		// Le buffer circulaire
 			int a_bufferSize;		// La taille du buffer circulaire
 			int a_bufferWriteCursor;	// Un cursor vers la case du buffer ou il faut ecrire la donnee
 			int a_bufferReadCursor;		// Un cursor vers la case du buffer ou il faut lire la donnee
 
 			boost::mutex a_mutex;		// Un mutex de protection
+
+		private:
+			std::string a_port;		// Nom du port COM
+			SerialPort * a_rs232; 		// Le port COM
+
+			boost::thread *a_thread;	// Le thread
+			bool a_thread_active;		// Le flag de sorti du thread
 	};
 
 #endif

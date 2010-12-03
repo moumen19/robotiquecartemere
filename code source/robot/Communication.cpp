@@ -19,7 +19,7 @@ Communication::Communication(Data *sensors, Data *environment, Constraint *const
     //a_bufferAsservissementCursor = 0;
     //a_bufferSensorCursor = 0;
 
-    this->a_asservissement = new BusRS232();
+    this->a_asservissement = new RS232Asservissement();
     this->a_asservissement->open();
 
     //this->a_sensor = new BusRS232();

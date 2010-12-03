@@ -6,7 +6,7 @@ EXEC=robot_prgm
 
 all: $(EXEC)
 
-$(EXEC): main.o Debug.o BusRS232.o Communication.o Constraint.o Data.o DataFusion.o Planning.o Robot.o Strategy.o
+$(EXEC): main.o Debug.o BusRS232.o Communication.o Constraint.o Data.o DataFusion.o Planning.o Robot.o RS232Asservissement.o Strategy.o
 	$(CC) $^ $(LDFLAGS) -o $@
 
 main.o: main.cpp
@@ -34,6 +34,9 @@ Planning.o: ./robot/Planning.cpp ./robot/Planning.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 Robot.o: ./robot/Robot.cpp ./robot/Robot.hpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+RS232Asservissement.o: ./robot/RS232Asservissement.cpp ./robot/RS232Asservissement.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 Strategy.o: ./robot/Strategy.cpp ./robot/Strategy.hpp
