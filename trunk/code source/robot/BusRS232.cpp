@@ -53,7 +53,7 @@ bool BusRS232::open()
 	{
 		this->a_rs232->Open(SerialPort::BAUD_9600, 
 				    SerialPort::CHAR_SIZE_8, 
-				    SerialPort::PARITY_ODD, 
+				    SerialPort::PARITY_NONE, 
 				    SerialPort::STOP_BITS_1, 
 				    SerialPort::FLOW_CONTROL_NONE);
 	}
@@ -148,7 +148,7 @@ void BusRS232::receive()
 				buffer = this->a_rs232->ReadByte(0);
 
 				a_mutex.lock();		// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
-
+std::cout << (int)buffer << " | ";
 				this->a_buffer[this->a_bufferWriteCursor] = buffer;	// On stocke l'octet recu dans le buffer circulaire
 				this->a_bufferWriteCursor++;				// On incremente le curseur d'ecriture
 				if(this->a_bufferWriteCursor >= this->a_bufferSize)	// Si le curseur pointe vers un element externe au tableau
