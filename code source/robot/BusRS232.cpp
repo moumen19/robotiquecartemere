@@ -108,8 +108,8 @@ void BusRS232::close()
  */
 void BusRS232::send(boost::any msg)
 {
-	SerialPort::DataBuffer buffer = this->onSend(msg);
-	this->a_rs232->Write(buffer);
+	//SerialPort::DataBuffer buffer = this->onSend(msg);
+	this->a_rs232->Write(boost::any_cast<SerialPort::DataBuffer>(msg));
 }
 
 /**
@@ -119,12 +119,12 @@ void BusRS232::send(boost::any msg)
  */
 SerialPort::DataBuffer BusRS232::onSend(const boost::any & msg)
 {
-	std::string str_msg = boost::any_cast<std::string>(msg);	// Le msg doit être un std::string ici
-	SerialPort::DataBuffer buffer;
+	//std::string str_msg = boost::any_cast<std::string>(msg);	// Le msg doit être un std::string ici
+	SerialPort::DataBuffer buffer = boost::any_cast<SerialPort::DataBuffer>(msg);;
 
 	// On converti le std::string en std::vector<char>
-	for(unsigned int i = 0; i < str_msg.size(); i++)
-		buffer.push_back(str_msg[i]);
+	//for(unsigned int i = 0; i < str_msg.size(); i++)
+	//	buffer.push_back(str_msg[i]);
 
 	return buffer;
 }

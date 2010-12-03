@@ -19,7 +19,7 @@ Communication::Communication(Data *sensors, Data *environment, Constraint *const
     //a_bufferAsservissementCursor = 0;
     //a_bufferSensorCursor = 0;
 
-    this->a_asservissement = new RS232Asservissement();
+    this->a_asservissement = new BusRS232();//RS232Asservissement();
     this->a_asservissement->open();
 
     //this->a_sensor = new BusRS232();
@@ -87,22 +87,39 @@ void Communication::run()
     //char m;
     //char s[256] = "";
 int i = 0;
-    while(this->a_thread_active && i < 10)
+decoupFloat t;
+std::cout << std::endl;
+    while(this->a_thread_active && i < 13)
     {
-	messageAsservissement msg;
+	//messageAsservissement msg;
+	char msg;
 	if(this->a_asservissement->isDataAvailable())
 	{
+
+		msg = boost::any_cast<char>(this->a_asservissement->getData());
+		if(i >= 1 && i <=4)
+			t.data[i-1] = msg;
+		if(i >= 5 && i <=8)
+			t.data[i-5] = msg;
+		if(i >= 9 && i <=12)
+			t.data[i-9] = msg;
+
+		if(i == 4 || i == 8 || i == 12)
+			std::cout << (float)t.value << "  : ";
+		if(i == 0 || i == 13)
+			std::cout << msg << "  : ";
+
 i++;
-	    msg = boost::any_cast<messageAsservissement>(this->a_asservissement->getData());
-            std::cout << std::endl << msg.id << "  : " ;
-	    for(int i = 0; i < 4; i++)    
+	    //msg = boost::any_cast<messageAsservissement>(this->a_asservissement->getData());
+            //std::cout << std::endl << (int)msg.id << "  : " ;
+	    /*for(int i = 0; i < 4; i++)    
 		std::cout << msg.x.data[i] << "  : " ;
 	    for(int i = 0; i < 4; i++)    
 		std::cout << msg.y.data[i] << "  : " ;
 	    for(int i = 0; i < 4; i++)    
-		std::cout << msg.alpha.data[i] << "  : ";
+		std::cout << msg.alpha.data[i] << "  : ";*/
 	    //std::cout << msg.x.value << "  : " << msg.y.value << "  : " << msg.alpha.value << "  : ";
-	    std::cout << msg.commande << std::endl;
+	    //std::cout << (int)msg.commande << std::endl;
 	}
 //sleep(1);
 
@@ -138,3 +155,43 @@ this->a_asservissement->close();
     return;
 }
 
+void Communication::test()
+{
+	decoupFloat x, y, alpha;
+	x.value = 5;
+	y.value = 5;
+	alpha.value = 0;
+
+	SerialPort::DataBuffer m;
+
+	m.push_back(42);
+
+	for(int i = 0; i < 4; i++)
+		m.push_back(x.data[i]);
+
+	for(int i = 0; i < 4; i++)
+		m.push_back(y.data[i]);
+
+	for(int i = 0; i < 4; i++)
+		m.push_back(alpha.data[i]);
+
+	m.push_back(7);
+
+	//std::string msg(m);
+	//std::cout << msg << std::endl;
+	
+	/*messageAsservissement msg;
+	msg.id = 42;
+	msg.x.value = 0;
+	msg.y.value = 0;
+	msg.alpha.value = 0;
+	msg.commande = 7;*/
+	/*messageAsservissement msg;
+	msg.id = 42;
+	msg.x.value = 5;
+	msg.y.value = 5;
+	msg.alpha.value = 0;
+	msg.commande = 3;*/
+
+	this->a_asservissement->send(m);
+}
