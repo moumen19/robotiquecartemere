@@ -28,6 +28,11 @@
 	/**
 	 * Ajoute un message en mémoire.
 	 * Affiche le message dans la console et/ou dans un fichier de logs selon la configuration
+	 * @param title - Le titre du message
+	 * @param content - Le contenu du message
+	 * @param priority - Le niveau de priorite 
+	 * @see Debug_Priority
+	 * @see _DEBUG()
 	 */
 	void _DEBUG::addMessage(std::string title, std::string content, Debug_Priority priority)
 	{
@@ -37,7 +42,10 @@
 		m.content = content;
 		m.priority = priority;
 		m.isEmpty = false;
-		_DEBUG::a_messages.push_back(m);	// Stockage du message
+
+		// Stockage du message en mémoire
+		if((_DEBUG::a_configuration & SAVE_IN_MEMORY) == SAVE_IN_MEMORY)
+			_DEBUG::a_messages.push_back(m);	
 
 		if(_DEBUG::a_configuration != DISPLAY_NONE)
 		{
