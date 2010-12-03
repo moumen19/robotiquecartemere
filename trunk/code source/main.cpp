@@ -20,21 +20,32 @@ using namespace std;
 
 int main()
 {
-    // Configuration du mode Debug
-    _DEBUG_EXEC(configuration(DISPLAY_NONE, "logs.txt"));
+	// Configuration du mode Debug
+	_DEBUG_EXEC(configuration(CONSOLE_DISPLAY, "logs.txt"));
 
 
-    _DEBUG("Lancement du programme", INFORMATION);
+	_DEBUG("Lancement du programme", INFORMATION);
 
-    signal(SIGIO, SIG_IGN); // IMPORTANT !! Sinon, le programme plante à la réception des données des ports COMs
+	signal(SIGIO, SIG_IGN); // IMPORTANT !! Sinon, le programme plante à la réception des données des ports COMs
 
-    // Création du robot
-    Robot robot2010;
-    // Lancement du calcul du robot
-    robot2010.startCommunication();
-    robot2010.start();
-    robot2010.wait();
+	// Création du robot
+	Robot robot2010;
+	// Lancement du calcul du robot
+	robot2010.startCommunication();
+	robot2010.start();
 
-    return 0;
+	
+	sleep(1);
+		int a;
+	do{
+		std::cout << "Envoyer la commande ? ";
+		std::cin >> a;
+		std::cout << "Commande envoye..." << std::endl;
+		robot2010.test();
+	}while(a != 0);
+
+	robot2010.stop();
+
+	return 0;
 }
 

@@ -83,12 +83,12 @@ void Robot::run()
 
     _DEBUG("Debut de la routine de calcul des trajectoires", INFORMATION);
 
-    double donnee = 20.01;
-    this->a_sensorsData->set(0, donnee);
-    donnee = 10.2;
-    this->a_sensorsData->set(0, donnee);
-    std::cout << boost::any_cast<double>(this->a_sensorsData->get(0, DataOption::LAST)) << std::endl;
-    std::cout << boost::any_cast<double>(this->a_sensorsData->get(0, DataOption::FIRST)) << std::endl;
+    //double donnee = 20.01;
+    //this->a_sensorsData->set(0, donnee);
+    //donnee = 10.2;
+    //this->a_sensorsData->set(0, donnee);
+    //std::cout << boost::any_cast<double>(this->a_sensorsData->get(0, DataOption::LAST)) << std::endl;
+    //std::cout << boost::any_cast<double>(this->a_sensorsData->get(0, DataOption::FIRST)) << std::endl;
 
     while(this->a_thread_active)
     {
@@ -99,3 +99,9 @@ void Robot::run()
 
     return;
 }
+
+void Robot::test()
+{
+	this->a_communication->test();
+}
+

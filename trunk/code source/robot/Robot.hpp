@@ -43,6 +43,8 @@
             void stop();
             void wait();
 
+		void test();
+
         protected:
             //static void * run(void *);
 	    void run();
