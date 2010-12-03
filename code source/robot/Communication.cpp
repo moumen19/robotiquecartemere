@@ -94,7 +94,7 @@ int i = 0;
 	{
 i++;
 	    msg = boost::any_cast<messageAsservissement>(this->a_asservissement->getData());
-            std::cout << std::endl << (int)msg.id << "  : " ;
+            std::cout << std::endl << msg.id << "  : " ;
 	    for(int i = 0; i < 4; i++)    
 		std::cout << msg.x.data[i] << "  : " ;
 	    for(int i = 0; i < 4; i++)    
@@ -102,7 +102,7 @@ i++;
 	    for(int i = 0; i < 4; i++)    
 		std::cout << msg.alpha.data[i] << "  : ";
 	    //std::cout << msg.x.value << "  : " << msg.y.value << "  : " << msg.alpha.value << "  : ";
-	    std::cout << (int)msg.commande << std::endl;
+	    std::cout << msg.commande << std::endl;
 	}
 //sleep(1);
 
