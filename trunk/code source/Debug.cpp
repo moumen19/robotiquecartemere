@@ -105,6 +105,9 @@
 
 	/**
  	 * Configure le mode de Deboggage
+	 * @param configuration - Les constantes de configuration. Possibilité d'envoyer plusieurs constantes grace a l'operateur OU
+	 * @param filename - Le chemin du fichier de logs
+	 * @see Debug_Configuration
 	 */
 	void _DEBUG::configuration(Debug_Configuration configuration, std::string filename = "")
 	{
@@ -114,6 +117,8 @@
 
 	/**
 	 * Retourne le message numero index
+	 * @param index - le numero du message stocke en memoire
+	 * @return La structure message
 	 */
 	Message _DEBUG::getMessage(unsigned int index)
 	{
@@ -127,6 +132,7 @@
 
 	/**
 	 * Retourne le message non lu le plus ancien
+	 * @return La structure message
 	 */
 	Message _DEBUG::getNextMessage()
 	{
@@ -143,6 +149,7 @@
 
 	/**
 	 * Retourne le nombre de messages stockés en mémoire
+	 * @return Le nombre de message en memoire
 	 */
 	int _DEBUG::getNumMessages()
 	{
@@ -166,3 +173,4 @@
 	}
 
 #endif
+
