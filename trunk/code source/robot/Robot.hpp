@@ -13,62 +13,61 @@
 #ifndef DEF_ROBOT
 #define DEF_ROBOT
 
-    //#include <pthread.h>
-    #include <boost/thread/thread.hpp>
+	#include <boost/thread/thread.hpp>
 
-    #include "../Debug.hpp"
+	#include "../Debug.hpp"
 
-    #include "Data.hpp"
-    #include "Planning.hpp"
-    #include "Constraint.hpp"
-    #include "Strategy.hpp"
-    #include "DataFusion.hpp"
-    #include "Communication.hpp"
+	#include "Data.hpp"
+	#include "Planning.hpp"
+	#include "Constraint.hpp"
+	#include "Strategy.hpp"
+	#include "DataFusion.hpp"
+	#include "Communication.hpp"
 
-    class Robot
-    {
-        public:
-            Robot();
-            ~Robot();
+	class Robot
+	{
+		public:
+			Robot();
+			~Robot();
 
-            void interruptuion_arret_urgence();
+			void interruptuion_arret_urgence();
 
-            bool isCommunicationActive();
-            void startCommunication();
-            void stopCommunication();
+			bool isCommunicationActive();
+			void startCommunication();
+			void stopCommunication();
 
-            // Gestion du thread
-            bool isActive();
-            void start();
-            void stop();
-            void wait();
+			// Gestion du thread
+			bool isActive();
+			void start();
+			void stop();
+			void wait();
 
-		void test();
+			void test();
 
-        protected:
-            //static void * run(void *);
-	    void run();
+		protected:
+			void run();
 
-        private:
-            Data a_sensorsData;
-            Data a_environmentData;
-            Constraint a_constraint;
-            DataFusion a_dataFusion;
-            Strategy a_strategy;
-            Planning a_planning;
-            Communication a_communication;
+		private:
+			Data a_sensorsData;
+			Data a_environmentData;
+			Constraint a_constraint;
+			DataFusion a_dataFusion;
+			Strategy a_strategy;
+			Planning a_planning;
+			Communication a_communication;
 
-            boost::thread *a_thread;
-            bool a_thread_active;
-    };
+			boost::thread *a_thread;
+			bool a_thread_active;
+	};
 
-    enum Sensor
-    {
-        US1 = 0,
-        US2 = 1,
-	US3 = 2,
-	US4 = 3, 
-	US5 = 5
-    };
+	enum Sensor
+	{
+		US1 = 0,
+		US2 = 1,
+		US3 = 2,
+		US4 = 3, 
+		US5 = 5
+	};
 
 #endif
+

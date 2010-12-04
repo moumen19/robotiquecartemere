@@ -1,13 +1,22 @@
+/*
+ *
+ * Bureau d'étude Robotique M2 ISEN 2010-2011
+ *
+ * DELBERGUE Julien
+ * JACQUEL Olivier
+ * PIETTE Ferdinand (ferdinand.piette@gmail.com)
+ *
+ * Fichier DataFusion.cpp
+ *
+ */
+
 #include "DataFusion.hpp"
 
 DataFusion::DataFusion(Data & sensor, Data & environment) :
-a_sensorsData(sensor),
-a_environmentData(environment)
+	a_sensorsData(sensor),
+	a_environmentData(environment)
 {
-    /*this->a_sensorsData = sensor;
-    this->a_environmentData = environment;*/
-
-    _DEBUG("Initialisation du module de fusion de donnees", INFORMATION);
+	_DEBUG("Initialisation du module de fusion de donnees", INFORMATION);
 }
 
 DataFusion::~DataFusion()
@@ -19,3 +28,4 @@ void DataFusion::run()
 {
 
 }
+

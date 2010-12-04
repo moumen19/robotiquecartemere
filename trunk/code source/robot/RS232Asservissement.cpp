@@ -100,3 +100,4 @@ bool RS232Asservissement::isDataAvailable()
 
 	return false;
 }
+

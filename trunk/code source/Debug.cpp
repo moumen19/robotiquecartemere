@@ -53,17 +53,17 @@
 			std::string msg;
 			switch(m.priority)
 			{
-			    case FATAL:
-				msg = "(Fatal error)";
-				break;
-			    case WARNING:
-				msg = "(Warning)";
-				break;
-			    case INFORMATION:
-				msg = "(Information)";
-				break;
-			    default:
-				msg = "(?)";
+				case FATAL:
+					msg = "(Fatal error)";
+					break;
+				case WARNING:
+					msg = "(Warning)";
+					break;
+				case INFORMATION:
+					msg = "(Information)";
+					break;
+				default:
+					msg = "(?)";
 			}
 			msg += "\n\t";
 			msg += m.title;
@@ -72,24 +72,20 @@
 
 			// Affichage en console
 			if((_DEBUG::a_configuration & CONSOLE_DISPLAY) == CONSOLE_DISPLAY)
-			{
-			    std::cout << "DEBUG MODE " << msg << std::endl;
-			}
+				std::cout << "DEBUG MODE " << msg << std::endl;
 
 			// Ecriture dans un fichier de logs
 			if((_DEBUG::a_configuration & FILE_DISPLAY) == FILE_DISPLAY)
 			{
-			    std::ofstream file(_DEBUG::a_filename.c_str(), std::ios::out | std::ios::app);
+				std::ofstream file(_DEBUG::a_filename.c_str(), std::ios::out | std::ios::app);
 
-			    if(file)
-			    {
+				if(file)
+				{
 				file << msg << std::endl;;
 				file.close();
-			    }
-			    else
-			    {
-				    std::cerr << "Erreur: Impossible d'ouvrir le fichier de logs du mode DEBUG !" << std::endl;
-			    }
+				}
+				else
+					std::cerr << "Erreur: Impossible d'ouvrir le fichier de logs du mode DEBUG !" << std::endl;
 			}
 		}
 	}
@@ -123,7 +119,7 @@
 	Message _DEBUG::getMessage(unsigned int index)
 	{
 		if(index < _DEBUG::a_messages.size())
-		    return _DEBUG::a_messages[index];
+			return _DEBUG::a_messages[index];
 
 		Message m;
 		m.isEmpty = true;
@@ -138,8 +134,8 @@
 	{
 		if(_DEBUG::a_cursor < _DEBUG::a_messages.size())
 		{
-		    _DEBUG::a_cursor++;
-		    return _DEBUG::a_messages[a_cursor-1];
+			_DEBUG::a_cursor++;
+			return _DEBUG::a_messages[a_cursor-1];
 		}
 
 		Message m;
