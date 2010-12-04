@@ -1,7 +1,26 @@
-CC=g++ 
-CFLAGS=-W -Wall 
-LDFLAGS= -lserial -lboost_thread 
-EXEC=robot_prgm 
+#
+# Bureau d'étude Robotique M2 ISEN 2010-2011
+#
+# DELBERGUE Julien
+# JACQUEL Olivier
+# PIETTE Ferdinand (ferdinand.piette@gmail.com)
+#
+# makefile
+#
+#
+#
+# Programme de la carte mère du robot (communication avec les carteurs et l'asservissement, fusion de donnée, stratégie et planification)
+# Compilation sous g++
+#
+# all	 	compile tout le programme (par defaut)
+# rebuild 	efface l'executable et les fichiers compiles .o (si existant) et recompile le programme
+# clean 	efface l'executable et les fichiers compiles .o (si existant)
+#
+
+CC=g++
+CFLAGS=-W -Wall
+LDFLAGS=-lserial -lboost_thread
+EXEC=robot_prgm
 
 
 all: $(EXEC)
