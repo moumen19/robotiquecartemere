@@ -61,25 +61,25 @@ boost::any RS232Asservissement::onReceive()
 	// On recupere un octet
 	messageAsservissement ass_msg;
 
-	ass_msg.id = this->a_buffer[this->a_bufferReadCursor];
-	this->a_bufferReadCursor++;		// On repositionne le curseur de lecture
+	ass_msg.id = this->a_buffer->get();/*this->a_buffer[this->a_bufferReadCursor];
+	this->a_bufferReadCursor++;		// On repositionne le curseur de lecture*/
 	for(int i = 0; i < 4; i++)
 	{
-		ass_msg.x.data[i] = this->a_buffer[this->a_bufferReadCursor];
-		this->a_bufferReadCursor++;	// On repositionne le curseur de lecture
+		ass_msg.x.data[i] = this->a_buffer->get();/*this->a_buffer[this->a_bufferReadCursor];
+		this->a_bufferReadCursor++;	// On repositionne le curseur de lecture*/
 	}
 	for(int i = 0; i < 4; i++)
 	{
-		ass_msg.y.data[i] = this->a_buffer[this->a_bufferReadCursor];
-		this->a_bufferReadCursor++;	// On repositionne le curseur de lecture
+		ass_msg.y.data[i] = this->a_buffer->get();/*this->a_buffer[this->a_bufferReadCursor];
+		this->a_bufferReadCursor++;	// On repositionne le curseur de lecture*/
 	}
 	for(int i = 0; i < 4; i++)
 	{
-		ass_msg.alpha.data[i] = this->a_buffer[this->a_bufferReadCursor];
-		this->a_bufferReadCursor++;	// On repositionne le curseur de lecture
+		ass_msg.alpha.data[i] = this->a_buffer->get();/*this->a_buffer[this->a_bufferReadCursor];
+		this->a_bufferReadCursor++;	// On repositionne le curseur de lecture*/
 	}
-	ass_msg.commande = this->a_buffer[this->a_bufferReadCursor];
-	this->a_bufferReadCursor++;		// On repositionne le curseur de lecture
+	ass_msg.commande = this->a_buffer->get();/*this->a_buffer[this->a_bufferReadCursor];
+	this->a_bufferReadCursor++;		// On repositionne le curseur de lecture*/
 	
 	boost::any msg = ass_msg;
 
@@ -99,9 +99,9 @@ bool RS232Asservissement::isDataAvailable()
 	a_mutex.lock();	// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 
 	// On calcul le nombre d'octets non lu
-	int bufferAvailable = this->a_bufferWriteCursor - this->a_bufferReadCursor;
+	int bufferAvailable = this->a_buffer->dataAvailable();/*this->a_bufferWriteCursor - this->a_bufferReadCursor;
 	if(this->a_bufferWriteCursor < this->a_bufferReadCursor)
-	bufferAvailable += this->a_bufferSize;
+		bufferAvailable += this->a_bufferSize;*/
 
 	a_mutex.unlock();	// On deverouille le mutex	
 

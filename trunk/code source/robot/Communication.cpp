@@ -86,10 +86,10 @@ void Communication::run()
 
     //char m;
     //char s[256] = "";
-int i = 0;
+int i = 0, j = 0;
 decoupFloat t;
-std::cout << std::endl;
-    while(this->a_thread_active && i < 13)
+//std::cout << std::endl;
+    while(this->a_thread_active && i > -1)
     {
 	//messageAsservissement msg;
 	char msg;
@@ -105,11 +105,28 @@ std::cout << std::endl;
 			t.data[i-9] = msg;
 
 		if(i == 4 || i == 8 || i == 12)
-			std::cout << (float)t.value << "  : ";
+		{
+			_DISPLAY((float)t.value);
+			_DISPLAY(" : ");
+		}
 		if(i == 0 || i == 13)
-			std::cout << msg << "  : ";
+		{
+			_DISPLAY(msg);
+			_DISPLAY(" : ");
+		}
 
 i++;
+if(i == 14)
+{
+	i = 0;
+	j++;
+	_DISPLAY(std::endl);
+	_DISPLAY(j);
+	_DISPLAY("\t");
+// Ici, ça plante à j = 74 (74ème boucle)
+
+}
+
 	    //msg = boost::any_cast<messageAsservissement>(this->a_asservissement->getData());
             //std::cout << std::endl << (int)msg.id << "  : " ;
 	    /*for(int i = 0; i < 4; i++)    

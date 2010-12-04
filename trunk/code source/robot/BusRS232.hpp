@@ -20,6 +20,7 @@
 	#include <boost/thread/mutex.hpp>
 
 	#include "../Debug.hpp"
+	#include "Buffer.hpp"
 
 	/**
 	 * Une classe générique de dialogue avec un bus RS232
@@ -45,10 +46,7 @@
 			virtual boost::any onReceive();					// Methode appele a l'appel de getData() (transforme les octets du buffer en donnee)
 			void receive();							// Méthode thread qui écoute en permanance le port COM et qui stocke chaque octet reçu dans un buffer circulaire
 
-			char * a_buffer;		// Le buffer circulaire
-			int a_bufferSize;		// La taille du buffer circulaire
-			int a_bufferWriteCursor;	// Un cursor vers la case du buffer ou il faut ecrire la donnee
-			int a_bufferReadCursor;		// Un cursor vers la case du buffer ou il faut lire la donnee
+			Buffer * a_buffer;		// Le buffer circulaire
 
 			boost::mutex a_mutex;		// Un mutex de protection
 

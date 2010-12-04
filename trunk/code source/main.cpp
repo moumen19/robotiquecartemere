@@ -35,7 +35,7 @@ int main()
 	robot2010.start();
 
 	
-	sleep(1);
+	/*sleep(1);
 		int a;
 	do{
 		std::cout << "Envoyer la commande ? ";
@@ -44,7 +44,8 @@ int main()
 		robot2010.test();
 	}while(a != 0);
 
-	robot2010.stop();
+	robot2010.stop();*/
+	robot2010.wait();
 
 	return 0;
 }
