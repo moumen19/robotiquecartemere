@@ -21,18 +21,18 @@
 	class Buffer
 	{
 		public:
-			Buffer(int size = 1024);
-			~Buffer();
+			Buffer(int size = 1024);	// Constructeur
+			~Buffer();			// Destructeur
 
-			void put(char);
-			char get();
-			int dataAvailable();
+			void put(char);			// Ajoute un octet au buffer
+			char get();			// Lit un octet du buffer
+			int dataAvailable();		// Retourne le nombre d'octet disponible en lecture
 
 		private: 
-			int a_size;
-			int a_readCursor;
-			int a_writeCursor;
-			char * a_buffer;
+			int a_size;			// Taille du buffer circulaire
+			int a_readCursor;		// Curseur de lecture
+			int a_writeCursor;		// Curseur d'écriture
+			char * a_buffer;		// Tableau d'octet : le buffer
 	};
 
 #endif
