@@ -18,12 +18,10 @@
  * @param port - Le nom du port COM à ouvrir (/dev/ttyUSB0 par defaut)
  * @param bufferSize - La taille du buffer circulaire (1024 par defaut)
  */
-BusRS232::BusRS232(std::string port, int bufferSize) : a_buffer(bufferSize)
+BusRS232::BusRS232(std::string port, int bufferSize) : a_buffer(bufferSize), a_rs232(port)
 {
 	this->a_port = port;
 	this->a_thread_active = false;
-
-	this->a_rs232 = new SerialPort(port);
 
 	_DEBUG("Initialisation du module de communication par bus RS232", INFORMATION);
 }
@@ -47,7 +45,7 @@ bool BusRS232::open()
 	// Ouvre la connexion
 	try
 	{
-		this->a_rs232->Open(SerialPort::BAUD_9600, 
+		this->a_rs232.Open(SerialPort::BAUD_9600, 
 				    SerialPort::CHAR_SIZE_8, 
 				    SerialPort::PARITY_NONE, 
 				    SerialPort::STOP_BITS_1, 
@@ -59,7 +57,7 @@ bool BusRS232::open()
 	}
 
 	// Lance le thread d'ecoute
-	if(this->a_rs232->IsOpen())
+	if(this->a_rs232.IsOpen())
 	{
 		_DEBUG("Ouverture du port RS232", INFORMATION);
 
@@ -79,12 +77,12 @@ bool BusRS232::open()
 void BusRS232::close()
 {
 	// Si la connexion est ouverte, on la ferme
-	if(this->a_rs232->IsOpen())
+	if(this->a_rs232.IsOpen())
 	{
 		try
 		{   
 			this->a_thread_active = false;     
-			this->a_rs232->Close();
+			this->a_rs232.Close();
 			//this->a_thread->join()	// Attention blockage ici !
 		}
 		catch(const std::exception & e)
@@ -105,7 +103,7 @@ void BusRS232::close()
 void BusRS232::send(boost::any msg)
 {
 	//SerialPort::DataBuffer buffer = this->onSend(msg);
-	this->a_rs232->Write(boost::any_cast<SerialPort::DataBuffer>(msg));
+	this->a_rs232.Write(boost::any_cast<SerialPort::DataBuffer>(msg));
 }
 
 /**
@@ -131,23 +129,23 @@ SerialPort::DataBuffer BusRS232::onSend(const boost::any & msg)
 void BusRS232::receive()
 {
 	_DEBUG("Debut de la routine d'ecoute d'un port RS232", INFORMATION);
-int i = 0, j = 0;
+//int i = 0, j = 0;
 	// Tant que l'on a pas ferme la connexion
 	while(this->a_thread_active)
 	{
-		if(this->a_rs232->IsOpen())
+		if(this->a_rs232.IsOpen())
 		{
 			unsigned char buffer = 0;
 			try
 			{
 				// On recupere un octet (timeout = 0 : processus bloquant)
-				buffer = this->a_rs232->ReadByte(0);
+				buffer = this->a_rs232.ReadByte(0);
 
 				a_mutex.lock();			// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 
 //_DISPLAY((int)buffer);
 //_DISPLAY(" | ");
-i++;
+//i++;
 /*if(i%14 == 0)	
 { 
 	j++;

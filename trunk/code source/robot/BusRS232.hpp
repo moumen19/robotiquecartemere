@@ -52,7 +52,7 @@
 
 		private:
 			std::string a_port;		// Nom du port COM
-			SerialPort * a_rs232; 		// Le port COM
+			SerialPort a_rs232; 		// Le port COM
 
 			boost::thread *a_thread;	// Le thread
 			bool a_thread_active;		// Le flag de sorti du thread

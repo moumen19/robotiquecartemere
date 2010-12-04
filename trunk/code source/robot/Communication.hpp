@@ -55,7 +55,7 @@
     class Communication
     {
         public:
-            Communication(Data *, Data *, Constraint *, Planning *);
+            Communication(Data &, Data &, Constraint &, Planning &);
             ~Communication();
 
             void send(Port::Port, std::string);
@@ -79,10 +79,10 @@
             //char a_bufferAsservissement[_BUFFER_ASSERVISSEMENT_SIZE];
             //int a_bufferAsservissementCursor;
             
-            Data *a_sensorsData;
-            Data *a_environmentData;
-            Constraint *a_constraint;
-            Planning *a_planning;
+            Data & a_sensorsData;
+            Data & a_environmentData;
+            Constraint & a_constraint;
+            Planning & a_planning;
 
             boost::thread *a_thread;
             //pthread_t a_thread;

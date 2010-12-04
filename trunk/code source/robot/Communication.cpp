@@ -13,7 +13,11 @@
 #include "Communication.hpp"
 #include <sstream>
 
-Communication::Communication(Data *sensors, Data *environment, Constraint *constraint, Planning *planning)
+Communication::Communication(Data & sensors, Data & environment, Constraint & constraint, Planning & planning) : 
+a_sensorsData(sensors),
+a_environmentData(environment),
+a_constraint(constraint),
+a_planning(planning)
 {
     
     //a_bufferAsservissementCursor = 0;
@@ -25,10 +29,10 @@ Communication::Communication(Data *sensors, Data *environment, Constraint *const
     //this->a_sensor = new BusRS232();
     //this->a_sensor->open();
 
-    this->a_sensorsData = sensors;
+    /*this->a_sensorsData = sensors;
     this->a_environmentData = environment;
     this->a_constraint = constraint;
-    this->a_planning = planning;
+    this->a_planning = planning;*/
 
     this->a_thread_active = false;
 

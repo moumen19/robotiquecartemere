@@ -50,16 +50,15 @@
 	    void run();
 
         private:
-            Data *a_sensorsData;
-            Data *a_environmentData;
-            Planning *a_planning;
-            Constraint *a_constraint;
-            Strategy *a_strategy;
-            DataFusion *a_dataFusion;
-            Communication *a_communication;
+            Data a_sensorsData;
+            Data a_environmentData;
+            Constraint a_constraint;
+            DataFusion a_dataFusion;
+            Strategy a_strategy;
+            Planning a_planning;
+            Communication a_communication;
 
             boost::thread *a_thread;
-            //pthread_t a_thread;
             bool a_thread_active;
     };
 
