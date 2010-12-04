@@ -13,16 +13,20 @@
 #include "Robot.hpp"
 #include <sstream>
 
-Robot::Robot()
+Robot::Robot() :
+a_dataFusion(a_sensorsData, a_environmentData),
+a_strategy(a_environmentData, a_constraint),
+a_planning(a_environmentData, a_constraint, a_strategy),
+a_communication(a_sensorsData, a_environmentData, a_constraint, a_planning)
 {
-    this->a_sensorsData = new Data();
-    this->a_environmentData = new Data();
-    this->a_constraint = new Constraint();
+    //this->a_sensorsData = new Data();
+    //this->a_environmentData = new Data();
+    //this->a_constraint = new Constraint();
 
-    this->a_dataFusion = new DataFusion(this->a_sensorsData, this->a_environmentData);
+    /*this->a_dataFusion = new DataFusion(this->a_sensorsData, this->a_environmentData);
     this->a_strategy = new Strategy(this->a_environmentData, this->a_constraint);
     this->a_planning = new Planning(this->a_environmentData, this->a_constraint, this->a_strategy);
-    this->a_communication = new Communication(this->a_sensorsData, this->a_environmentData, this->a_constraint, this->a_planning);
+    this->a_communication = new Communication(this->a_sensorsData, this->a_environmentData, this->a_constraint, this->a_planning);*/
 
     this->a_thread_active = false;
 
@@ -31,25 +35,25 @@ Robot::Robot()
 
 Robot::~Robot()
 {
-    if(this->a_communication->isActive())
-        this->a_communication->stop();
+    if(this->a_communication.isActive())
+        this->a_communication.stop();
     this->stop();
     //pthread_join(this->a_thread, NULL);
 }
 
 bool Robot::isCommunicationActive()
 {
-    return this->a_communication->isActive();
+    return this->a_communication.isActive();
 }
 
 void Robot::startCommunication()
 {
-    this->a_communication->start();
+    this->a_communication.start();
 }
 
 void Robot::stopCommunication()
 {
-    this->a_communication->stop();
+    this->a_communication.stop();
 }
 
 bool Robot::isActive()
@@ -102,6 +106,6 @@ void Robot::run()
 
 void Robot::test()
 {
-	this->a_communication->test();
+	this->a_communication.test();
 }
 

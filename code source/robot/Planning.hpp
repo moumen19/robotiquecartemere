@@ -18,7 +18,7 @@
     class Planning
     {
         public:
-            Planning(Data *, Constraint *, Strategy *);
+            Planning(Data &, Constraint &, Strategy &);
             ~Planning();
 
             void clearTrajectory();
@@ -26,9 +26,9 @@
             void run();
 
         private:
-            Data *a_environmentData;
-            Constraint *a_constraint;
-            Strategy *a_strategy;
+            Data & a_environmentData;
+            Constraint & a_constraint;
+            Strategy & a_strategy;
             std::vector<Point> a_trajectory;
     };
 
