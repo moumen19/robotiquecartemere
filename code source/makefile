@@ -1,7 +1,7 @@
-CC=g++							# Compilateur
-CFLAGS=-W -Wall						# Flags
-LDFLAGS= -lserial -lboost_thread #-lpthread 		# Lien Bibliotheques
-EXEC=robot_prgm						# Nom du programme
+CC=g++ 
+CFLAGS=-W -Wall 
+LDFLAGS= -lserial -lboost_thread 
+EXEC=robot_prgm 
 
 
 all: $(EXEC)

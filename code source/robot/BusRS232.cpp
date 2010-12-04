@@ -144,7 +144,7 @@ int i = 0, j = 0;
 				// On recupere un octet (timeout = 0 : processus bloquant)
 				buffer = this->a_rs232->ReadByte(0);
 
-				a_mutex.lock();		// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
+				a_mutex.lock();			// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 
 //_DISPLAY((int)buffer);
 //_DISPLAY(" | ");
@@ -157,8 +157,8 @@ i++;
 	_DISPLAY("\t");
 }*/
 
-				a_buffer->put(buffer);	// On ajoute un octet au curseur
-				a_mutex.unlock();	// On deverouille le mutex
+				this->a_buffer->put(buffer);	// On ajoute un octet au buffer
+				a_mutex.unlock();		// On deverouille le mutex
 			}
 			catch(const std::exception & e)
 			{
@@ -194,7 +194,9 @@ boost::any BusRS232::onReceive()
 		_DEBUG("Pas de donnée disponible...", WARNING);	// A remplacer par une vraie excpetion
 
 	a_mutex.lock();				// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
-	boost::any msg = a_buffer->get();	// On recupere un octet
+	unsigned char c;
+	c = this->a_buffer->get(); 		// On recupere un octet
+	boost::any msg = c;
 	a_mutex.unlock();			// On deverouille le mutex
 	
 	return msg;				// retourne un char
