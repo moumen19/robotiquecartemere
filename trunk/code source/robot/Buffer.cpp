@@ -12,46 +12,60 @@
 
 #include "Buffer.hpp"
 
+/** 
+ * Constructeur
+ * @param size - La taille du buffer circulaire
+ */
 Buffer::Buffer(int size)
 {
 	this->a_size = size;
 	this->a_buffer = new char[this->a_size]; 
-
 	
 	this->a_readCursor = 0;
 	this->a_writeCursor = 0;
 }
 
+/**
+ * Destructeur
+ */
 Buffer::~Buffer()
 {
 	delete[] this->a_buffer;
 }
 
+/**
+ * Ajoute un octet au buffer
+ * @param c - L'octet a ajouter au buffer
+ */
 void Buffer::put(char c)
 {
-	this->a_buffer[this->a_writeCursor] = c;
-	this->a_writeCursor++;
+	this->a_buffer[this->a_writeCursor] = c;	// On ajoute l'octet au buffer
+	this->a_writeCursor++;				// On incremente le curseur d'ecriture
 
-	if(this->a_writeCursor >= this->a_size)
-		a_writeCursor = 0;
+	if(this->a_writeCursor >= this->a_size)		// Si le curseur sort du buffer
+		a_writeCursor = 0;			// On remet le curseur d'ecriture a 0
 
-	if(this->a_writeCursor == this->a_readCursor)
+	if(this->a_writeCursor == this->a_readCursor)	// Si le curseur d'ecriture croise le curseur de lecture
 	{
-		this->a_readCursor++;
-		if(this->a_readCursor >= this->a_size)
-			a_readCursor = 0;
+		this->a_readCursor++;			// On incremente le curseur de lecture (perte de donnees)
+		if(this->a_readCursor >= this->a_size)	// Si le curseur de lecture sort du buffer
+			a_readCursor = 0;		// On remet a O le curseur de lecture
 	}
 }
 
+/**
+ * Recupere le premier octet non lu
+ * @return Le premeir octet non lu
+ */
 char Buffer::get()
 {
-	if(this->dataAvailable())
+	if(this->dataAvailable())	// Si on a des donnees a recuperer
 	{
-		char c = this->a_buffer[this->a_readCursor];
-		this->a_readCursor++;
+		char c = this->a_buffer[this->a_readCursor];	// On recupere le premier caractere
+		this->a_readCursor++;				// On incremente le curseur de lecture
 
-		if(this->a_readCursor >= this->a_size)
-			this->a_readCursor = 0;
+		if(this->a_readCursor >= this->a_size)		// Si le curseur de lecture sort du buffer
+			this->a_readCursor = 0;			// On remet a 0 le curseur de lecture
 
 		return c;
 	}
@@ -60,11 +74,16 @@ char Buffer::get()
 	return 0;
 }
 
+/**
+ * Retourne le nombre d'octet disponible à la lecture
+ * @return Le nombre d'octet disponible
+ */
 int Buffer::dataAvailable()
 {
-	int available = this->a_writeCursor - this->a_readCursor;
+	int available = this->a_writeCursor - this->a_readCursor;	// On calcul le nombre d'octet disponible
 
-	if(this->a_writeCursor < this->a_readCursor)
-		available += this->a_size;
+	if(this->a_writeCursor < this->a_readCursor)			
+		available += this->a_size;				
 	return available;
 }
+
