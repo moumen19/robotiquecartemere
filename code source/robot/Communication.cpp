@@ -19,7 +19,7 @@ Communication::Communication(Data & sensors, Data & environment, Constraint & co
 	a_constraint(constraint),
 	a_planning(planning)
 {
-	this->a_asservissement->open();
+	this->a_asservissement.open();
 
 	//this->a_sensor = new BusRS232();
 	//this->a_sensor->open();
@@ -38,7 +38,7 @@ void Communication::send(Port::Port port, std::string msg)
 {
 	if(port == Port::ASSERVISSEMENT)
 	{
-		this->a_asservissement->send(msg);
+		this->a_asservissement.send(msg);
 	}
 	else if(port == Port::SENSOR)
 	{
@@ -81,9 +81,9 @@ void Communication::run()
 	{
 		//messageAsservissement msg;
 		char msg;
-		if(this->a_asservissement->isDataAvailable())
+		if(this->a_asservissement.isDataAvailable())
 		{
-			msg = boost::any_cast<char>(this->a_asservissement->getData());
+			msg = boost::any_cast<char>(this->a_asservissement.getData());
 			if(i >= 1 && i <=4)
 				t.data[i-1] = msg;
 			if(i >= 5 && i <=8)
@@ -112,7 +112,7 @@ void Communication::run()
 				_DISPLAY("\t");
 			}
 
-			//msg = boost::any_cast<messageAsservissement>(this->a_asservissement->getData());
+			//msg = boost::any_cast<messageAsservissement>(this->a_asservissement.getData());
 			//std::cout << std::endl << (int)msg.id << "  : " ;
 			/*for(int i = 0; i < 4; i++)    
 				std::cout << msg.x.data[i] << "  : " ;
@@ -151,7 +151,7 @@ void Communication::run()
 		*/
 
 	}
-	this->a_asservissement->close();
+	this->a_asservissement.close();
 	_DEBUG("Fin de la routine d'ecoute des ports de communications", INFORMATION);
 }
 
@@ -193,6 +193,6 @@ void Communication::test()
 	msg.alpha.value = 0;
 	msg.commande = 3;*/
 
-	this->a_asservissement->send(m);
+	this->a_asservissement.send(m);
 }
 
