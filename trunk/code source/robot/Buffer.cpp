@@ -19,7 +19,7 @@
 Buffer::Buffer(int size)
 {
 	this->a_size = size;
-	this->a_buffer = new char[this->a_size]; 
+	this->a_buffer = new unsigned char[this->a_size]; 
 	
 	this->a_readCursor = 0;
 	this->a_writeCursor = 0;
@@ -37,7 +37,7 @@ Buffer::~Buffer()
  * Ajoute un octet au buffer
  * @param c - L'octet a ajouter au buffer
  */
-void Buffer::put(char c)
+void Buffer::put(const unsigned char &c)
 {
 	this->a_buffer[this->a_writeCursor] = c;	// On ajoute l'octet au buffer
 	this->a_writeCursor++;				// On incremente le curseur d'ecriture
@@ -57,20 +57,20 @@ void Buffer::put(char c)
  * Recupere le premier octet non lu
  * @return Le premeir octet non lu
  */
-char Buffer::get()
+unsigned char Buffer::get()
 {
 	if(this->dataAvailable())	// Si on a des donnees a recuperer
 	{
-		char c = this->a_buffer[this->a_readCursor];	// On recupere le premier caractere
-		this->a_readCursor++;				// On incremente le curseur de lecture
+		unsigned char c = this->a_buffer[this->a_readCursor];	// On recupere le premier caractere
+		this->a_readCursor++;					// On incremente le curseur de lecture
 
-		if(this->a_readCursor >= this->a_size)		// Si le curseur de lecture sort du buffer
-			this->a_readCursor = 0;			// On remet a 0 le curseur de lecture
+		if(this->a_readCursor >= this->a_size)			// Si le curseur de lecture sort du buffer
+			this->a_readCursor = 0;				// On remet a 0 le curseur de lecture
 
 		return c;
 	}
 
-		_DEBUG("Pas de donnée disponible...", WARNING);	// A remplacer par une vraie excpetion !!!
+		_DEBUG("Pas de donnée disponible...", WARNING);		// A remplacer par une vraie excpetion !!!
 	return 0;
 }
 
@@ -85,5 +85,23 @@ int Buffer::dataAvailable()
 	if(this->a_writeCursor < this->a_readCursor)			
 		available += this->a_size;				
 	return available;
+}
+
+/**
+ * Surcharge d'operateur de flux
+ * Ajoute un octet au buffer
+ */
+void Buffer::operator<<(const unsigned char & c)
+{
+	this->put(c);
+}
+
+/**
+ * Surcharge d'operateur de flux
+ * Recupere un octet du buffer
+ */
+void Buffer::operator>>(unsigned char & c)
+{
+	c = this->get();
 }
 
