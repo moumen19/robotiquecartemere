@@ -51,7 +51,11 @@
 	 * @param f - La méthode statique avec ses parametres
 	 */
 	#define _DEBUG_EXEC(f)	if(_DEBUG_MODE == true) \
-		                _DEBUG::f;
+			                _DEBUG::f;
+
+	#define _DISPLAY(message)	_DEBUG::lock(); \
+					std::cout << message; \
+					_DEBUG::unlock();
 
 	/** 
 	 * Définition des constantes de configurations

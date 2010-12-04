@@ -6,13 +6,16 @@ EXEC=robot_prgm
 
 all: $(EXEC)
 
-$(EXEC): main.o Debug.o BusRS232.o Communication.o Constraint.o Data.o DataFusion.o Planning.o Robot.o RS232Asservissement.o Strategy.o
+$(EXEC): main.o Debug.o Buffer.o BusRS232.o Communication.o Constraint.o Data.o DataFusion.o Planning.o Robot.o RS232Asservissement.o Strategy.o
 	$(CC) $^ $(LDFLAGS) -o $@
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 Debug.o: Debug.cpp Debug.hpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+Buffer.o: ./robot/Buffer.cpp ./robot/Buffer.hpp 
 	$(CC) $(CFLAGS) -c $< -o $@
 
 BusRS232.o: ./robot/BusRS232.cpp ./robot/BusRS232.hpp
@@ -49,3 +52,4 @@ clean:
 	rm -f *.o $(EXEC)
 
 rebuild: clean all
+

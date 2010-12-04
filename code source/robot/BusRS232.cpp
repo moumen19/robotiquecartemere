@@ -21,10 +21,7 @@
 BusRS232::BusRS232(std::string port, int bufferSize)
 {
 	this->a_port = port;
-	this->a_bufferSize = bufferSize;
-	this->a_buffer = new char[this->a_bufferSize];
-	this->a_bufferWriteCursor = 0;
-	this->a_bufferReadCursor = 0;
+	this->a_buffer = new Buffer(bufferSize);
 	this->a_thread_active = false;
 
 	this->a_rs232 = new SerialPort(port);
@@ -135,7 +132,7 @@ SerialPort::DataBuffer BusRS232::onSend(const boost::any & msg)
 void BusRS232::receive()
 {
 	_DEBUG("Debut de la routine d'ecoute d'un port RS232", INFORMATION);
-
+int i = 0, j = 0;
 	// Tant que l'on a pas ferme la connexion
 	while(this->a_thread_active)
 	{
@@ -148,19 +145,19 @@ void BusRS232::receive()
 				buffer = this->a_rs232->ReadByte(0);
 
 				a_mutex.lock();		// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
-std::cout << (int)buffer << " | ";
-				this->a_buffer[this->a_bufferWriteCursor] = buffer;	// On stocke l'octet recu dans le buffer circulaire
-				this->a_bufferWriteCursor++;				// On incremente le curseur d'ecriture
-				if(this->a_bufferWriteCursor >= this->a_bufferSize)	// Si le curseur pointe vers un element externe au tableau
-					this->a_bufferWriteCursor -= this->a_bufferSize;// On reboucle (position 0)
 
-				if(this->a_bufferWriteCursor == this->a_bufferReadCursor)	// Si le curseur d'ecriture a un tour d'avance par rapport au curseur de lecture
-				{
-					this->a_bufferReadCursor++;				// On deplace le curseur de lecture de 1 (perte d'information)
-					if(this->a_bufferReadCursor >= this->a_bufferSize)	// Si le curseur pointe vers un element externe au tableau
-						this->a_bufferReadCursor -= this->a_bufferSize;	// On reboucle (position 0)
-				}
+//_DISPLAY((int)buffer);
+//_DISPLAY(" | ");
+i++;
+/*if(i%14 == 0)	
+{ 
+	j++;
+	_DISPLAY(std::endl); 
+	_DISPLAY(j);
+	_DISPLAY("\t");
+}*/
 
+				a_buffer->put(buffer);	// On ajoute un octet au curseur
 				a_mutex.unlock();	// On deverouille le mutex
 			}
 			catch(const std::exception & e)
@@ -196,15 +193,11 @@ boost::any BusRS232::onReceive()
 	if(!this->isDataAvailable())
 		_DEBUG("Pas de donnée disponible...", WARNING);	// A remplacer par une vraie excpetion
 
-	a_mutex.lock();			// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
+	a_mutex.lock();				// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
+	boost::any msg = a_buffer->get();	// On recupere un octet
+	a_mutex.unlock();			// On deverouille le mutex
 	
-	// On recupere un octet
-	boost::any msg = this->a_buffer[this->a_bufferReadCursor];
-	this->a_bufferReadCursor++;	// On repositionne le curseur de lecture
-
-	a_mutex.unlock();		// On deverouille le mutex
-	
-	return msg;			// retourne un char
+	return msg;				// retourne un char
 }
 
 /**
@@ -216,14 +209,9 @@ boost::any BusRS232::onReceive()
  */
 bool BusRS232::isDataAvailable()
 {
-	a_mutex.lock();	// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
-
-	// On calcul le nombre d'octets non lu
-	int bufferAvailable = this->a_bufferWriteCursor - this->a_bufferReadCursor;
-	if(this->a_bufferWriteCursor < this->a_bufferReadCursor)
-	bufferAvailable += this->a_bufferSize;
-
-	a_mutex.unlock();	// On deverouille le mutex	
+	a_mutex.lock();						// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
+	int bufferAvailable = a_buffer->dataAvailable();	// On recupere le nombre d'octet non lu
+	a_mutex.unlock();					// On deverouille le mutex	
 
 	if(bufferAvailable > 0)
 		return true;
