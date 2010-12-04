@@ -46,7 +46,7 @@
 			virtual boost::any onReceive();					// Methode appele a l'appel de getData() (transforme les octets du buffer en donnee)
 			void receive();							// Méthode thread qui écoute en permanance le port COM et qui stocke chaque octet reçu dans un buffer circulaire
 
-			Buffer * a_buffer;		// Le buffer circulaire
+			Buffer a_buffer;		// Le buffer circulaire
 
 			boost::mutex a_mutex;		// Un mutex de protection
 

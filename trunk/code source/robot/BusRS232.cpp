@@ -18,10 +18,9 @@
  * @param port - Le nom du port COM à ouvrir (/dev/ttyUSB0 par defaut)
  * @param bufferSize - La taille du buffer circulaire (1024 par defaut)
  */
-BusRS232::BusRS232(std::string port, int bufferSize)
+BusRS232::BusRS232(std::string port, int bufferSize) : a_buffer(bufferSize)
 {
 	this->a_port = port;
-	this->a_buffer = new Buffer(bufferSize);
 	this->a_thread_active = false;
 
 	this->a_rs232 = new SerialPort(port);
@@ -157,7 +156,7 @@ i++;
 	_DISPLAY("\t");
 }*/
 
-				this->a_buffer->put(buffer);	// On ajoute un octet au buffer
+				this->a_buffer << buffer;	// On ajoute un octet au buffer
 				a_mutex.unlock();		// On deverouille le mutex
 			}
 			catch(const std::exception & e)
@@ -195,7 +194,7 @@ boost::any BusRS232::onReceive()
 
 	a_mutex.lock();				// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 	unsigned char c;
-	c = this->a_buffer->get(); 		// On recupere un octet
+	this->a_buffer >> c; 			// On recupere un octet
 	boost::any msg = c;
 	a_mutex.unlock();			// On deverouille le mutex
 	
@@ -212,7 +211,7 @@ boost::any BusRS232::onReceive()
 bool BusRS232::isDataAvailable()
 {
 	a_mutex.lock();						// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
-	int bufferAvailable = a_buffer->dataAvailable();	// On recupere le nombre d'octet non lu
+	int bufferAvailable = a_buffer.dataAvailable();	// On recupere le nombre d'octet non lu
 	a_mutex.unlock();					// On deverouille le mutex	
 
 	if(bufferAvailable > 0)
