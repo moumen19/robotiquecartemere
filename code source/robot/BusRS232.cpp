@@ -18,7 +18,9 @@
  * @param port - Le nom du port COM à ouvrir (/dev/ttyUSB0 par defaut)
  * @param bufferSize - La taille du buffer circulaire (1024 par defaut)
  */
-BusRS232::BusRS232(std::string port, int bufferSize) : a_buffer(bufferSize), a_rs232(port)
+BusRS232::BusRS232(std::string port, int bufferSize) : 
+	a_buffer(bufferSize), 
+	a_rs232(port)
 {
 	this->a_port = port;
 	this->a_thread_active = false;
@@ -129,7 +131,7 @@ SerialPort::DataBuffer BusRS232::onSend(const boost::any & msg)
 void BusRS232::receive()
 {
 	_DEBUG("Debut de la routine d'ecoute d'un port RS232", INFORMATION);
-//int i = 0, j = 0;
+	//int i = 0, j = 0;
 	// Tant que l'on a pas ferme la connexion
 	while(this->a_thread_active)
 	{
@@ -143,16 +145,16 @@ void BusRS232::receive()
 
 				a_mutex.lock();			// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 
-//_DISPLAY((int)buffer);
-//_DISPLAY(" | ");
-//i++;
-/*if(i%14 == 0)	
-{ 
-	j++;
-	_DISPLAY(std::endl); 
-	_DISPLAY(j);
-	_DISPLAY("\t");
-}*/
+				//_DISPLAY((int)buffer);
+				//_DISPLAY(" | ");
+				//i++;
+				/*if(i%14 == 0)	
+				{ 
+					j++;
+					_DISPLAY(std::endl); 
+					_DISPLAY(j);
+					_DISPLAY("\t");
+				}*/
 
 				this->a_buffer << buffer;	// On ajoute un octet au buffer
 				a_mutex.unlock();		// On deverouille le mutex

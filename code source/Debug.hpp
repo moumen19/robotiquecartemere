@@ -39,11 +39,11 @@
  	 */
 	#define _DEBUG(message, priority)	if(_DEBUG_MODE == true) \
 						{ \
-						    std::ostringstream oss; \
-						    oss << __FILE__ << " (" << __LINE__ << ")"; \
-						    _DEBUG::lock(); \
-						    _DEBUG::addMessage(oss.str(), message, priority); \
-						    _DEBUG::unlock(); \
+							std::ostringstream oss; \
+							oss << __FILE__ << " (" << __LINE__ << ")"; \
+							_DEBUG::lock(); \
+							_DEBUG::addMessage(oss.str(), message, priority); \
+							_DEBUG::unlock(); \
 						}
 
 	/** 
