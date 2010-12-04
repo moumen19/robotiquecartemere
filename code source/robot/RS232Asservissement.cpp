@@ -60,14 +60,14 @@ boost::any RS232Asservissement::onReceive()
 	
 	messageAsservissement ass_msg;
 
-	ass_msg.id = this->a_buffer->get();			// Recuperation de l'identifiant
+	this->a_buffer >> ass_msg.id;			// Recuperation de l'identifiant
 	for(int i = 0; i < 4; i++)				// Recuperation de la position en x
-		ass_msg.x.data[i] = this->a_buffer->get();
+		this->a_buffer >> ass_msg.x.data[i];
 	for(int i = 0; i < 4; i++)				// Recuperation de la position en y
-		ass_msg.y.data[i] = this->a_buffer->get();
+		this->a_buffer >> ass_msg.y.data[i];
 	for(int i = 0; i < 4; i++)				// Recuperation de l'angle
-		ass_msg.alpha.data[i] = this->a_buffer->get();
-	ass_msg.commande = this->a_buffer->get();		// Recuperation de la commande
+		this->a_buffer >> ass_msg.alpha.data[i];
+	this->a_buffer >> ass_msg.commande;		// Recuperation de la commande
 
 	a_mutex.unlock();			// On deverouille le mutex
 	
@@ -85,7 +85,7 @@ boost::any RS232Asservissement::onReceive()
 bool RS232Asservissement::isDataAvailable()
 {
 	a_mutex.lock();	// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
-	int bufferAvailable = this->a_buffer->dataAvailable();	// On calcul le nombre d'octets non lu
+	int bufferAvailable = this->a_buffer.dataAvailable();	// On calcul le nombre d'octets non lu
 	a_mutex.unlock();	// On deverouille le mutex	
 
 
