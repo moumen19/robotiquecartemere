@@ -1,0 +1,16 @@
+Explication des classes gérant la communication du robot 2010/2011
+
+4 classes :
+	- Buffer
+	- BusRS232
+	- RS232Asservissement
+	- Communication
+
+La classe Buffer gère automatiquement un buffer circulaire. On peut ajouter ou retirer un octet du buffer. La classe se charge de positionner les curseurs comme il faut automatiquement.
+
+La classe BusRS232 s'ocupe d'écouter en permanance le bus RS232 grâce à un thread. A chaque octet reçu, la classe rempli le buffer circulaire. Cette classe permet aussi d'envoyer des octets via le bus RS232 ou récupérer un octet.
+
+La classe RS232Asservissement est une classe fille de BusRS232. Cette classe à les mêmes fonctions que la classe BusRS232 sauf que l'on a réimplémenter les fonctions d'envois de données et de réceptions de données (qui sont des fonctions virtuelles). Maintenant, on n'envoi plus un tableau d'octets et on ne récupère plus un octet au coups, mais on envoi et on réceptionne directement un message asservissement.
+
+Enfin, la classe Communication va récupérer les messages provenant de l'asservissement et des capteurs pour les traiter. Cette classe s'occupe donc de définir les actions à effectuer lors de la réception des messages. Elle va interprété le contenu des messages.
+

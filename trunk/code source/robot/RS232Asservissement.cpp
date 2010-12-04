@@ -33,14 +33,14 @@ SerialPort::DataBuffer RS232Asservissement::onSend(const boost::any & msg)
 	SerialPort::DataBuffer buffer;
 
 	// On converti le messageAsservissement en std::vector<char>
-	buffer.push_back(ass_msg.id);
-	for(unsigned int i = 0; i < 4; i++)
+	buffer.push_back(ass_msg.id);			// On ajoute l'id
+	for(unsigned int i = 0; i < 4; i++)		// On ajoute la position en x
 		buffer.push_back(ass_msg.x.data[i]);
-	for(unsigned int i = 0; i < 4; i++)
+	for(unsigned int i = 0; i < 4; i++)		// On ajoute la position en y
 		buffer.push_back(ass_msg.y.data[i]);
-	for(unsigned int i = 0; i < 4; i++)
+	for(unsigned int i = 0; i < 4; i++)		// On ajoute l'angle
 		buffer.push_back(ass_msg.alpha.data[i]);
-	buffer.push_back(ass_msg.commande);
+	buffer.push_back(ass_msg.commande);		// On ajoute la commande
 
 	return buffer;
 }
@@ -60,23 +60,19 @@ boost::any RS232Asservissement::onReceive()
 	
 	messageAsservissement ass_msg;
 
-	ass_msg.id = this->a_buffer->get();
-
-	for(int i = 0; i < 4; i++)
+	ass_msg.id = this->a_buffer->get();			// Recuperation de l'identifiant
+	for(int i = 0; i < 4; i++)				// Recuperation de la position en x
 		ass_msg.x.data[i] = this->a_buffer->get();
-
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < 4; i++)				// Recuperation de la position en y
 		ass_msg.y.data[i] = this->a_buffer->get();
-
-	for(int i = 0; i < 4; i++)
+	for(int i = 0; i < 4; i++)				// Recuperation de l'angle
 		ass_msg.alpha.data[i] = this->a_buffer->get();
-
-	ass_msg.commande = this->a_buffer->get();
-	
-	boost::any msg = ass_msg;
+	ass_msg.commande = this->a_buffer->get();		// Recuperation de la commande
 
 	a_mutex.unlock();			// On deverouille le mutex
 	
+	boost::any msg = ass_msg;
+
 	return msg;				// retourne un char
 }
 
