@@ -28,11 +28,9 @@ int main()
 
 	signal(SIGIO, SIG_IGN); // IMPORTANT !! Sinon, le programme plante à la réception des données des ports COMs
 
-	// Création du robot
-	Robot robot2010;
-	// Lancement du calcul du robot
-	robot2010.startCommunication();
-	robot2010.start();
+	Robot robot2010;			// Création du robot
+	robot2010.startCommunication();		// Lancement du dialogue avec les capteurs et l'asservissement
+	robot2010.start();			// Lancement du traitement des informations et de la planification de trajectoire
 
 	
 	/*sleep(1);
@@ -45,7 +43,8 @@ int main()
 	}while(a != 0);
 
 	robot2010.stop();*/
-	robot2010.wait();
+
+	robot2010.wait();			// Mise en attente du robot
 
 	return 0;
 }

@@ -53,6 +53,9 @@
 	#define _DEBUG_EXEC(f)	if(_DEBUG_MODE == true) \
 			                _DEBUG::f;
 
+	/**
+	 * Definition d'une macro affichant un simple message dans la console
+	 */
 	#define _DISPLAY(message)	_DEBUG::lock(); \
 					std::cout << message; \
 					_DEBUG::unlock();
