@@ -135,25 +135,28 @@ void BusRS232::receive()
 			unsigned char buffer = 0;
 			try
 			{
-				// On recupere un octet (timeout = 0 : processus bloquant)
-				buffer = this->a_rs232.ReadByte(0);
+				if(this->a_rs232.IsDataAvailable())
+				{
+					buffer = this->a_rs232.ReadByte(0);	// On recupere un octet (timeout = 0 : processus bloquant)
 
-				a_mutex.lock();			// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
+					/*_DISPLAY((int)buffer << " | ");
+					i++;
+					if(i%14 == 0)	
+					{ 
+						j++;
+						_DISPLAY(std::endl << j << "\t"); 
+					}*/
 
-				//_DISPLAY((int)buffer << " | ");
-				//i++;
-				/*if(i%14 == 0)	
-				{ 
-					j++;
-					_DISPLAY(std::endl << j << "\t"); 
-				}*/
-
-				this->a_buffer << buffer;	// On ajoute un octet au buffer
-				a_mutex.unlock();		// On deverouille le mutex
+					a_mutex.lock();				// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
+					this->a_buffer << buffer;		// On ajoute un octet au buffer
+					a_mutex.unlock();			// On deverouille le mutex
+				}
 			}
+			catch(const SerialPort::ReadTimeout & e)
+			{}
 			catch(const std::exception & e)
 			{
-				//_DEBUG(e.what(), WARNING);
+				_DEBUG(e.what(), WARNING);
 			}
 		} 
 		else
