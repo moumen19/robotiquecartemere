@@ -99,29 +99,23 @@ void BusRS232::close()
 
 /**
  * Envoi une donnée au port COM
- * @param msg - La donnee à envoyer (par defaut, ce parametre doit etre un std::string. Pour envoyer un autre type de donnee, il faudra creer une classe heritant de BusRS232 et reimplementer onSend())
+ * @param msg - La donnee à envoyer (par defaut, ce parametre doit etre un SerialPort::DataBuffer. Pour envoyer un autre type de donnee, il faudra creer une classe heritant de BusRS232 et reimplementer onSend())
  * @see onSend()
  */
 void BusRS232::send(boost::any msg)
 {
-	//SerialPort::DataBuffer buffer = this->onSend(msg);
-	this->a_rs232.Write(boost::any_cast<SerialPort::DataBuffer>(msg));
+	SerialPort::DataBuffer buffer = this->onSend(msg);
+	this->a_rs232.Write(buffer);
 }
 
 /**
  * Methode virtuelle qui formate le msg en tableau de char
- * @param msg - la donnee a envoyer (par defaut, ce parametre doit etre un std::string. Pour envoyer un autre type de donnee, il faudra creer une classe heritant de BusRS232 et reimplementer onSend())
+ * @param msg - la donnee a envoyer (par defaut, ce parametre doit etre un SerialPort::DataBuffer. Pour envoyer un autre type de donnee, il faudra creer une classe heritant de BusRS232 et reimplementer onSend())
  * @return Retourne le tableau de char sous la forme d'un DataBuffer de la bibliotheque LibSerial (un std::vector de char)
  */
 SerialPort::DataBuffer BusRS232::onSend(const boost::any & msg)
 {
-	//std::string str_msg = boost::any_cast<std::string>(msg);	// Le msg doit être un std::string ici
 	SerialPort::DataBuffer buffer = boost::any_cast<SerialPort::DataBuffer>(msg);;
-
-	// On converti le std::string en std::vector<char>
-	//for(unsigned int i = 0; i < str_msg.size(); i++)
-	//	buffer.push_back(str_msg[i]);
-
 	return buffer;
 }
 
@@ -131,6 +125,7 @@ SerialPort::DataBuffer BusRS232::onSend(const boost::any & msg)
 void BusRS232::receive()
 {
 	_DEBUG("Debut de la routine d'ecoute d'un port RS232", INFORMATION);
+
 	//int i = 0, j = 0;
 	// Tant que l'on a pas ferme la connexion
 	while(this->a_thread_active)
@@ -145,15 +140,12 @@ void BusRS232::receive()
 
 				a_mutex.lock();			// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 
-				//_DISPLAY((int)buffer);
-				//_DISPLAY(" | ");
+				//_DISPLAY((int)buffer << " | ");
 				//i++;
 				/*if(i%14 == 0)	
 				{ 
 					j++;
-					_DISPLAY(std::endl); 
-					_DISPLAY(j);
-					_DISPLAY("\t");
+					_DISPLAY(std::endl << j << "\t"); 
 				}*/
 
 				this->a_buffer << buffer;	// On ajoute un octet au buffer

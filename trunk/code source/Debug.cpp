@@ -65,14 +65,14 @@
 				default:
 					msg = "(?)";
 			}
-			msg += "\n\t";
+			msg += "\t";
 			msg += m.title;
-			msg += " :\n\t* ";
+			msg += " :\t";
 			msg += m.content;
 
 			// Affichage en console
 			if((_DEBUG::a_configuration & CONSOLE_DISPLAY) == CONSOLE_DISPLAY)
-				std::cout << "DEBUG MODE " << msg << std::endl;
+				std::cout << msg << std::endl;
 
 			// Ecriture dans un fichier de logs
 			if((_DEBUG::a_configuration & FILE_DISPLAY) == FILE_DISPLAY)

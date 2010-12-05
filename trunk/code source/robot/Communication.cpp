@@ -76,7 +76,7 @@ void Communication::run()
 
 	int i = 0, j = 0;
 	decoupFloat t;
-	//std::cout << std::endl;
+	//_DISPLAY(std::endl);
 	while(this->a_thread_active && i > -1)
 	{
 		//messageAsservissement msg;
@@ -113,42 +113,18 @@ void Communication::run()
 			}
 
 			//msg = boost::any_cast<messageAsservissement>(this->a_asservissement.getData());
-			//std::cout << std::endl << (int)msg.id << "  : " ;
+			//_DISPLAY(std::endl << (int)msg.id << "  : ");
 			/*for(int i = 0; i < 4; i++)    
-				std::cout << msg.x.data[i] << "  : " ;
+				_DISPLAY(msg.x.data[i] << "  : " );
 			for(int i = 0; i < 4; i++)    
-				std::cout << msg.y.data[i] << "  : " ;
+				_DISPLAY(msg.y.data[i] << "  : " );
 			for(int i = 0; i < 4; i++)    
-				std::cout << msg.alpha.data[i] << "  : ";*/
-			//std::cout << msg.x.value << "  : " << msg.y.value << "  : " << msg.alpha.value << "  : ";
-			//std::cout << (int)msg.commande << std::endl;
+				_DISPLAY(msg.alpha.data[i] << "  : ");*/
+			//_DISPLAY(msg.x.value << "  : " << msg.y.value << "  : " << msg.alpha.value << "  : ");
+			//_DISPLAY((int)msg.commande << std::endl);
 		}
-		//sleep(1);
 
-		/*if(This->a_rs232Asservissement.IsOpen())
-		{
-			while(This->a_rs232Asservissement.rdbuf()->in_avail())
-			{
-				This->a_rs232Asservissement >> m;
-				if(m == 42)
-				{
-					sprintf(s, "Reception de donnees de la part de l'asservissement : %s", This->a_bufferAsservissement);
-					_DEBUG(s, INFORMATION);
-					This->a_bufferAsservissementCursor = 0;
-				}
-
-				if(This->a_bufferAsservissementCursor <= _BUFFER_ASSERVISSEMENT_SIZE)
-				{
-					This->a_bufferAsservissement[This->a_bufferAsservissementCursor] = m;
-					This->a_bufferAsservissementCursor++;
-				}
-				else
-					_DEBUG("Debordement du buffer de reception de donnees asservissement...", WARNING);
-			}
-		}
-		else
-			_DEBUG("Erreur de communication avec l'asservissement", WARNING);
-		*/
+		/*this->a_rs232.rdbuf()->in_avail();*/
 
 	}
 	this->a_asservissement.close();
@@ -177,9 +153,6 @@ void Communication::test()
 
 	m.push_back(7);
 
-	//std::string msg(m);
-	//std::cout << msg << std::endl;
-	
 	/*messageAsservissement msg;
 	msg.id = 42;
 	msg.x.value = 0;

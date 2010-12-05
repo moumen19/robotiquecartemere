@@ -24,40 +24,50 @@
 	#include "DataFusion.hpp"
 	#include "Communication.hpp"
 
+	enum Robot_Configuration
+	{
+		ACTIVE_MAIN_THREADING,
+		DESACTIVE_MAIN_THREADING
+	};
+
+	/**
+ 	 * La classe robot permet de gerer et de coordonnee l'ensemble des actions des differents modules du robot
+	 */
 	class Robot
 	{
 		public:
-			Robot();
-			~Robot();
+			Robot(Robot_Configuration config = ACTIVE_MAIN_THREADING);	// Constructeur
+			~Robot();								// Destructeur
 
-			void interruptuion_arret_urgence();
+			void interruptuion_arret_urgence();////////////	
 
-			bool isCommunicationActive();
-			void startCommunication();
-			void stopCommunication();
+			bool isCommunicationActive();						// Teste si le module de communication est lance
+			void startCommunication();						// Lance le dialogue avec les capteurs et l'asservissement
+			void stopCommunication();						// Arrete le dialogue avec les capteurs et l'asservissement
 
 			// Gestion du thread
-			bool isActive();
-			void start();
-			void stop();
-			void wait();
+			bool isActive();							// Teste si le robot est actif
+			void start();								// Lance le traitement des donnees capteurs et la planification de trajectoire
+			void stop();								// Desactive le robot
+			void wait();								// Attend jusqu'a ce que le robot soit desactive
 
-			void test();
+			void test();//////////
 
 		protected:
-			void run();
+			void run();								// Thread traitant les donnees capteurs et planifiant la trajectoire
 
 		private:
-			Data a_sensorsData;
-			Data a_environmentData;
-			Constraint a_constraint;
-			DataFusion a_dataFusion;
-			Strategy a_strategy;
-			Planning a_planning;
-			Communication a_communication;
+			Data a_sensorsData;							// Module de stockage des infos capteurs
+			Data a_environmentData;							// Module de stockage des infos haut niveau sur l'environement (perception du robot)
+			Constraint a_constraint;						// Module specifiant les contraintes du robot
+			DataFusion a_dataFusion;						// Module de traitement des infos capteurs pour les transformer en infos environement
+			Strategy a_strategy;							// Module décidant la strategie que le robot doit adopter
+			Planning a_planning;							// Module de planification de trajectoire
+			Communication a_communication;						// Module de communication avec les capteurs et l'asservissement
 
-			boost::thread *a_thread;
-			bool a_thread_active;
+			boost::thread *a_thread;						// Le thread
+			bool a_thread_active;							// Un flag d'arret du thread
+			Robot_Configuration a_threadConfiguration;				// Configuration du multi threading
 	};
 
 	enum Sensor
