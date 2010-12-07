@@ -80,10 +80,19 @@ void Communication::run()
 	while(this->a_thread_active && i > -1)
 	{
 		//messageAsservissement msg;
-		char msg;
+		char msg = 0;
 		if(this->a_asservissement.isDataAvailable())
 		{
-			msg = boost::any_cast<char>(this->a_asservissement.getData());
+			try
+			{	
+				msg = boost::any_cast<char>(this->a_asservissement.getData());
+			}
+			catch(std::exception e)
+			{
+				_DEBUG(e.what(), WARNING);
+			}
+
+			
 			if(i >= 1 && i <=4)
 				t.data[i-1] = msg;
 			if(i >= 5 && i <=8)

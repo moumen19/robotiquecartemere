@@ -30,7 +30,7 @@
 	class BusRS232
 	{
 		public:
-			BusRS232(std::string port = "/dev/ttyUSB0", int bufferSize = 1024);	// Constructeur indiquant le port COM a ouvrir ainsi que la taille du buffer circulaire
+			BusRS232(std::string port = "/dev/ttyUSB1", int bufferSize = 1024);	// Constructeur indiquant le port COM a ouvrir ainsi que la taille du buffer circulaire
 			virtual ~BusRS232();	// Destructeur
 
 			bool open();		// Ouvre la connexion
