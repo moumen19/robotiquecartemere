@@ -70,7 +70,7 @@ unsigned char Buffer::get()
 		return c;
 	}
 
-		_DEBUG("Pas de donnée disponible...", WARNING);		// A remplacer par une vraie excpetion !!!
+	_DEBUG("Pas de donnée disponible...", WARNING);			// A remplacer par une vraie excpetion !!!
 	return 0;
 }
 

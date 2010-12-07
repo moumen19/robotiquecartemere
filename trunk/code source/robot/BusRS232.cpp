@@ -115,7 +115,16 @@ void BusRS232::send(boost::any msg)
  */
 SerialPort::DataBuffer BusRS232::onSend(const boost::any & msg)
 {
-	SerialPort::DataBuffer buffer = boost::any_cast<SerialPort::DataBuffer>(msg);;
+	SerialPort::DataBuffer buffer;
+	try
+	{	
+		buffer = boost::any_cast<SerialPort::DataBuffer>(msg);
+	}
+	catch(std::exception e)
+	{
+		_DEBUG(e.what(), WARNING);
+	}
+
 	return buffer;
 }
 
@@ -206,7 +215,7 @@ boost::any BusRS232::onReceive()
 bool BusRS232::isDataAvailable()
 {
 	a_mutex.lock();						// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
-	int bufferAvailable = a_buffer.dataAvailable();	// On recupere le nombre d'octet non lu
+	int bufferAvailable = a_buffer.dataAvailable();		// On recupere le nombre d'octet non lu
 	a_mutex.unlock();					// On deverouille le mutex	
 
 	if(bufferAvailable > 0)
