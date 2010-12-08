@@ -17,6 +17,7 @@
 				</Compiler>
 				<Linker>
 					<Add option="-lserial" />
+					<Add option="-lboost_thread" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -37,6 +38,12 @@
 			<Add option="-g" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Buffer.cpp" />
+		<Unit filename="Buffer.hpp" />
+		<Unit filename="BusRS232.cpp" />
+		<Unit filename="BusRS232.hpp" />
+		<Unit filename="Debug.cpp" />
+		<Unit filename="Debug.hpp" />
 		<Unit filename="OpeningAndChecks.cpp">
 			<Option compile="0" />
 			<Option link="0" />

@@ -1,4 +1,5 @@
 #include <SerialStream.h> // requires libserial package to be installed
+#include <SerialPort.h>
 ///////////////////////////////// DOC ////////////////////////////////////
 
 //
@@ -12,6 +13,7 @@
 #include <iostream>
 #include <stdint.h>
 
+#include "BusRS232.hpp"
 #include "OpeningAndChecks.cpp"
 
 using namespace std;
@@ -19,6 +21,7 @@ using namespace LibSerial;
 
 
 extern SerialStream my_serial_port;
+extern SerialPort portS(const std::string COMport_name);
 
 
 int main(int argc, char *argv[])
@@ -30,8 +33,10 @@ int main(int argc, char *argv[])
    left = 5;
     right = 5;
 
+   // BusRS232 bus = BusRS232();
+
     //*/ Open Serial
-    if(createCOMport(my_serial_port, "/dev/ttyUSB0", SerialStreamBuf::BAUD_9600) ){ // if(my_serial_port.IsOpen()){
+    if(createCOMport(portS("/dev/ttyUSB0"), SerialPort::BAUD_9600) ){ // if(my_serial_port.IsOpen()){
         cout<<":)"<<endl;
     }
     else{
