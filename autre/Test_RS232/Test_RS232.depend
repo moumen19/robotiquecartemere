@@ -33,14 +33,13 @@
 1291296615 /home/julien/C++/svn_Info/autre/Test_RS232/joystick.h
 	<stdio.h>
 
-1291298960 source:/home/julien/C++/svn_Info/autre/Test_RS232/main.cpp
+1291738436 source:/home/julien/C++/svn_Info/autre/Test_RS232/main.cpp
 	<SerialStream.h>
 	<iostream>
 	<stdint.h>
 	"OpeningAndChecks.cpp"
-	"joystick.c"
 
-1291298204 /home/julien/C++/svn_Info/autre/Test_RS232/OpeningAndChecks.cpp
+1291736218 /home/julien/C++/svn_Info/autre/Test_RS232/OpeningAndChecks.cpp
 	<SerialStream.h>
 	<iostream>
 	<unistd.h>

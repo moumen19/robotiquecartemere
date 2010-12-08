@@ -23,7 +23,6 @@ int main()
 	// Configuration du mode Debug
 	_DEBUG_EXEC(configuration(CONSOLE_DISPLAY, "logs.txt"));
 
-
 	_DEBUG("Lancement du programme", INFORMATION);
 
 	signal(SIGIO, SIG_IGN); // IMPORTANT !! Sinon, le programme plante à la réception des données des ports COMs

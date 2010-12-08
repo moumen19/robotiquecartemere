@@ -18,7 +18,7 @@
 #
 
 CC=g++
-CFLAGS=-W -Wall
+CFLAGS=-W -Wall -g
 LDFLAGS=-lserial -lboost_thread
 EXEC=robot_prgm
 
