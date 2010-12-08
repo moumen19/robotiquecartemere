@@ -13,7 +13,6 @@
 #include <stdint.h>
 
 #include "OpeningAndChecks.cpp"
-#include "joystick.c"
 
 using namespace std;
 using namespace LibSerial;
@@ -27,13 +26,9 @@ int main(int argc, char *argv[])
    int fd;
    int done = 0;
    int left,right;
-    left = 5;
+   char a = 'j';
+   left = 5;
     right = 5;
-   fd = open_joystick("");
-   if (fd < 0) {
-      printf("open failed.\n");
-      exit(1);
-   }
 
     //*/ Open Serial
     if(createCOMport(my_serial_port, "/dev/ttyUSB0", SerialStreamBuf::BAUD_9600) ){ // if(my_serial_port.IsOpen()){
@@ -46,63 +41,16 @@ int main(int argc, char *argv[])
 
    while (!done ) {
 
-        GetMotorSpeed(&left,&right);
-        printf("left : %d\nright : %d\n",left,right);
-        sendMotorsSpeed((float)left,(float)right);
-        usleep(10000);
+    for(int i=0;i<7;i++){
+        my_serial_port >> a;
+        cout<<a<<endl;
+    }
+        usleep(100000);
    }
 
-   /*while (!done ) {
-
-        //GetMotorSpeed(&left,&right);
-        //printf("left : %d\nright : %d\n",left,right);
-        sendMotorsSpeed((float)left,(float)right);
-        sleep(1);
-   }*/
 
      // Close Serial
     my_serial_port.Close();
     cout<<"\nEND\n";
     return 0;
 }
-
-
-/*int main(int argc, char *argv[])
-{
-   int fd;
-   int done = 0;
-   int left,right;
-    left = 0;
-    right = 0;
-
-     // Open Serial
-    if(createCOMport(my_serial_port, "/dev/ttyUSB0", SerialStreamBuf::BAUD_9600) ){ // if(my_serial_port.IsOpen()){
-        cout<<":)"<<endl;
-    }
-    else{
-        cout<<":("<<endl;
-        exit(1);
-    }
-
-    // Open Joy
-   fd = open_joystick("");
-   if (fd < 0) {
-      printf("open failed.\n");
-      exit(1);
-   }
-
-   while (!done) {
-
-        GetMotorSpeed(&left,&right);
-        //system("clear");
-        printf("left : %d\nright : %d\n",left,right);
-        sendMotorsSpeed(left,right);
-        //usleep(10000);
-   }
-
-     // Close Serial
-    my_serial_port.Close();
-    cout<<"\nEND\n";
-    return 0;
-}*/
-
