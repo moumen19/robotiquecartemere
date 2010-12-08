@@ -13,7 +13,7 @@
 #include "Communication.hpp"
 #include <sstream>
 
-Communication::Communication(Data & sensors, Data & environment, Constraint & constraint, Planning & planning) : 
+Communication::Communication(Data & sensors, Data & environment, Constraint & constraint, Planning & planning) :
 	a_sensorsData(sensors),
 	a_environmentData(environment),
 	a_constraint(constraint),
@@ -83,54 +83,30 @@ void Communication::run()
 		char msg = 0;
 		if(this->a_asservissement.isDataAvailable())
 		{
+
+			/*
 			try
-			{	
+			{
 				msg = boost::any_cast<char>(this->a_asservissement.getData());
 			}
-			catch(std::exception e)
+			catch(std::exception & e)
 			{
 				_DEBUG(e.what(), WARNING);
 			}
+            //*/
 
-			
-			if(i >= 1 && i <=4)
-				t.data[i-1] = msg;
-			if(i >= 5 && i <=8)
-				t.data[i-5] = msg;
-			if(i >= 9 && i <=12)
-				t.data[i-9] = msg;
-
-			if(i == 4 || i == 8 || i == 12)
-			{
-				_DISPLAY((float)t.value);
-				_DISPLAY(" : ");
-			}
-			if(i == 0 || i == 13)
-			{
-				_DISPLAY(msg);
-				_DISPLAY(" : ");
-			}
-
-			i++;
-			if(i == 14)
-			{
-				i = 0;
-				j++;
-				_DISPLAY(std::endl);
-				_DISPLAY(j);
-				_DISPLAY("\t");
-			}
 
 			//msg = boost::any_cast<messageAsservissement>(this->a_asservissement.getData());
 			//_DISPLAY(std::endl << (int)msg.id << "  : ");
-			/*for(int i = 0; i < 4; i++)    
+			/*for(int i = 0; i < 4; i++)
 				_DISPLAY(msg.x.data[i] << "  : " );
-			for(int i = 0; i < 4; i++)    
+			for(int i = 0; i < 4; i++)
 				_DISPLAY(msg.y.data[i] << "  : " );
-			for(int i = 0; i < 4; i++)    
+			for(int i = 0; i < 4; i++)
 				_DISPLAY(msg.alpha.data[i] << "  : ");*/
 			//_DISPLAY(msg.x.value << "  : " << msg.y.value << "  : " << msg.alpha.value << "  : ");
 			//_DISPLAY((int)msg.commande << std::endl);
+
 		}
 
 		/*this->a_rs232.rdbuf()->in_avail();*/

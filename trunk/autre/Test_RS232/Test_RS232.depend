@@ -54,3 +54,32 @@
 	<string.h>
 	"joystick.h"
 
+1291799962 source:/home/julien/C++/svn_Info/autre/Test_RS232/Buffer.cpp
+	"Buffer.hpp"
+
+1291813229 /home/julien/C++/svn_Info/autre/Test_RS232/Buffer.hpp
+	"Debug.hpp"
+
+1291730254 /home/julien/C++/svn_Info/autre/Test_RS232/Debug.hpp
+	<iostream>
+	<vector>
+	<boost/thread/mutex.hpp>
+	<sstream>
+
+1291805790 source:/home/julien/C++/svn_Info/autre/Test_RS232/BusRS232.cpp
+	"BusRS232.hpp"
+	<string.h>
+
+1291813234 /home/julien/C++/svn_Info/autre/Test_RS232/BusRS232.hpp
+	<string>
+	<SerialPort.h>
+	<boost/any.hpp>
+	<boost/thread/thread.hpp>
+	<boost/thread/mutex.hpp>
+	"Debug.hpp"
+	"Buffer.hpp"
+
+1291730254 source:/home/julien/C++/svn_Info/autre/Test_RS232/Debug.cpp
+	"Debug.hpp"
+	<fstream>
+

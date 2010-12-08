@@ -18,8 +18,8 @@
  * @param port - Le nom du port COM à ouvrir (/dev/ttyUSB0 par defaut)
  * @param bufferSize - La taille du buffer circulaire (1024 par defaut)
  */
-BusRS232::BusRS232(std::string port, int bufferSize) : 
-	a_buffer(bufferSize), 
+BusRS232::BusRS232(std::string port, int bufferSize) :
+	a_buffer(bufferSize),
 	a_rs232(port)
 {
 	this->a_port = port;
@@ -42,15 +42,16 @@ BusRS232::~BusRS232()
  */
 bool BusRS232::open()
 {
-	this->close();	// Si une connexion est deja ouverte, on la ferme
+    if(a_rs232.IsOpen())
+    this->close();	// Si une connexion est deja ouverte, on la ferme
 
 	// Ouvre la connexion
 	try
 	{
-		this->a_rs232.Open(SerialPort::BAUD_9600, 
-				    SerialPort::CHAR_SIZE_8, 
-				    SerialPort::PARITY_NONE, 
-				    SerialPort::STOP_BITS_1, 
+		this->a_rs232.Open(SerialPort::BAUD_9600,
+				    SerialPort::CHAR_SIZE_8,
+				    SerialPort::PARITY_NONE,
+				    SerialPort::STOP_BITS_1,
 				    SerialPort::FLOW_CONTROL_NONE);
 	}
 	catch(const std::exception & e)
@@ -64,7 +65,7 @@ bool BusRS232::open()
 		_DEBUG("Ouverture du port RS232", INFORMATION);
 
 		this->a_thread_active = true;
-		a_thread = new boost::thread(&BusRS232::receive, this);        
+		a_thread = new boost::thread(&BusRS232::receive, this);
 
 		return true;
 	}
@@ -82,13 +83,13 @@ void BusRS232::close()
 	if(this->a_rs232.IsOpen())
 	{
 		try
-		{   
-			this->a_thread_active = false;     
+		{
+			this->a_thread_active = false;
 			this->a_rs232.Close();
 			//this->a_thread->join()	// Attention blockage ici !
 		}
 		catch(const std::exception & e)
-		{	
+		{
 		    _DEBUG(e.what(), WARNING);
 		}
 
@@ -117,7 +118,7 @@ SerialPort::DataBuffer BusRS232::onSend(const boost::any & msg)
 {
 	SerialPort::DataBuffer buffer;
 	try
-	{	
+	{
 		buffer = boost::any_cast<SerialPort::DataBuffer>(msg);
 	}
 	catch(std::exception e)
@@ -135,7 +136,7 @@ void BusRS232::receive()
 {
 	_DEBUG("Debut de la routine d'ecoute d'un port RS232", INFORMATION);
 
-	//int i = 0, j = 0;
+	int i = 1, j = 0;
 	// Tant que l'on a pas ferme la connexion
 	while(this->a_thread_active)
 	{
@@ -148,18 +149,31 @@ void BusRS232::receive()
 				{
 					buffer = this->a_rs232.ReadByte(0);	// On recupere un octet (timeout = 0 : processus bloquant)
 
-					/*_DISPLAY((int)buffer << " | ");
+					if((i == 8)){
+					    std::cout<<std::endl;
+					    i=1;
+					}
+                    std::cout<< (int) buffer <<"(i="<<i<<")"<<" ;";
+                    i++;
+
+
+                    /*
+					_DISPLAY((int)buffer << " | ");
 					i++;
-					if(i%14 == 0)	
-					{ 
+					if(i%14 == 0)
+					{
 						j++;
-						_DISPLAY(std::endl << j << "\t"); 
-					}*/
+						_DISPLAY(std::endl << j << "\t");
+					}//*/
 
 					a_mutex.lock();				// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 					this->a_buffer << buffer;		// On ajoute un octet au buffer
 					a_mutex.unlock();			// On deverouille le mutex
 				}
+				/*else
+				{
+				    std::cout<< ".";
+				}*/
 			}
 			catch(const SerialPort::ReadTimeout & e)
 			{}
@@ -167,7 +181,7 @@ void BusRS232::receive()
 			{
 				_DEBUG(e.what(), WARNING);
 			}
-		} 
+		}
 		else
 			_DEBUG("Port RS232 non ouvert", WARNING);
 	}
@@ -201,12 +215,12 @@ boost::any BusRS232::onReceive()
 	this->a_buffer >> c; 			// On recupere un octet
 	boost::any msg = c;
 	a_mutex.unlock();			// On deverouille le mutex
-	
+
 	return msg;				// retourne un char
 }
 
 /**
- * Methode virtuelle qui teste si une donnée est présente dans le buffer circulaire 
+ * Methode virtuelle qui teste si une donnée est présente dans le buffer circulaire
  * Par defaut, cette methode teste si au moins un octet est present
  * Si vous creez une classe heritant de BusRS232 et reimplementez onReceive(), il faudra adapter cette methode pour qu'elle retourne vrai si votre donnee est bien presente
  * @return true si la donnee est disponible, false sinon
@@ -216,7 +230,7 @@ bool BusRS232::isDataAvailable()
 {
 	a_mutex.lock();						// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 	int bufferAvailable = a_buffer.dataAvailable();		// On recupere le nombre d'octet non lu
-	a_mutex.unlock();					// On deverouille le mutex	
+	a_mutex.unlock();					// On deverouille le mutex
 
 	if(bufferAvailable > 0)
 		return true;
