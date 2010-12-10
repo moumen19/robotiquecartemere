@@ -46,13 +46,13 @@
 			void start();
 			void stop();
 
-			void test();
+			void test(int i = 0);
 
 		protected:
 			void run();
 
 		private:
-			BusRS232 a_asservissement; //RS232Asservissement
+			RS232Asservissement a_asservissement;
 			BusRS232 * a_sensor;//RS232Sensor a_sensor;
 
 			Data & a_sensorsData;
