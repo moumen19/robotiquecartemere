@@ -26,6 +26,7 @@
 
 			void put(const unsigned char &);	// Ajoute un octet au buffer
 			unsigned char get();			// Lit un octet du buffer
+			unsigned char see(int i = 0);		// Regarde l'octet numero i a partir du curseur de lecture
 			int dataAvailable();			// Retourne le nombre d'octet disponible en lecture
 
 			void operator<<(const unsigned char &);	// Ajoute un octet au buffer

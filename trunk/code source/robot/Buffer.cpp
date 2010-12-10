@@ -31,6 +31,7 @@ Buffer::Buffer(int size)
 Buffer::~Buffer()
 {
 	delete[] this->a_buffer;
+	_DEBUG("Destruction du module Buffer", INFORMATION);
 }
 
 /**
@@ -72,6 +73,17 @@ unsigned char Buffer::get()
 
 	_DEBUG("Pas de donnée disponible...", WARNING);			// A remplacer par une vraie excpetion !!!
 	return 0;
+}
+
+/**
+ * Regarde l'octet i sans retirer celui-ci du buffer
+ * @param i - le numero de l'octet a lire a partir du curseur de lecture (0 par defaut)
+ * @return L'octet i du buffer a partir du curseur de lecture
+ */
+unsigned char Buffer::see(int i)
+{
+	unsigned char c = this->a_buffer[(this->a_readCursor+i)%this->a_size];	// On regarde le caractere numéro i à partir du curseur de lecture
+	return c;
 }
 
 /**

@@ -19,7 +19,7 @@ const int RS232Asservissement::messageSize = 14;
  */
 RS232Asservissement::~RS232Asservissement()
 {
-
+	_DEBUG("Destruction du module RS232Asservissement", INFORMATION);
 }
 
 /**
@@ -56,24 +56,23 @@ boost::any RS232Asservissement::onReceive()
 	if(!this->isDataAvailable())
 		_DEBUG("Pas de donnée disponible...", WARNING);	// A remplacer par une vraie excpetion
 
-	a_mutex.lock();			// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
+	a_mutex.lock();					// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 	
 	messageAsservissement ass_msg;
-
 	this->a_buffer >> ass_msg.id;			// Recuperation de l'identifiant
-	for(int i = 0; i < 4; i++)				// Recuperation de la position en x
+	for(int i = 0; i < 4; i++)			// Recuperation de la position en x
 		this->a_buffer >> ass_msg.x.data[i];
-	for(int i = 0; i < 4; i++)				// Recuperation de la position en y
+	for(int i = 0; i < 4; i++)			// Recuperation de la position en y
 		this->a_buffer >> ass_msg.y.data[i];
-	for(int i = 0; i < 4; i++)				// Recuperation de l'angle
+	for(int i = 0; i < 4; i++)			// Recuperation de l'angle
 		this->a_buffer >> ass_msg.alpha.data[i];
 	this->a_buffer >> ass_msg.commande;		// Recuperation de la commande
 
-	a_mutex.unlock();			// On deverouille le mutex
+	a_mutex.unlock();				// On deverouille le mutex
 	
 	boost::any msg = ass_msg;
 
-	return msg;				// retourne un char
+	return msg;					// retourne un messaage asservissement
 }
 
 /**
@@ -84,18 +83,24 @@ boost::any RS232Asservissement::onReceive()
  */
 bool RS232Asservissement::isDataAvailable()
 {
-	a_mutex.lock();	// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
+	a_mutex.lock();						// On protege les donnees (a_buffer)
 	int bufferAvailable = this->a_buffer.dataAvailable();	// On calcul le nombre d'octets non lu
-	a_mutex.unlock();	// On deverouille le mutex	
+	a_mutex.unlock();					// On deverouille le mutex	
 
-
-	if(bufferAvailable >= 14)//this->messageSize)
+	if(bufferAvailable >= RS232Asservissement::messageSize)
 	{
-		/*if(this->a_buffer[this->a_bufferReadCursor] != 42)
+		a_mutex.lock();	// On protege le mutex
+		while(this->a_buffer.see() != 42 && bufferAvailable > 0)
 		{
-			this->a_bufferReadCursor += 14;//;this->messageSize;
-		}*/
-		return true;
+			unsigned char c;
+			this->a_buffer >> c;			
+			_DISPLAY("|" << (int)c << "|");
+			bufferAvailable--;
+		}
+		a_mutex.unlock();	// On deverouille le mutex
+
+		if(bufferAvailable >= RS232Asservissement::messageSize)
+			return true;
 	}
 
 	return false;

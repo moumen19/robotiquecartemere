@@ -14,6 +14,7 @@
 #define DEF_RS232ASSERVISSEMENT
 
 	#include "../Debug.hpp"
+
 	#include "BusRS232.hpp"
 
 	/**
@@ -44,7 +45,7 @@
 	class RS232Asservissement : public BusRS232
 	{
 		public:
-			virtual ~RS232Asservissement();
+			virtual ~RS232Asservissement();	// Destructeur virtuel
 			virtual bool isDataAvailable();	// Teste si une donnée provenant de l'asservissement est présente dans le buffer circulaire 
 			static const int messageSize;	// Taille du message asservissement
 

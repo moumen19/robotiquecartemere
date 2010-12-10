@@ -32,6 +32,7 @@ Communication::Communication(Data & sensors, Data & environment, Constraint & co
 Communication::~Communication()
 {
 	this->stop();
+	_DEBUG("Destruction du module Communication", INFORMATION);
 }
 
 void Communication::send(Port::Port port, std::string msg)
@@ -73,84 +74,78 @@ void Communication::run()
 {
 	_DEBUG("Debut de la routine d'ecoute des ports de communications", INFORMATION);
 
-
-	int i = 0, j = 0;
-	decoupFloat t;
-	//_DISPLAY(std::endl);
-	while(this->a_thread_active && i > -1)
+	while(this->a_thread_active)
 	{
-		//messageAsservissement msg;
-		char msg = 0;
 		if(this->a_asservissement.isDataAvailable())
 		{
-
-			/*
 			try
 			{
-				msg = boost::any_cast<char>(this->a_asservissement.getData());
+				messageAsservissement msg = boost::any_cast<messageAsservissement>(this->a_asservissement.getData());
+				
+				_DISPLAY((int)msg.id << " : ");
+				//*
+				for(int i = 0; i < 4; i++)
+					_DISPLAY((int)msg.x.data[i] << " : ");
+				for(int i = 0; i < 4; i++)
+					_DISPLAY((int)msg.y.data[i] << " : ");
+
+				for(int i = 0; i < 4; i++)
+					_DISPLAY((int)msg.alpha.data[i] << " : ");
+				//*/
+				_DISPLAY(msg.x.value << " : " << msg.y.value << " : " << msg.alpha.value << " : ");
+				_DISPLAY((int)msg.commande << std::endl);
+
+				switch(msg.commande)
+				{
+					case 0:
+						break;
+					default:
+						_DEBUG("Le message asservissement n'a pas pu etre traite, la commande ne correspon a aucune action repertoriee", WARNING);
+				}
+
 			}
 			catch(std::exception & e)
 			{
 				_DEBUG(e.what(), WARNING);
 			}
-            //*/
-
-
-			//msg = boost::any_cast<messageAsservissement>(this->a_asservissement.getData());
-			//_DISPLAY(std::endl << (int)msg.id << "  : ");
-			/*for(int i = 0; i < 4; i++)
-				_DISPLAY(msg.x.data[i] << "  : " );
-			for(int i = 0; i < 4; i++)
-				_DISPLAY(msg.y.data[i] << "  : " );
-			for(int i = 0; i < 4; i++)
-				_DISPLAY(msg.alpha.data[i] << "  : ");*/
-			//_DISPLAY(msg.x.value << "  : " << msg.y.value << "  : " << msg.alpha.value << "  : ");
-			//_DISPLAY((int)msg.commande << std::endl);
 
 		}
-
-		/*this->a_rs232.rdbuf()->in_avail();*/
-
 	}
 	this->a_asservissement.close();
 	_DEBUG("Fin de la routine d'ecoute des ports de communications", INFORMATION);
 }
 
-void Communication::test()
+void Communication::test(int i)
 {
-	decoupFloat x, y, alpha;
-	x.value = 5;
-	y.value = 5;
-	alpha.value = 0;
+	messageAsservissement msg;
+	switch(i)
+	{
+		case 0:
+			msg.id = 42;
+			msg.x.value = 0;
+			msg.y.value = 0;
+			msg.alpha.value = 0;
+			msg.commande = 0;
+			break;
+		case 3:
+			msg.id = 42;
+			msg.x.value = 5;
+			msg.y.value = 5;
+			msg.alpha.value = 0;
+			msg.commande = 3;
+			break;
+		case 7:
+			msg.id = 42;
+			msg.x.value = 0;
+			msg.y.value = 0;
+			msg.alpha.value = 0;
+			msg.commande = 7;
+			break;
+		default:
+			_DEBUG("La commande asservissement n'est pas valide", WARNING);
+			return;
+	}
 
-	SerialPort::DataBuffer m;
-
-	m.push_back(42);
-
-	for(int i = 0; i < 4; i++)
-		m.push_back(x.data[i]);
-
-	for(int i = 0; i < 4; i++)
-		m.push_back(y.data[i]);
-
-	for(int i = 0; i < 4; i++)
-		m.push_back(alpha.data[i]);
-
-	m.push_back(7);
-
-	/*messageAsservissement msg;
-	msg.id = 42;
-	msg.x.value = 0;
-	msg.y.value = 0;
-	msg.alpha.value = 0;
-	msg.commande = 7;*/
-	/*messageAsservissement msg;
-	msg.id = 42;
-	msg.x.value = 5;
-	msg.y.value = 5;
-	msg.alpha.value = 0;
-	msg.commande = 3;*/
-
-	this->a_asservissement.send(m);
+	this->a_asservissement.send(msg);
 }
 

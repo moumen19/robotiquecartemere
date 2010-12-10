@@ -37,6 +37,7 @@ Robot::~Robot()
 	if(this->a_communication.isActive())
 		this->a_communication.stop();
 	this->stop();
+	_DEBUG("Destruction du module Robot", INFORMATION);
 }
 
 /**
@@ -111,7 +112,7 @@ void Robot::wait()
 	switch(this->a_threadConfiguration)
 	{
 		case ACTIVE_MAIN_THREADING:
-			this->a_thread->join();
+			//this->a_thread->join();
 			break;
 		default:
 			_DEBUG("La methode wait n'a aucun effet car le threading principale est desactive", WARNING);
@@ -133,8 +134,8 @@ void Robot::run()
 	_DEBUG("Fin de la routine de calcul des trajectoires", INFORMATION);
 }
 
-void Robot::test()
+void Robot::test(int i)
 {
-	this->a_communication.test();
+	this->a_communication.test(i);
 }
 

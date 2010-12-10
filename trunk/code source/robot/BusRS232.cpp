@@ -34,6 +34,7 @@ BusRS232::BusRS232(std::string port, int bufferSize) :
 BusRS232::~BusRS232()
 {
 	this->close();
+	_DEBUG("Destruction du module BusRS232", INFORMATION);
 }
 
 /**
@@ -106,7 +107,14 @@ void BusRS232::close()
 void BusRS232::send(boost::any msg)
 {
 	SerialPort::DataBuffer buffer = this->onSend(msg);
-	this->a_rs232.Write(buffer);
+	try
+	{
+		this->a_rs232.Write(buffer);
+	}
+	catch(std::exception & e)
+	{
+		_DEBUG(e.what(), WARNING);
+	}
 }
 
 /**
@@ -136,7 +144,6 @@ void BusRS232::receive()
 {
 	_DEBUG("Debut de la routine d'ecoute d'un port RS232", INFORMATION);
 
-	int i = 1, j = 0;
 	// Tant que l'on a pas ferme la connexion
 	while(this->a_thread_active)
 	{
@@ -149,34 +156,15 @@ void BusRS232::receive()
 				{
 					buffer = this->a_rs232.ReadByte(0);	// On recupere un octet (timeout = 0 : processus bloquant)
 
-					if((i == 8)){
-					    std::cout<<std::endl;
-					    i=1;
-					}
-                    std::cout<< (int) buffer <<"(i="<<i<<")"<<" ;";
-                    i++;
-
-
-                    /*
-					_DISPLAY((int)buffer << " | ");
-					i++;
-					if(i%14 == 0)
-					{
-						j++;
-						_DISPLAY(std::endl << j << "\t");
-					}//*/
-
 					a_mutex.lock();				// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 					this->a_buffer << buffer;		// On ajoute un octet au buffer
 					a_mutex.unlock();			// On deverouille le mutex
 				}
-				/*else
-				{
-				    std::cout<< ".";
-				}*/
+				else
+				{}
 			}
 			catch(const SerialPort::ReadTimeout & e)
-			{}
+			{/* Si on a depasse le timeout, on ne fait rien */}
 			catch(const std::exception & e)
 			{
 				_DEBUG(e.what(), WARNING);

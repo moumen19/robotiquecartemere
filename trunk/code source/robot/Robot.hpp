@@ -36,7 +36,7 @@
 	class Robot
 	{
 		public:
-			Robot(Robot_Configuration config = ACTIVE_MAIN_THREADING);	// Constructeur
+			Robot(Robot_Configuration config = ACTIVE_MAIN_THREADING);		// Constructeur
 			~Robot();								// Destructeur
 
 			void interruptuion_arret_urgence();////////////	
@@ -51,7 +51,7 @@
 			void stop();								// Desactive le robot
 			void wait();								// Attend jusqu'a ce que le robot soit desactive
 
-			void test();//////////
+			void test(int i = 0);//////////
 
 		protected:
 			void run();								// Thread traitant les donnees capteurs et planifiant la trajectoire
