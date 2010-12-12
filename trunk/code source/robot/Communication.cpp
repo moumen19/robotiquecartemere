@@ -32,7 +32,7 @@ Communication::Communication(Data & sensors, Data & environment, Constraint & co
 Communication::~Communication()
 {
 	this->stop();
-	_DEBUG("Destruction du module Communication", INFORMATION);
+	_DEBUG("Destruction du module de communication", INFORMATION);
 }
 
 void Communication::send(Port::Port port, std::string msg)

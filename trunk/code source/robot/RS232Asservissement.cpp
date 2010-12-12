@@ -12,6 +12,8 @@
 
 #include "RS232Asservissement.hpp"
 
+#include <boost/interprocess/sync/scoped_lock.hpp>
+
 const int RS232Asservissement::messageSize = 14;
 
 /**
@@ -56,7 +58,8 @@ boost::any RS232Asservissement::onReceive()
 	if(!this->isDataAvailable())
 		_DEBUG("Pas de donnée disponible...", WARNING);	// A remplacer par une vraie excpetion
 
-	a_mutex.lock();					// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
+	//boost::interprocess::scoped_lock<boost::mutex> lock(a_mutex, boost::interprocess::try_to_lock);
+	this->a_mutex.lock();				// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 	
 	messageAsservissement ass_msg;
 	this->a_buffer >> ass_msg.id;			// Recuperation de l'identifiant
@@ -68,7 +71,7 @@ boost::any RS232Asservissement::onReceive()
 		this->a_buffer >> ass_msg.alpha.data[i];
 	this->a_buffer >> ass_msg.commande;		// Recuperation de la commande
 
-	a_mutex.unlock();				// On deverouille le mutex
+	this->a_mutex.unlock();				// On deverouille le mutex
 	
 	boost::any msg = ass_msg;
 
@@ -83,13 +86,14 @@ boost::any RS232Asservissement::onReceive()
  */
 bool RS232Asservissement::isDataAvailable()
 {
-	a_mutex.lock();						// On protege les donnees (a_buffer)
+	//boost::interprocess::scoped_lock<boost::mutex> lock(a_mutex, boost::interprocess::try_to_lock);
+	this->a_mutex.lock();					// On protege les donnees (a_buffer)
 	int bufferAvailable = this->a_buffer.dataAvailable();	// On calcul le nombre d'octets non lu
-	a_mutex.unlock();					// On deverouille le mutex	
+	this->a_mutex.unlock();					// On deverouille le mutex	
 
 	if(bufferAvailable >= RS232Asservissement::messageSize)
 	{
-		a_mutex.lock();	// On protege le mutex
+		this->a_mutex.lock();		// On protege le mutex
 		while(this->a_buffer.see() != 42 && bufferAvailable > 0)
 		{
 			unsigned char c;
@@ -97,7 +101,7 @@ bool RS232Asservissement::isDataAvailable()
 			_DISPLAY("|" << (int)c << "|");
 			bufferAvailable--;
 		}
-		a_mutex.unlock();	// On deverouille le mutex
+		this->a_mutex.unlock();		// On deverouille le mutex
 
 		if(bufferAvailable >= RS232Asservissement::messageSize)
 			return true;

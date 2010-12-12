@@ -12,6 +12,7 @@
 
 #include "BusRS232.hpp"
 #include <string.h>
+#include <boost/interprocess/sync/scoped_lock.hpp>
 
 /**
  * Constructeur indiquant le port COM a ouvrir ainsi que la taille du buffer circulaire
@@ -34,6 +35,7 @@ BusRS232::BusRS232(std::string port, int bufferSize) :
 BusRS232::~BusRS232()
 {
 	this->close();
+	//this->a_mutex.unlock();
 	_DEBUG("Destruction du module BusRS232", INFORMATION);
 }
 
@@ -85,9 +87,9 @@ void BusRS232::close()
 	{
 		try
 		{
-			this->a_thread_active = false;
 			this->a_rs232.Close();
-			//this->a_thread->join()	// Attention blockage ici !
+			this->a_thread_active = false;
+			this->a_thread->join();	// Attention blockage ici !
 		}
 		catch(const std::exception & e)
 		{
@@ -156,9 +158,10 @@ void BusRS232::receive()
 				{
 					buffer = this->a_rs232.ReadByte(0);	// On recupere un octet (timeout = 0 : processus bloquant)
 
-					a_mutex.lock();				// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
+					//boost::interprocess::scoped_lock<boost::mutex> lock(a_mutex, boost::interprocess::try_to_lock);
+					this->a_mutex.lock();			// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 					this->a_buffer << buffer;		// On ajoute un octet au buffer
-					a_mutex.unlock();			// On deverouille le mutex
+					this->a_mutex.unlock();			// On deverouille le mutex
 				}
 				else
 				{}
@@ -198,11 +201,12 @@ boost::any BusRS232::onReceive()
 	if(!this->isDataAvailable())
 		_DEBUG("Pas de donnée disponible...", WARNING);	// A remplacer par une vraie excpetion
 
-	a_mutex.lock();				// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
+	//boost::interprocess::scoped_lock<boost::mutex> lock(a_mutex, boost::interprocess::try_to_lock);	
+	this->a_mutex.lock();			// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 	unsigned char c;
 	this->a_buffer >> c; 			// On recupere un octet
 	boost::any msg = c;
-	a_mutex.unlock();			// On deverouille le mutex
+	this->a_mutex.unlock();			// On deverouille le mutex
 
 	return msg;				// retourne un char
 }
@@ -216,9 +220,11 @@ boost::any BusRS232::onReceive()
  */
 bool BusRS232::isDataAvailable()
 {
-	a_mutex.lock();						// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
+	//boost::interprocess::scoped_lock<boost::mutex> lock(a_mutex, boost::interprocess::try_to_lock);
+					
+	this->a_mutex.lock();					// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 	int bufferAvailable = a_buffer.dataAvailable();		// On recupere le nombre d'octet non lu
-	a_mutex.unlock();					// On deverouille le mutex
+	this->a_mutex.unlock();					// On deverouille le mutex
 
 	if(bufferAvailable > 0)
 		return true;

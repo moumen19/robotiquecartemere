@@ -37,7 +37,7 @@ Robot::~Robot()
 	if(this->a_communication.isActive())
 		this->a_communication.stop();
 	this->stop();
-	_DEBUG("Destruction du module Robot", INFORMATION);
+	_DEBUG("Destruction du robot", INFORMATION);
 }
 
 /**

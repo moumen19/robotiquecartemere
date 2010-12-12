@@ -19,7 +19,7 @@ Constraint::Constraint()
 
 Constraint::~Constraint()
 {
-
+	_DEBUG("Destruction du module de contraintes", INFORMATION);
 }
 
 double Constraint::get(int nb)
