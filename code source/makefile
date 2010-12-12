@@ -15,7 +15,7 @@
 # all	 	compile tout le programme (par defaut)
 # rebuild 	efface l'executable et les fichiers compiles .o (si existant) et recompile le programme
 # clean 	efface l'executable et les fichiers compiles .o (si existant)
-#
+
 
 CC=g++
 CFLAGS=-W -Wall -g
@@ -34,7 +34,7 @@ main.o: main.cpp
 Debug.o: Debug.cpp Debug.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
-Buffer.o: ./robot/Buffer.cpp ./robot/Buffer.hpp 
+Buffer.o: ./robot/Buffer.cpp ./robot/Buffer.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 BusRS232.o: ./robot/BusRS232.cpp ./robot/BusRS232.hpp
@@ -71,4 +71,27 @@ clean:
 	rm -f *.o $(EXEC)
 
 rebuild: clean all
+
+
+### CodeBlocks Part ###
+### This allows the makefile to be used by CodeBlocks ###
+#####################################################################
+
+# rules called by codeblocks
+Release: all
+	cp *.o ./obj/Release
+	cp $(EXEC) ./bin/Release
+	rm -fv *.o $(EXEC)
+cleanRelease: clean
+	cd ./obj/Release && rm -fv *.o
+	cd ./bin/Release && rm -fv $(EXEC)
+Debug: all
+	cp *.o ./obj/Debug
+	cp $(EXEC) ./bin/Debug
+	rm -fv *.o $(EXEC)
+cleanDebug: clean
+	cd ./obj/Debug && rm -fv *.o
+	cd ./bin/Debug && rm -fv $(EXEC)
+
+#####################################################################
 

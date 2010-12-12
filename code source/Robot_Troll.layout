@@ -1,19 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="main.cpp" open="1" top="0" tabpos="2">
-		<Cursor position="229" topLine="0" />
-	</File>
-	<File name="makefile" open="1" top="0" tabpos="1">
-		<Cursor position="153" topLine="0" />
-	</File>
-	<File name="robot/BusRS232.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="1524" topLine="37" />
-	</File>
-	<File name="robot/BusRS232.hpp" open="1" top="0" tabpos="5">
-		<Cursor position="381" topLine="12" />
-	</File>
-	<File name="robot/Communication.cpp" open="1" top="0" tabpos="3">
-		<Cursor position="2707" topLine="125" />
-	</File>
 </CodeBlocks_layout_file>
