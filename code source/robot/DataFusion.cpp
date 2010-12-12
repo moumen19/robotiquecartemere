@@ -21,7 +21,7 @@ DataFusion::DataFusion(Data & sensor, Data & environment) :
 
 DataFusion::~DataFusion()
 {
-
+	_DEBUG("Destruction du module fusion de donnees", INFORMATION);
 }
 
 void DataFusion::run()

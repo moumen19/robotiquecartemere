@@ -20,7 +20,7 @@ using namespace std;
 
 int main()
 {
-	_DEBUG_EXEC(configuration(CONSOLE_DISPLAY, "logs.txt"));	// Configuration du mode Debug
+	_DEBUG_EXEC(configuration(CONSOLE_DISPLAY));	// Configuration du mode Debug
 
 	_DEBUG("Lancement du programme", INFORMATION);
 

@@ -20,7 +20,7 @@ Data::Data()
 
 Data::~Data()
 {
-
+	_DEBUG("Destruction du module stockage de donnees", INFORMATION);
 }
 
 boost::any Data::get(int nb, DataOption::Place place)

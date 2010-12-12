@@ -21,7 +21,7 @@ Strategy::Strategy(Data & environment, Constraint & constraint) :
 
 Strategy::~Strategy()
 {
-
+	_DEBUG("Destruction du module de strategie", INFORMATION);
 }
 
 int Strategy::get()
