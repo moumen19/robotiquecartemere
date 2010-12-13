@@ -95,13 +95,13 @@ void Communication::run()
 				//_DISPLAY(msg.x.value << " : " << msg.y.value << " : " << msg.alpha.value << " : ");
 				//_DISPLAY((int)msg.commande << std::endl);
 
-				switch(msg.commande)
+				/*switch(msg.commande)
 				{
 					case 0:
 						break;
 					default:
 						_DEBUG("Le message asservissement n'a pas pu etre traite, la commande ne correspon a aucune action repertoriee", WARNING);
-				}
+				}*/
 
 			}
 			catch(std::exception & e)
@@ -154,6 +154,7 @@ void Communication::run()
 
 void Communication::test(int i)
 {
+	//*
 	messageAsservissement msg;
 	switch(i)
 	{
@@ -166,8 +167,8 @@ void Communication::test(int i)
 			break;
 		case 4:
 			msg.id = 42;
-			msg.x.value = 5;
-			msg.y.value = 5;
+			msg.x.value = 1;
+			msg.y.value = 1;
 			msg.alpha.value = 0;
 			msg.commande = 4;
 			break;
@@ -181,7 +182,27 @@ void Communication::test(int i)
 		default:
 			_DEBUG("La commande asservissement n'est pas valide", WARNING);
 			return;
-	}
+	}//*/
+
+	/*SerialPort::DataBuffer msg;
+	msg.push_back(42);
+
+	msg.push_back(5);
+	msg.push_back(0);
+	msg.push_back(0);
+	msg.push_back(0);
+
+	msg.push_back(5);
+	msg.push_back(0);
+	msg.push_back(0);
+	msg.push_back(0);
+
+	msg.push_back(0);
+	msg.push_back(0);
+	msg.push_back(0);
+	msg.push_back(0);
+
+	msg.push_back(4);*/
 
 	this->a_RS232Asservissement.send(msg);
 }
