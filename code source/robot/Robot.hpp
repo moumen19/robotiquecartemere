@@ -23,6 +23,7 @@
 	#include "Strategy.hpp"
 	#include "DataFusion.hpp"
 	#include "Communication.hpp"
+	#include "Sensors.hpp"
 
 	enum Robot_Configuration
 	{
@@ -57,6 +58,7 @@
 			void run();								// Thread traitant les donnees capteurs et planifiant la trajectoire
 
 		private:
+			Sensors a_sensors;							// Liste des capteurs
 			Data a_sensorsData;							// Module de stockage des infos capteurs
 			Data a_environmentData;							// Module de stockage des infos haut niveau sur l'environement (perception du robot)
 			Constraint a_constraint;						// Module specifiant les contraintes du robot
@@ -68,15 +70,6 @@
 			boost::thread *a_thread;						// Le thread
 			bool a_thread_active;							// Un flag d'arret du thread
 			Robot_Configuration a_threadConfiguration;				// Configuration du multi threading
-	};
-
-	enum Sensor
-	{
-		US1 = 0,
-		US2 = 1,
-		US3 = 2,
-		US4 = 3, 
-		US5 = 5
 	};
 
 #endif

@@ -13,16 +13,16 @@
 #include "Communication.hpp"
 #include <sstream>
 
-Communication::Communication(Data & sensors, Data & environment, Constraint & constraint, Planning & planning) :
-	a_sensorsData(sensors),
+Communication::Communication(Sensors & sensors, Data & sensorsData, Data & environment, Constraint & constraint, Planning & planning) :
+	a_sensors(sensors),
+	a_sensorsData(sensorsData),
 	a_environmentData(environment),
 	a_constraint(constraint),
-	a_planning(planning)
+	a_planning(planning), 
+	a_RS232Sensor(sensors)
 {
-	this->a_asservissement.open();
-
-	//this->a_sensor = new BusRS232();
-	//this->a_sensor->open();
+	this->a_RS232Asservissement.open();
+	//this->a_RS232Sensor.open();
 
 	this->a_thread_active = false;
 
@@ -39,11 +39,11 @@ void Communication::send(Port::Port port, std::string msg)
 {
 	if(port == Port::ASSERVISSEMENT)
 	{
-		this->a_asservissement.send(msg);
+		this->a_RS232Asservissement.send(msg);
 	}
 	else if(port == Port::SENSOR)
 	{
-		//this->a_sensor->send(msg);
+		//this->a_RS232Sensor->send(msg);
 	}
 	else
 		_DEBUG("Envoie des données à un port non existant !", WARNING);
@@ -76,14 +76,14 @@ void Communication::run()
 
 	while(this->a_thread_active)
 	{
-		if(this->a_asservissement.isDataAvailable())
+		if(this->a_RS232Asservissement.isDataAvailable())
 		{
 			try
 			{
-				messageAsservissement msg = boost::any_cast<messageAsservissement>(this->a_asservissement.getData());
+				messageAsservissement msg = boost::any_cast<messageAsservissement>(this->a_RS232Asservissement.getData());
 				
-				_DISPLAY((int)msg.id << " : ");
-				//*
+				//_DISPLAY((int)msg.id << " : ");
+				/*
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.x.data[i] << " : ");
 				for(int i = 0; i < 4; i++)
@@ -92,8 +92,8 @@ void Communication::run()
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.alpha.data[i] << " : ");
 				//*/
-				_DISPLAY(msg.x.value << " : " << msg.y.value << " : " << msg.alpha.value << " : ");
-				_DISPLAY((int)msg.commande << std::endl);
+				//_DISPLAY(msg.x.value << " : " << msg.y.value << " : " << msg.alpha.value << " : ");
+				//_DISPLAY((int)msg.commande << std::endl);
 
 				switch(msg.commande)
 				{
@@ -110,8 +110,45 @@ void Communication::run()
 			}
 
 		}
+
+		if(this->a_RS232Sensor.isDataAvailable())
+		{
+			try
+			{
+				messageSensor msg = boost::any_cast<messageSensor>(this->a_RS232Sensor.getData());
+				
+				_DISPLAY((int)msg.id << " : ");
+				_DISPLAY((int)msg.id_sensor << " : ");
+				/*
+				for(int i = 0; i < 4; i++)
+					_DISPLAY((int)msg.time.getData(i) << " : ");
+				for(int i = 0; i < 4; i++)
+					_DISPLAY((int)msg.data.getData(i) << " : ");
+				for(int i = 0; i < 4; i++)
+					_DISPLAY((int)msg.crc.getData(i) << " : ");
+				//*/
+				_DISPLAY(msg.time.getValue() << " : " << msg.data.getValue() << " : " << msg.crc.getValue());
+				_DISPLAY(std::endl);
+
+				/*
+				switch(msg.id_sensor)
+				{
+					case 0:
+						break;
+					default:
+						_DEBUG("Le message capteur n'a pas pu etre traite...", WARNING);
+				}
+				//*/
+
+			}
+			catch(std::exception & e)
+			{
+				_DEBUG(e.what(), WARNING);
+			}
+
+		}
 	}
-	this->a_asservissement.close();
+	this->a_RS232Asservissement.close();
 	_DEBUG("Fin de la routine d'ecoute des ports de communications", INFORMATION);
 }
 
@@ -120,19 +157,19 @@ void Communication::test(int i)
 	messageAsservissement msg;
 	switch(i)
 	{
-		case 0:
+		case 3:
 			msg.id = 42;
 			msg.x.value = 0;
 			msg.y.value = 0;
 			msg.alpha.value = 0;
-			msg.commande = 0;
+			msg.commande = 3;
 			break;
-		case 3:
+		case 4:
 			msg.id = 42;
 			msg.x.value = 5;
 			msg.y.value = 5;
 			msg.alpha.value = 0;
-			msg.commande = 3;
+			msg.commande = 4;
 			break;
 		case 7:
 			msg.id = 42;
@@ -146,6 +183,6 @@ void Communication::test(int i)
 			return;
 	}
 
-	this->a_asservissement.send(msg);
+	this->a_RS232Asservissement.send(msg);
 }
 

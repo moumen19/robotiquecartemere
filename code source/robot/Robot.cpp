@@ -21,10 +21,29 @@ Robot::Robot(Robot_Configuration config) :
 	a_dataFusion(a_sensorsData, a_environmentData),
 	a_strategy(a_environmentData, a_constraint),
 	a_planning(a_environmentData, a_constraint, a_strategy),
-	a_communication(a_sensorsData, a_environmentData, a_constraint, a_planning)
+	a_communication(a_sensors, a_sensorsData, a_environmentData, a_constraint, a_planning)
 {
 	this->a_threadConfiguration = config;
 	this->a_thread_active = false;
+
+	a_sensors.addSensor(48, "US1", 2);
+	a_sensors.addSensor(50, "US2", 2);
+	a_sensors.addSensor(52, "US3", 2);
+	a_sensors.addSensor(54, "US4", 2);
+	a_sensors.addSensor(56, "US5", 2);
+	a_sensors.addSensor(58, "US6", 2);
+	a_sensors.addSensor(60, "US7", 2);
+	//a_sensors.addSensor(62, "US8", 2);
+
+	/*a_sensors.addSensor(80, "IR1", 2);	
+	a_sensors.addSensor(83, "IR2", 2);
+	a_sensors.addSensor(86, "IR3", 2);	
+	a_sensors.addSensor(89, "IR4", 2);
+		
+	a_sensors.addSensor(10, "BO1", 2);
+	a_sensors.addSensor(176, "AC1", 4);*/
+	a_sensors.addSensor(144, "BAU", 1);
+	//a_sensors.addSensor(112, "VID", 1);
 
 	_DEBUG("Initialisation du robot", INFORMATION);
 }
@@ -112,7 +131,7 @@ void Robot::wait()
 	switch(this->a_threadConfiguration)
 	{
 		case ACTIVE_MAIN_THREADING:
-			//this->a_thread->join();
+			this->a_thread->join();
 			break;
 		default:
 			_DEBUG("La methode wait n'a aucun effet car le threading principale est desactive", WARNING);
