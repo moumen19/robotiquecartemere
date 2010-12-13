@@ -108,7 +108,7 @@ void BusRS232::close()
  */
 void BusRS232::send(boost::any msg)
 {
-	SerialPort::DataBuffer buffer = this->onSend(msg);
+	SerialPort::DataBuffer buffer = onSend(msg);
 	try
 	{
 		this->a_rs232.Write(buffer);
