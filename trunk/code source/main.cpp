@@ -32,13 +32,19 @@ int main()
 
 	
 	//*
-	sleep(1);
-		int a;
+		int a = 4;
 	do{
-		std::cout << "Envoyer la commande ? ";
-		std::cin >> a;
-		std::cout << "Commande envoye..." << std::endl;
-		robot2010.test(a);
+		sleep(1);
+		//std::cout << "Envoyer la commande ? ";
+		//std::cin >> a;
+		std::cout << "Commande avance envoye..." << std::endl;
+		robot2010.test(4);
+
+		sleep(1);
+		//std::cout << "Envoyer la commande ? ";
+		//std::cin >> a;
+		std::cout << "Commande stop envoye..." << std::endl;
+		robot2010.test(3);
 	}while(a != -1);
 
 	robot2010.stop();//*/

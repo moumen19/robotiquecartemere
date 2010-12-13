@@ -105,7 +105,7 @@
 	 * @param filename - Le chemin du fichier de logs
 	 * @see Debug_Configuration
 	 */
-	void _DEBUG::configuration(Debug_Configuration configuration, std::string filename = "")
+	void _DEBUG::configuration(Debug_Configuration configuration, std::string filename)
 	{
 		_DEBUG::a_configuration = configuration;
 		_DEBUG::a_filename = filename;
