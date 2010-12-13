@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1292233360 source:/home/julien/C++/svn_Info/autre/SFML1/display.cpp
+	<SFML/Graphics.hpp>
+	<iostream>
+	"display.h"
+
+1292233349 /home/julien/C++/svn_Info/autre/SFML1/display.h
+	<SFML/Graphics.hpp>
+	<iostream>
+
+1292232549 source:/home/julien/C++/svn_Info/autre/SFML1/main.cpp
+	<SFML/Graphics.hpp>
+	<iostream>
+	"display.h"
+
