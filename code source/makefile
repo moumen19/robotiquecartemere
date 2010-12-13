@@ -25,7 +25,7 @@ EXEC=robot_prgm
 
 all: $(EXEC)
 
-$(EXEC): main.o Debug.o Buffer.o BusRS232.o Communication.o Constraint.o Data.o DataFusion.o Planning.o Robot.o RS232Asservissement.o Strategy.o
+$(EXEC): main.o Debug.o Buffer.o BusRS232.o Communication.o Constraint.o Data.o DataFusion.o Integer.o Planning.o Robot.o RS232Asservissement.o RS232Sensor.o Sensors.o Strategy.o
 	$(CC) $^ $(LDFLAGS) -o $@
 
 main.o: main.cpp
@@ -52,6 +52,9 @@ Data.o: ./robot/Data.cpp ./robot/Data.hpp
 DataFusion.o: ./robot/DataFusion.cpp ./robot/DataFusion.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
+Integer.o: ./robot/Integer.cpp ./robot/Integer.hpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
 Planning.o: ./robot/Planning.cpp ./robot/Planning.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
@@ -59,6 +62,12 @@ Robot.o: ./robot/Robot.cpp ./robot/Robot.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 RS232Asservissement.o: ./robot/RS232Asservissement.cpp ./robot/RS232Asservissement.hpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+RS232Sensor.o: ./robot/RS232Sensor.cpp ./robot/RS232Sensor.hpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+Sensors.o: ./robot/Sensors.cpp ./robot/Sensors.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 Strategy.o: ./robot/Strategy.cpp ./robot/Strategy.hpp

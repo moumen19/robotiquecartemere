@@ -100,21 +100,21 @@
 	class _DEBUG
 	{
 		public:
-			static void addMessage(std::string, std::string, Debug_Priority);	// Ajoute un message
-			static void clearAllMessage();						// Efface tous les messages
-			static void configuration(Debug_Configuration, std::string);		// Configure le mode Debug
-			static Message getMessage(unsigned int);				// Retourne un message
-			static Message getNextMessage();					// Retourne le message suivant
-			static int getNumMessages();						// Donne le nombre de message stocké
-			static void lock();							// Verouille un mutex
-			static void unlock();							// Deverouille le mutex
+			static void addMessage(std::string, std::string, Debug_Priority);		// Ajoute un message
+			static void clearAllMessage();							// Efface tous les messages
+			static void configuration(Debug_Configuration, std::string filename  = "");	// Configure le mode Debug
+			static Message getMessage(unsigned int);					// Retourne un message
+			static Message getNextMessage();						// Retourne le message suivant
+			static int getNumMessages();							// Donne le nombre de message stocké
+			static void lock();								// Verouille un mutex
+			static void unlock();								// Deverouille le mutex
 
 		private:
-			static std::vector<Message> a_messages;					// Stockage des messages
-			static unsigned int a_cursor;						// Curseur indiquant quel sera le prochain message retourne par getNextMessage()
-			static Debug_Configuration a_configuration;				// Configuration du mode Debug
-			static std::string a_filename;						// Chemin du fichier de logs si existant
-			static boost::mutex a_mutex;						// Mutex de protection
+			static std::vector<Message> a_messages;						// Stockage des messages
+			static unsigned int a_cursor;							// Curseur indiquant quel sera le prochain message retourne par getNextMessage()
+			static Debug_Configuration a_configuration;					// Configuration du mode Debug
+			static std::string a_filename;							// Chemin du fichier de logs si existant
+			static boost::mutex a_mutex;							// Mutex de protection
 	};
 
 #endif
