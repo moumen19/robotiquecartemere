@@ -26,7 +26,7 @@ int main()
 
 	signal(SIGIO, SIG_IGN); 		// IMPORTANT !! Sinon, le programme plante à la réception des données des ports COMs
 
-	Robot robot2010;			// Création du robot
+	Robot robot2010(ACTIVE_MAIN_THREADING);			// Création du robot
 	robot2010.startCommunication();		// Lancement du dialogue avec les capteurs et l'asservissement
 	robot2010.start();			// Lancement du traitement des informations et de la planification de trajectoire
 
@@ -43,13 +43,13 @@ int main()
 		sleep(1);
 		//std::cout << "Envoyer la commande ? ";
 		//std::cin >> a;
-		std::cout << "Commande stop envoye..." << std::endl;
-		robot2010.test(3);
+		//std::cout << "Commande stop envoye..." << std::endl;
+		//robot2010.test(3);
 	}while(a != -1);
 
 	robot2010.stop();//*/
 
-	robot2010.wait();			// Mise en attente du robot
+	//robot2010.wait();			// Mise en attente du robot
 
 	return 0;
 }
