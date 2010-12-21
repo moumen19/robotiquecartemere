@@ -19,13 +19,13 @@
 
 CC=g++
 CFLAGS=-W -Wall -g
-LDFLAGS=-lserial -lboost_thread
+LDFLAGS=-lserial -lboost_thread -lsfml-graphics -lsfml-window -lsfml-system
 EXEC=robot_prgm
 
 
 all: $(EXEC)
 
-$(EXEC): main.o Debug.o Buffer.o BusRS232.o Communication.o Constraint.o Data.o DataFusion.o Integer.o Planning.o Robot.o RS232Asservissement.o RS232Sensor.o Sensors.o Strategy.o
+$(EXEC): main.o Debug.o Buffer.o BusRS232.o Communication.o Constraint.o Data.o DataFusion.o Integer.o Planning.o Robot.o RS232Asservissement.o RS232Sensor.o Sensors.o Strategy.o display.o
 	$(CC) $^ $(LDFLAGS) -o $@
 
 main.o: main.cpp
@@ -71,6 +71,9 @@ Sensors.o: ./robot/Sensors.cpp ./robot/Sensors.hpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
 Strategy.o: ./robot/Strategy.cpp ./robot/Strategy.hpp
+	$(CC) $(CFLAGS) -c $< -o $@
+
+display.o: display.cpp display.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 

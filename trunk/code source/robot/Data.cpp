@@ -14,7 +14,7 @@
 
 Data::Data()
 {
-	this->a_data.resize(4);
+	//this->a_data.resize(4);
 	_DEBUG("Initialisation du module de stockage de donnees", INFORMATION);
 }
 
@@ -33,12 +33,15 @@ boost::any Data::get(int nb, DataOption::Place place)
 
 boost::any Data::get(int nb, int index)
 {
+	if(this->a_data[nb].size() < (unsigned int)index+1 || index < 0)
+		throw std::out_of_range("ERREUR : Aucune donnée stocke... :/:/:::qsdf:sfd !");
+
 	return this->a_data[nb][index];
 }
 
 void Data::set(int nb, boost::any value)
 {
 	this->a_data[nb].push_back(value);
-	_DEBUG("Ajout d'une donnee au module de stockage de donnees", INFORMATION);
+	//_DEBUG("Ajout d'une donnee au module de stockage de donnees", INFORMATION);
 }
 

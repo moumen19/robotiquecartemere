@@ -38,7 +38,7 @@
 	class RS232Sensor : public BusRS232
 	{
 		public:
-			RS232Sensor(Sensors &);			// Constructeur
+			RS232Sensor(Sensors &, std::string port = "/dev/ttyUSB0");			// Constructeur
 			virtual ~RS232Sensor();			// Destructeur virtuel
 			virtual bool isDataAvailable();		// Teste si une donnée provenant des capteurs est présente dans le buffer circulaire 
 

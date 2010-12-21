@@ -145,10 +145,45 @@ void Robot::run()
 {
 	_DEBUG("Debut de la routine de calcul des trajectoires", INFORMATION);
 
+	a_rendererSensor = new display;
+	
 	while(this->a_thread_active)
 	{
+		try
+		{
+			/*
+			messageSensor msg = boost::any_cast<messageSensor>(a_sensorsData.get(48, DataOption::LAST));
+			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());
+
+			msg = boost::any_cast<messageSensor>(a_sensorsData.get(50, DataOption::LAST));
+			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());
+			
+			msg = boost::any_cast<messageSensor>(a_sensorsData.get(52, DataOption::LAST));
+			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());
+
+			msg = boost::any_cast<messageSensor>(a_sensorsData.get(54, DataOption::LAST));
+			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());
+
+			msg = boost::any_cast<messageSensor>(a_sensorsData.get(56, DataOption::LAST));
+			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());
+
+			msg = boost::any_cast<messageSensor>(a_sensorsData.get(58, DataOption::LAST));
+			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());
+
+			msg = boost::any_cast<messageSensor>(a_sensorsData.get(60, DataOption::LAST));
+			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());//*/
+		}
+		catch(std::exception & e)
+		{
+			//_DEBUG(e.what(), WARNING);
+		}
+
+			
 		//_DEBUG("Robot", INFORMATION);
 	}
+
+	delete a_rendererSensor;
+	this->stop();
 
 	_DEBUG("Fin de la routine de calcul des trajectoires", INFORMATION);
 }
