@@ -16,6 +16,7 @@
 	#include <boost/thread/thread.hpp>
 
 	#include "../Debug.hpp"
+	#include "../display.h"
 
 	#include "Data.hpp"
 	#include "Planning.hpp"
@@ -70,6 +71,8 @@
 			boost::thread *a_thread;						// Le thread
 			bool a_thread_active;							// Un flag d'arret du thread
 			Robot_Configuration a_threadConfiguration;				// Configuration du multi threading
+
+			display * a_rendererSensor;
 	};
 
 #endif

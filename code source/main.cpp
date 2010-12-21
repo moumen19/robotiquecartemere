@@ -12,6 +12,8 @@
 
 #include <iostream>
 #include <signal.h>
+#include <boost/thread/thread.hpp>
+#include <boost/thread/xtime.hpp>
 
 #include "Debug.hpp"
 #include "./robot/Robot.hpp"
@@ -33,23 +35,24 @@ int main()
 	
 	//*
 		int a = 4;
+		robot2010.test(3);
 	do{
-		sleep(1);
-		//std::cout << "Envoyer la commande ? ";
-		//std::cin >> a;
-		std::cout << "Commande avance envoye..." << std::endl;
-		robot2010.test(4);
+		boost::xtime xt;
+		boost::xtime_get(&xt, boost::TIME_UTC);
+		xt.sec += 1;
+		boost::thread::sleep(xt); // Sleep for 1 second
 
-		sleep(1);
-		//std::cout << "Envoyer la commande ? ";
-		//std::cin >> a;
-		//std::cout << "Commande stop envoye..." << std::endl;
-		//robot2010.test(3);
+		//sleep(1);
+		std::cout << "Envoyer la commande ? ";
+		std::cin >> a;
+		std::cout << "Commande avance envoye..." << std::endl;
+		robot2010.test(a);
+
 	}while(a != -1);
 
 	robot2010.stop();//*/
 
-	//robot2010.wait();			// Mise en attente du robot
+	robot2010.wait();			// Mise en attente du robot
 
 	return 0;
 }

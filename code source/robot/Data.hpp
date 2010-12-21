@@ -14,6 +14,7 @@
 #define DEF_DATA
 
 	#include <vector>
+	#include <map>
 	#include <boost/any.hpp>
 
 	#include "../Debug.hpp"
@@ -38,7 +39,7 @@
 			void set(int, boost::any);
 
 		private:
-			std::vector< std::vector<boost::any> > a_data;
+			std::map <int, std::vector<boost::any> > a_data;
 	};
 
 #endif

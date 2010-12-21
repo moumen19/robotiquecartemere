@@ -16,6 +16,13 @@
 
 const int RS232Asservissement::messageSize = 14;
 
+RS232Asservissement::RS232Asservissement(std::string port) :
+	BusRS232(port)
+
+{
+
+}
+
 /**
  * Destructeur
  */

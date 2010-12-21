@@ -18,8 +18,9 @@
 /**
  * Constructeur
  */
-RS232Sensor::RS232Sensor(Sensors & sensors) : 
-	a_sensors(sensors)
+RS232Sensor::RS232Sensor(Sensors & sensors, std::string port) : 	
+	BusRS232(port),
+	a_sensors(sensors) 
 {
 
 }
@@ -65,16 +66,16 @@ boost::any RS232Sensor::onReceive()
 	this->a_mutex.lock();				// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 	
 	messageSensor sensor_msg;
-	this->a_buffer >> sensor_msg.id;		// Recuperation de l'identifiant
-	this->a_buffer >> sensor_msg.id_sensor;		// Recuperation de l'identifiant capteur
+	this->a_buffer >> sensor_msg.id;			// Recuperation de l'identifiant
+	this->a_buffer >> sensor_msg.id_sensor;			// Recuperation de l'identifiant capteur
 
-	sensor_msg.time.setData(this->a_buffer.get(), 0);
+	sensor_msg.time.setData(this->a_buffer.get(), 0);	// Recuperation du temps
 	sensor_msg.time.setData(this->a_buffer.get(), 1);
 	
-	for(int i = 0; i < a_sensors.getSensor(sensor_msg.id_sensor).getSize(); i++)
+	for(int i = 0; i < a_sensors.getSensor(sensor_msg.id_sensor).getSize(); i++)	// Recuperation de la donnee
 		sensor_msg.data.setData(this->a_buffer.get(), i);
 
-	sensor_msg.crc.setData(this->a_buffer.get(), 0);
+	sensor_msg.crc.setData(this->a_buffer.get(), 0);	// Recuperation du crc
 	sensor_msg.crc.setData(this->a_buffer.get(), 1);
 	
 
@@ -101,7 +102,7 @@ bool RS232Sensor::isDataAvailable()
 	if(bufferAvailable >= 7)
 	{
 		this->a_mutex.lock();		// On protege le mutex
-		while(this->a_buffer.see() != 56 && bufferAvailable > 0)
+		while(this->a_buffer.see() != 17 && bufferAvailable > 0)
 		{
 			unsigned char c;
 			this->a_buffer >> c;			
@@ -122,7 +123,7 @@ bool RS232Sensor::isDataAvailable()
 			else
 			{
 				//_DISPLAY(std::endl << sensorID << std::endl);
-				_DEBUG("Le message n'appartient a aucun capteur connu", WARNING);
+				//_DEBUG("Le message n'appartient a aucun capteur connu", WARNING);
 				unsigned char c;
 				this->a_buffer >> c;			
 				//_DISPLAY((unsigned int)sensorID << "c" << (int)c << "|");

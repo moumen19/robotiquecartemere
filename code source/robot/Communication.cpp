@@ -19,7 +19,8 @@ Communication::Communication(Sensors & sensors, Data & sensorsData, Data & envir
 	a_environmentData(environment),
 	a_constraint(constraint),
 	a_planning(planning), 
-	a_RS232Sensor(sensors)
+	a_RS232Asservissement("/dev/ttyUSB0"),
+	a_RS232Sensor(sensors, "/dev/ttyUSB1")
 {
 	this->a_RS232Asservissement.open();
 	//this->a_RS232Sensor.open();
@@ -82,7 +83,7 @@ void Communication::run()
 			{
 				messageAsservissement msg = boost::any_cast<messageAsservissement>(this->a_RS232Asservissement.getData());
 				
-				//_DISPLAY((int)msg.id << " : ");
+				_DISPLAY((int)msg.id << " : ");
 				/*
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.x.data[i] << " : ");
@@ -92,8 +93,8 @@ void Communication::run()
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.alpha.data[i] << " : ");
 				//*/
-				//_DISPLAY(msg.x.value << " : " << msg.y.value << " : " << msg.alpha.value << " : ");
-				//_DISPLAY((int)msg.commande << std::endl);
+				_DISPLAY(msg.x.value << " : " << msg.y.value << " : " << msg.alpha.value << " : ");
+				_DISPLAY((int)msg.commande << std::endl);
 
 				/*switch(msg.commande)
 				{
@@ -115,8 +116,13 @@ void Communication::run()
 		{
 			try
 			{
-				messageSensor msg = boost::any_cast<messageSensor>(this->a_RS232Sensor.getData());
+				boost::any msg_boost = this->a_RS232Sensor.getData();
+				messageSensor msg = boost::any_cast<messageSensor>(msg_boost);
 				
+				a_sensorsData.set((int)msg.id_sensor, msg);
+
+if(false && (int)msg.id_sensor == 48)
+{
 				_DISPLAY((int)msg.id << " : ");
 				_DISPLAY((int)msg.id_sensor << " : ");
 				/*
@@ -129,7 +135,7 @@ void Communication::run()
 				//*/
 				_DISPLAY(msg.time.getValue() << " : " << msg.data.getValue() << " : " << msg.crc.getValue());
 				_DISPLAY(std::endl);
-
+}
 				/*
 				switch(msg.id_sensor)
 				{
@@ -147,8 +153,15 @@ void Communication::run()
 			}
 
 		}
+
+		
+		
+		 	//a_renderer.setSensorDistance(0x30, 50);
+		 	//sleep(2);
+	    	
 	}
 	this->a_RS232Asservissement.close();
+	this->a_RS232Sensor.close();
 	_DEBUG("Fin de la routine d'ecoute des ports de communications", INFORMATION);
 }
 
@@ -156,6 +169,7 @@ void Communication::test(int i)
 {
 	//*
 	messageAsservissement msg;
+	int v = 0;
 	switch(i)
 	{
 		case 3:
@@ -166,9 +180,11 @@ void Communication::test(int i)
 			msg.commande = 3;
 			break;
 		case 4:
+			std::cout << "Vitesse : ";
+			std::cin >> v;
 			msg.id = 42;
-			msg.x.value = 1;
-			msg.y.value = 1;
+			msg.x.value = v;
+			msg.y.value = v;
 			msg.alpha.value = 0;
 			msg.commande = 4;
 			break;
@@ -179,12 +195,27 @@ void Communication::test(int i)
 			msg.alpha.value = 0;
 			msg.commande = 7;
 			break;
+		case 8:
+			msg.id = 42;
+			msg.x.value = 0;
+			msg.y.value = 0;
+			msg.alpha.value = 0;
+			msg.commande = 8;
+			break;
+		case 9:
+			msg.id = 42;
+			msg.x.value = 0;
+			msg.y.value = 0;
+			msg.alpha.value = 0;
+			msg.commande = 9;
+			break;
 		default:
 			_DEBUG("La commande asservissement n'est pas valide", WARNING);
 			return;
 	}//*/
 
-	/*SerialPort::DataBuffer msg;
+	/*
+	SerialPort::DataBuffer msg;
 	msg.push_back(42);
 
 	msg.push_back(5);
@@ -202,7 +233,7 @@ void Communication::test(int i)
 	msg.push_back(0);
 	msg.push_back(0);
 
-	msg.push_back(4);*/
+	msg.push_back(4);//*/
 
 	this->a_RS232Asservissement.send(msg);
 }
