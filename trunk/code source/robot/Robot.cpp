@@ -21,7 +21,7 @@ Robot::Robot(Robot_Configuration config) :
 	a_dataFusion(a_sensorsData, a_environmentData),
 	a_strategy(a_environmentData, a_constraint),
 	a_planning(a_environmentData, a_constraint, a_strategy),
-	a_communication(a_sensors, a_sensorsData, a_environmentData, a_constraint, a_planning)
+	a_communication(a_sensors, a_sensorsData, a_environmentData, a_strategy)
 {
 	this->a_threadConfiguration = config;
 	this->a_thread_active = false;
@@ -145,13 +145,15 @@ void Robot::run()
 {
 	_DEBUG("Debut de la routine de calcul des trajectoires", INFORMATION);
 
+	a_strategy.set(GO_AHEAD);
+
 	a_rendererSensor = new display;
 	
 	while(this->a_thread_active)
 	{
 		try
 		{
-			/*
+			//*
 			messageSensor msg = boost::any_cast<messageSensor>(a_sensorsData.get(48, DataOption::LAST));
 			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());
 

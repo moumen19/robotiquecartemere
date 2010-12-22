@@ -61,6 +61,12 @@
 						std::cout << message; \
 						_DEBUG::unlock(); \
 					}
+	
+	#define _CIN(message)		{ \
+						_DEBUG::lock(); \
+						std::cin >> message; \
+						_DEBUG::unlock(); \
+					}
 
 	/** 
 	 * Définition des constantes de configurations

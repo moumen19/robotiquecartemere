@@ -18,19 +18,32 @@
 	#include "Constraint.hpp"
 	#include "Data.hpp"
 
+	enum Strat
+	{
+		NONE,
+		BAU_START,
+		BAU_STOP,
+		GO_AHEAD
+	};
+
 	class Strategy
 	{
 		public:
 			Strategy(Data &, Constraint &);
 			~Strategy();
 
-			int get();
-			void set(int);
+			Strat get();
+			void set(Strat);
+	
+			void bau_start();
+			void bau_stop();
+			void go_ahead();
 
 		private:
 			Constraint & a_constraint;
 			Data & a_environmentData;
-			int a_strategy;
+			Strat a_strategy;
+			Strat a_strategySave;
 	};
 
 #endif

@@ -33,9 +33,10 @@ int main()
 	robot2010.start();			// Lancement du traitement des informations et de la planification de trajectoire
 
 	
-	//*
-		int a = 4;
+	/*
+		int a = 7;
 		robot2010.test(3);
+	//*	
 	do{
 		boost::xtime xt;
 		boost::xtime_get(&xt, boost::TIME_UTC);
@@ -43,9 +44,9 @@ int main()
 		boost::thread::sleep(xt); // Sleep for 1 second
 
 		//sleep(1);
-		std::cout << "Envoyer la commande ? ";
-		std::cin >> a;
-		std::cout << "Commande avance envoye..." << std::endl;
+		_DISPLAY("Envoyer la commande ? ");
+		_CIN(a);
+		_DISPLAY("Commande envoye..." << std::endl);
 		robot2010.test(a);
 
 	}while(a != -1);

@@ -17,6 +17,7 @@ Planning::Planning(Data & environment, Constraint & constraint, Strategy & strat
 	a_constraint(constraint),
 	a_strategy(strategy)
 {
+	a_lastStrategy = NONE;
 	_DEBUG("Initialisation du module de planification", INFORMATION);
 }
 
@@ -32,6 +33,17 @@ void Planning::clearTrajectory()
 
 void Planning::run()
 {
+	switch(a_strategy.get())
+	{
+		case BAU_START:
+			break;
+		case BAU_STOP:
+			break;
+		case GO_AHEAD:
+			break;
+		default:
+			_DEBUG("La strategie ne correspond à aucune", WARNING);
+	}
 
 }
 
