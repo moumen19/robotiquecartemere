@@ -42,6 +42,7 @@
 			Constraint & a_constraint;
 			Strategy & a_strategy;
 			std::vector<Point> a_trajectory;
+			Strat a_lastStrategy;
 	};
 
 #endif

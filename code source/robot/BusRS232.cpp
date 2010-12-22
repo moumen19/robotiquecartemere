@@ -160,7 +160,7 @@ void BusRS232::receive()
 				{
 					this->a_mutex.lock();
 					buffer = this->a_rs232.ReadByte(0);	// On recupere un octet (timeout = 0 : processus bloquant)
-
+					//_DISPLAY(buffer << std::endl);
 					//boost::interprocess::scoped_lock<boost::mutex> lock(a_mutex, boost::interprocess::try_to_lock);
 					this->a_buffer << buffer;		// On ajoute un octet au buffer
 					this->a_mutex.unlock();			// On deverouille le mutex

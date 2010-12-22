@@ -13,17 +13,16 @@
 #include "Communication.hpp"
 #include <sstream>
 
-Communication::Communication(Sensors & sensors, Data & sensorsData, Data & environment, Constraint & constraint, Planning & planning) :
+Communication::Communication(Sensors & sensors, Data & sensorsData, Data & environment, Strategy & strategy) :
 	a_sensors(sensors),
 	a_sensorsData(sensorsData),
 	a_environmentData(environment),
-	a_constraint(constraint),
-	a_planning(planning), 
+	a_strategy(strategy),
 	a_RS232Asservissement("/dev/ttyUSB0"),
 	a_RS232Sensor(sensors, "/dev/ttyUSB1")
 {
 	this->a_RS232Asservissement.open();
-	//this->a_RS232Sensor.open();
+	this->a_RS232Sensor.open();
 
 	this->a_thread_active = false;
 
@@ -83,7 +82,7 @@ void Communication::run()
 			{
 				messageAsservissement msg = boost::any_cast<messageAsservissement>(this->a_RS232Asservissement.getData());
 				
-				_DISPLAY((int)msg.id << " : ");
+				//_DISPLAY((int)msg.id << " : ");
 				/*
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.x.data[i] << " : ");
@@ -93,16 +92,16 @@ void Communication::run()
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.alpha.data[i] << " : ");
 				//*/
-				_DISPLAY(msg.x.value << " : " << msg.y.value << " : " << msg.alpha.value << " : ");
-				_DISPLAY((int)msg.commande << std::endl);
+				//_DISPLAY(msg.x.value << " : " << msg.y.value << " : " << msg.alpha.value << " : ");
+				//_DISPLAY((int)msg.commande << std::endl);
 
-				/*switch(msg.commande)
+				switch(msg.commande)
 				{
 					case 0:
 						break;
 					default:
 						_DEBUG("Le message asservissement n'a pas pu etre traite, la commande ne correspon a aucune action repertoriee", WARNING);
-				}*/
+				}
 
 			}
 			catch(std::exception & e)
@@ -121,10 +120,10 @@ void Communication::run()
 				
 				a_sensorsData.set((int)msg.id_sensor, msg);
 
-if(false && (int)msg.id_sensor == 48)
+if(true && (int)msg.id_sensor == 144)
 {
-				_DISPLAY((int)msg.id << " : ");
-				_DISPLAY((int)msg.id_sensor << " : ");
+				//_DISPLAY((int)msg.id << " : ");
+				//_DISPLAY((int)msg.id_sensor << " : ");
 				/*
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.time.getData(i) << " : ");
@@ -133,19 +132,23 @@ if(false && (int)msg.id_sensor == 48)
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.crc.getData(i) << " : ");
 				//*/
-				_DISPLAY(msg.time.getValue() << " : " << msg.data.getValue() << " : " << msg.crc.getValue());
-				_DISPLAY(std::endl);
-}
+				//_DISPLAY(msg.time.getValue() << " : " << msg.data.getValue() << " : " << msg.crc.getValue());
+				//_DISPLAY(std::endl);
+
 				/*
 				switch(msg.id_sensor)
 				{
-					case 0:
+					case 144:
+						if(msg.data.getValue() == 0)
+							a_strategy.set(BAU_STOP);
+						else
+							a_strategy.set(BAU_START);
 						break;
 					default:
 						_DEBUG("Le message capteur n'a pas pu etre traite...", WARNING);
 				}
 				//*/
-
+}
 			}
 			catch(std::exception & e)
 			{
@@ -169,7 +172,7 @@ void Communication::test(int i)
 {
 	//*
 	messageAsservissement msg;
-	int v = 0;
+	int vg = 5, vd = 5;
 	switch(i)
 	{
 		case 3:
@@ -180,11 +183,14 @@ void Communication::test(int i)
 			msg.commande = 3;
 			break;
 		case 4:
-			std::cout << "Vitesse : ";
-			std::cin >> v;
+			/*
+			std::cout << "Vitesse gauche : ";
+			std::cin >> vg;
+			std::cout << "Vitesse droite : ";
+			std::cin >> vd;//*/
 			msg.id = 42;
-			msg.x.value = v;
-			msg.y.value = v;
+			msg.x.value = vg;
+			msg.y.value = vd;
 			msg.alpha.value = 0;
 			msg.commande = 4;
 			break;
