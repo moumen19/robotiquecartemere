@@ -1,0 +1,29 @@
+include "map.inc"
+include "projet.inc"
+
+size [30 30]			# taille de la simu
+
+map
+( 
+  #bitmap "bitmaps/projet.png"	# dessin de la map
+  bitmap "bitmaps/projet1.png"
+  size [30 30]			# taille de la map
+  name "projet"
+)
+
+window
+(
+  size [ 700.0 700.0 ]		# taille de la fenetre 
+  center [0 0]			# centrer la simu
+  scale 0.05			# 30/700 -> taille map / taille fenetre
+
+)
+
+troll
+(
+	name "troll"
+	pose [0 0 0]		# position d'origine du robot [axe_x axe_y angle]
+	pose [-10 -10 0]
+	color "green"
+)
+
