@@ -124,8 +124,8 @@ void Communication::run()
 
 if(true && (int)msg.id_sensor == 144)
 {
-				//_DISPLAY((int)msg.id << " : ");
-				//_DISPLAY((int)msg.id_sensor << " : ");
+				_DISPLAY((int)msg.id << " : ");
+				_DISPLAY((int)msg.id_sensor << " : ");
 				/*
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.time.getData(i) << " : ");
@@ -134,8 +134,8 @@ if(true && (int)msg.id_sensor == 144)
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.crc.getData(i) << " : ");
 				//*/
-				//_DISPLAY(msg.time.getValue() << " : " << msg.data.getValue() << " : " << msg.crc.getValue());
-				//_DISPLAY(std::endl);
+				_DISPLAY(msg.time.getValue() << " : " << msg.data.getValue() << " : " << msg.crc.getValue());
+				_DISPLAY(std::endl);
 
 				//*
 				messageAsservissement msgSend;
@@ -172,7 +172,8 @@ if(true && (int)msg.id_sensor == 144)
 						this->a_RS232Asservissement.send(msgSend);
 						break;
 					default:
-						_DEBUG("Le message capteur n'a pas pu etre traite...", WARNING);
+						break;
+						//_DEBUG("Le message capteur n'a pas pu etre traite...", WARNING);
 				}
 				//*/
 }

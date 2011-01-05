@@ -1,4 +1,6 @@
-Problème validation etape 1
+ETAPE 1 : Validée
+
+Problème validation etape 1 => Oscillation tension alim => REGLE
 
 BAU ON => BAU OFF : pas de réactivation de l'étape précédente coté asservissement + ping position mauvaise (ou reset !)
 
