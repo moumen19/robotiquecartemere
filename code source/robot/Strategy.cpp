@@ -25,6 +25,12 @@ Strategy::~Strategy()
 	_DEBUG("Destruction du module de strategie", INFORMATION);
 }
 
+void Strategy::init(Strat strategy)
+{
+	a_strategySave = strategy;
+	this->set(strategy);
+}
+
 Strat Strategy::get()
 {
 	return this->a_strategy;
@@ -34,35 +40,42 @@ void Strategy::set(Strat strategy)
 {
 	switch(strategy)
 	{
-		case BAU_START:			
-			bau_start();
-			_DEBUG("BAU_START actif", INFORMATION);
+		case BAU_ON:			
+			bau_on();
 			break;
-		case BAU_STOP:
-			bau_start();
-			_DEBUG("BAU_STOP actif", INFORMATION);
+		case BAU_OFF:
+			bau_off();
 			break;
 		case GO_AHEAD:
 			go_ahead();
-			_DEBUG("GO_AHEAD actif", INFORMATION);
+			break;
 		default:
 			break;
 	}
 }
 
-void Strategy::bau_start()
+void Strategy::bau_on()
 {
-	this->a_strategySave = this->a_strategy;
-	this->a_strategy = BAU_START;
+	if(this->get() != BAU_ON)
+	{
+		_DEBUG("BAU_ON actif", INFORMATION);
+		this->a_strategySave = this->a_strategy;
+		this->a_strategy = BAU_ON;
+	}
 }
 
-void Strategy::bau_stop()
+void Strategy::bau_off()
 {
-	this->set(a_strategySave);
+	if(this->a_strategySave != this->get())
+	{
+		_DEBUG("BAU_OFF actif", INFORMATION);
+		this->set(a_strategySave);
+	}
 }
 
 void Strategy::go_ahead()
 {
+	_DEBUG("GO_AHEAD actif", INFORMATION);
 	this->a_strategy = GO_AHEAD;
 }
 

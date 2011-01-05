@@ -1,0 +1,124 @@
+Problème validation etape 1
+
+BAU ON => BAU OFF : pas de réactivation de l'étape précédente coté asservissement + ping position mauvaise (ou reset !)
+
+
+
+	EXEMPLE 1
+
+Message asservissement : tout est OK [ENVOYE]
+Message asservissement : tout est OK [ENVOYE]
+42 : -0.145242 : 29.9616 : -0.00410256 : 0
+42 : -0.146347 : 30.2223 : -0.00461538 : 0
+(Information)	robot/Strategy.cpp (61) :	BAU_ON actif
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+42 : 4.45792e-05 : -0.106247 : -0.00051282 : 0
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+42 : 4.45792e-05 : -0.106247 : -0.00051282 : 0
+42 : 4.45792e-05 : -0.106247 : -0.00051282 : 0
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+(Information)	robot/Strategy.cpp (71) :	BAU_OFF actif
+(Information)	robot/Strategy.cpp (78) :	GO_AHEAD actif
+Message asservissement : tout est OK [ENVOYE]
+Message asservissement : tout est OK [ENVOYE]
+Message asservissement : tout est OK [ENVOYE]
+Message asservissement : tout est OK [ENVOYE]
+42 : 0 : 0 : 0 : 0
+42 : 0 : 0 : 0 : 0
+Message asservissement : tout est OK [ENVOYE]
+Message asservissement : tout est OK [ENVOYE]
+42 : 0 : 0 : 0 : 0
+42 : 0 : 0 : 0 : 0
+Message asservissement : tout est OK [ENVOYE]
+Message asservissement : tout est OK [ENVOYE]
+42 : 4.95324e-06 : -0.00965883 : -0.00051282 : 0
+42 : 4.95324e-06 : -0.00965883 : -0.00051282 : 0
+(Information)	robot/Strategy.cpp (61) :	BAU_ON actif
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+42 : 4.95324e-06 : -0.00965883 : -0.00051282 : 0
+
+
+
+	EXEMPLE 2 
+
+Message asservissement : tout est OK [ENVOYE]
+42 : -0.0839134 : 101.688 : 0.00102564 : 0
+42 : -0.0836756 : 101.968 : 0.000512821 : 0
+Message asservissement : tout est OK [ENVOYE]
+Message asservissement : tout est OK [ENVOYE]
+42 : -0.0859091 : 107.145 : -0.00153846 : 0
+42 : -0.0863895 : 107.435 : -0.00153846 : 0
+Message asservissement : tout est OK [ENVOYE]
+(Information)	robot/Strategy.cpp (61) :	BAU_ON actif
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+42 : -3.46727e-05 : -0.0772706 : 1.16415e-10 : 0
+42 : -3.46727e-05 : -0.0772706 : 1.16415e-10 : 0
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+42 : -3.46727e-05 : -0.0772706 : 1.16415e-10 : 0
+42 : -3.46727e-05 : -0.0772706 : 1.16415e-10 : 0
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+42 : -3.46727e-05 : -0.0772706 : 1.16415e-10 : 0
+42 : -3.46727e-05 : -0.0772706 : 1.16415e-10 : 0
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+42 : -3.46727e-05 : -0.0772706 : 1.16415e-10 : 0
+42 : -3.46727e-05 : -0.0772706 : 1.16415e-10 : 0
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+42 : -3.46727e-05 : -0.0772706 : 1.16415e-10 : 0
+Message asservissement : ARRET [ENVOYE]
+42 : -3.46727e-05 : -0.0772706 : 1.16415e-10 : 0
+42 : -3.9626e-05 : -0.0869294 : 0.000512821 : 0
+Message asservissement : ARRET [ENVOYE]
+42 : -2.97195e-05 : -0.0772706 : 0.00102564 : 0
+(Information)	robot/Strategy.cpp (71) :	BAU_OFF actif
+(Information)	robot/Strategy.cpp (78) :	GO_AHEAD actif
+Message asservissement : tout est OK [ENVOYE]
+Message asservissement : tout est OK [ENVOYE]
+42 : -2.97195e-05 : -0.0772706 : 0.00102564 : 0
+42 : -2.97195e-05 : -0.0772706 : 0.00102564 : 0
+
+
+
+
+
+
+
+	EXEMPLE 3
+
+
+2 : -0.377664 : 56.5812 : -0.00717949 : 0
+42 : -0.37974 : 56.8613 : -0.00769231 : 0
+Message asservissement : tout est OK [ENVOYE]
+Message asservissement : tout est OK [ENVOYE]
+42 : -0.427427 : 62.3378 : -0.00820513 : 0
+42 : -0.429547 : 62.6082 : -0.00820513 : 0
+(Information)	robot/Strategy.cpp (61) :	BAU_ON actif
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+42 : 4.95324e-05 : -0.0869294 : -0.00051282 : 0
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+42 : 4.95324e-05 : -0.0869294 : -0.00051282 : 0
+42 : 4.95324e-05 : -0.0869294 : -0.00051282 : 0
+Message asservissement : ARRET [ENVOYE]
+Message asservissement : ARRET [ENVOYE]
+42 : 4.95324e-05 : -0.0965883 : 0 : 0
+

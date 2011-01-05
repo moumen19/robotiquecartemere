@@ -21,6 +21,7 @@
 	#include "Sensors.hpp"
 	#include "Data.hpp"
 	#include "Strategy.hpp"
+	#include "Planning.hpp"
 	#include "RS232Asservissement.hpp"
 	//#include "BusRS232.hpp"	
 	#include "RS232Sensor.hpp"
@@ -37,7 +38,7 @@
 	class Communication
 	{
 		public:
-			Communication(Sensors &, Data &, Data &, Strategy &);
+			Communication(Sensors &, Data &, Data &, Strategy &, Planning &);
 			~Communication();
 
 			void send(Port::Port, std::string);
@@ -57,6 +58,7 @@
 			Data & a_sensorsData;
 			Data & a_environmentData;
 			Strategy & a_strategy;
+			Planning & a_planning;
 
 			RS232Asservissement a_RS232Asservissement; //RS232Asservissement
 			RS232Sensor a_RS232Sensor;

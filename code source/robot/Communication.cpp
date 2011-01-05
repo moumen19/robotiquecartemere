@@ -13,11 +13,12 @@
 #include "Communication.hpp"
 #include <sstream>
 
-Communication::Communication(Sensors & sensors, Data & sensorsData, Data & environment, Strategy & strategy) :
+Communication::Communication(Sensors & sensors, Data & sensorsData, Data & environment, Strategy & strategy, Planning & planning) :
 	a_sensors(sensors),
 	a_sensorsData(sensorsData),
 	a_environmentData(environment),
 	a_strategy(strategy),
+	a_planning(planning),
 	a_RS232Asservissement("/dev/ttyUSB0"),
 	a_RS232Sensor(sensors, "/dev/ttyUSB1")
 {
@@ -73,7 +74,8 @@ void Communication::stop()
 void Communication::run()
 {
 	_DEBUG("Debut de la routine d'ecoute des ports de communications", INFORMATION);
-
+	
+	this->test(4);
 	while(this->a_thread_active)
 	{
 		if(this->a_RS232Asservissement.isDataAvailable())
@@ -82,7 +84,7 @@ void Communication::run()
 			{
 				messageAsservissement msg = boost::any_cast<messageAsservissement>(this->a_RS232Asservissement.getData());
 				
-				//_DISPLAY((int)msg.id << " : ");
+				_DISPLAY((int)msg.id << " : ");
 				/*
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.x.data[i] << " : ");
@@ -92,8 +94,8 @@ void Communication::run()
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.alpha.data[i] << " : ");
 				//*/
-				//_DISPLAY(msg.x.value << " : " << msg.y.value << " : " << msg.alpha.value << " : ");
-				//_DISPLAY((int)msg.commande << std::endl);
+				_DISPLAY(msg.x.value << " : " << msg.y.value << " : " << msg.alpha.value << " : ");
+				_DISPLAY((int)msg.commande << std::endl);
 
 				switch(msg.commande)
 				{
@@ -135,14 +137,39 @@ if(true && (int)msg.id_sensor == 144)
 				//_DISPLAY(msg.time.getValue() << " : " << msg.data.getValue() << " : " << msg.crc.getValue());
 				//_DISPLAY(std::endl);
 
-				/*
+				//*
+				messageAsservissement msgSend;
 				switch(msg.id_sensor)
 				{
 					case 144:
 						if(msg.data.getValue() == 0)
-							a_strategy.set(BAU_STOP);
+						{
+							a_strategy.set(BAU_OFF);
+							msgSend.id = 42;
+							msgSend.x.value = 0;
+							msgSend.y.value = 0;
+							msgSend.alpha.value = 0;
+							msgSend.commande = 9;
+							this->a_RS232Asservissement.send(msgSend);
+							_DISPLAY("Message asservissement : tout est OK [ENVOYE]"<<std::endl);
+						}
 						else
-							a_strategy.set(BAU_START);
+						{
+							a_strategy.set(BAU_ON);
+							msgSend.id = 42;
+							msgSend.x.value = 0;
+							msgSend.y.value = 0;
+							msgSend.alpha.value = 0;
+							msgSend.commande = 8;
+							this->a_RS232Asservissement.send(msgSend);							
+							_DISPLAY("Message asservissement : ARRET [ENVOYE]"<<std::endl);
+						}
+						msgSend.id = 42;
+						msgSend.x.value = 0;
+						msgSend.y.value = 0;
+						msgSend.alpha.value = 0;
+						msgSend.commande = 7;
+						this->a_RS232Asservissement.send(msgSend);
 						break;
 					default:
 						_DEBUG("Le message capteur n'a pas pu etre traite...", WARNING);
