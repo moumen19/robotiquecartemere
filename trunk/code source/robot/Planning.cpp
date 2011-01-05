@@ -35,9 +35,9 @@ void Planning::run()
 {
 	switch(a_strategy.get())
 	{
-		case BAU_START:
+		case BAU_ON:
 			break;
-		case BAU_STOP:
+		case BAU_OFF:
 			break;
 		case GO_AHEAD:
 			break;

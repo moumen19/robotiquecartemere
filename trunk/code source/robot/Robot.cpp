@@ -21,7 +21,7 @@ Robot::Robot(Robot_Configuration config) :
 	a_dataFusion(a_sensorsData, a_environmentData),
 	a_strategy(a_environmentData, a_constraint),
 	a_planning(a_environmentData, a_constraint, a_strategy),
-	a_communication(a_sensors, a_sensorsData, a_environmentData, a_strategy)
+	a_communication(a_sensors, a_sensorsData, a_environmentData, a_strategy, a_planning)
 {
 	this->a_threadConfiguration = config;
 	this->a_thread_active = false;
@@ -145,7 +145,7 @@ void Robot::run()
 {
 	_DEBUG("Debut de la routine de calcul des trajectoires", INFORMATION);
 
-	a_strategy.set(GO_AHEAD);
+	a_strategy.init(GO_AHEAD);
 
 	a_rendererSensor = new display;
 	
@@ -173,6 +173,9 @@ void Robot::run()
 			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());
 
 			msg = boost::any_cast<messageSensor>(a_sensorsData.get(60, DataOption::LAST));
+			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());
+
+			msg = boost::any_cast<messageSensor>(a_sensorsData.get(144, DataOption::LAST));
 			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());//*/
 		}
 		catch(std::exception & e)
@@ -180,6 +183,7 @@ void Robot::run()
 			//_DEBUG(e.what(), WARNING);
 		}
 
+		this->a_planning.run();
 			
 		//_DEBUG("Robot", INFORMATION);
 	}

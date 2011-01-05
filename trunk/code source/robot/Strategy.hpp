@@ -21,8 +21,8 @@
 	enum Strat
 	{
 		NONE,
-		BAU_START,
-		BAU_STOP,
+		BAU_ON,
+		BAU_OFF,
 		GO_AHEAD
 	};
 
@@ -32,11 +32,12 @@
 			Strategy(Data &, Constraint &);
 			~Strategy();
 
+			void init(Strat);
 			Strat get();
 			void set(Strat);
 	
-			void bau_start();
-			void bau_stop();
+			void bau_on();
+			void bau_off();
 			void go_ahead();
 
 		private:
