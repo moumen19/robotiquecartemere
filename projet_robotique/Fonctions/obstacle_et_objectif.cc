@@ -405,7 +405,7 @@ int main(int argc, char **argv)
     float position_angle = 0.0;
 
     float distance = sqrt(objectif_x*objectif_x + objectif_y*objectif_y);
-    float angle = atan(objectif_y / objectif_x);
+   // float angle = atan(objectif_y / objectif_x);
     
     timeval tim;
     double t1,t2;

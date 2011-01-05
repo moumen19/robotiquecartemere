@@ -27,3 +27,9 @@ troll
 	color "green"
 )
 
+#troll
+#(
+#	name "troll2"
+#	pose [10 -5 180]
+#	color "orange"
+#)
