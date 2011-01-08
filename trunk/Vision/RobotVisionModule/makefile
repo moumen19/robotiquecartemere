@@ -9,7 +9,7 @@
 
 CC=g++
 CFLAGS=-W -Wall -g
-LDFLAGS=#-lserial -lboost_thread -lsfml-graphics -lsfml-window -lsfml-system
+LDFLAGS= -lcv -lhighgui -lcvaux #-lserial -lboost_thread
 EXEC=RobotVisionModule
 
 all: $(EXEC)
