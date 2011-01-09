@@ -3,7 +3,9 @@
  *
  */
 
+#include <stdio.h>
 #include <iostream>
+#include <opencv/cvaux.h>
 #include <opencv/cv.h>
 #include <opencv/highgui.h>
 
@@ -23,9 +25,9 @@ int main( int argc, char **argv )
     }
 
     /* create a window for the video */
-    cvNamedWindow( "result", CV_WINDOW_NORMAL );
+    cvNamedWindow( "result", CV_WINDOW_AUTOSIZE);
 
-    while( key != 'q's ) {
+    while( key != 'q' ) {
 		/* get a frame */
         frame = cvQueryFrame( capture );
 

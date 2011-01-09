@@ -14,12 +14,13 @@ EXEC=RobotVisionModule
 
 all: $(EXEC)
 
-$(EXEC): main.o 
+$(EXEC): main.o Vision.o
 	$(CC) $^ $(LDFLAGS) -o $@
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) -c $< -o $@
 
+Vision.o: Vision.cpp Vision.hpp
 
 .PHONY: clean rebuild $(EXEC)
 
