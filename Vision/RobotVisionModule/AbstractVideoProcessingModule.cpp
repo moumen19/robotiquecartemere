@@ -1,11 +1,7 @@
 #include "AbstractVideoProcessingModule.hpp"
 
-AbstractVideoProcessingModule::AbstractVideoProcessingModule()
-{
-    //ctor
-}
-
+//dtor
 AbstractVideoProcessingModule::~AbstractVideoProcessingModule()
 {
-    //dtor
+
 }

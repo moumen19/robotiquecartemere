@@ -1,11 +1,13 @@
 #include "VideoFile.hpp"
 
+//ctor
 VideoFile::VideoFile()
 {
-    //ctor
+
 }
 
+//dtor
 VideoFile::~VideoFile()
 {
-    //dtor
+
 }
