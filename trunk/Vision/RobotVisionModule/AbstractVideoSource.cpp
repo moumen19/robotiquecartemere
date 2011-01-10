@@ -1,11 +1,7 @@
 #include "AbstractVideoSource.hpp"
 
-AbstractVideoSource::AbstractVideoSource()
-{
-    //ctor
-}
-
+//dtor
 AbstractVideoSource::~AbstractVideoSource()
 {
-    //dtor
+
 }

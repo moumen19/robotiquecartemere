@@ -10,6 +10,11 @@ class Stereovision : public AbstractVideoProcessingModule
         Stereovision();
         virtual ~Stereovision();
 
+        virtual bool setup();
+        virtual void run();
+        virtual void send();
+        virtual cv::Mat getFrame();
+        virtual void display();
     protected:
     private:
         Camera * m_LeftCamera;
