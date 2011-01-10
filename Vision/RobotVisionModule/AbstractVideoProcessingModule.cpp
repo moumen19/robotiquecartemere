@@ -1,4 +1,4 @@
-#include "AbstractVideoProcessingModule.h"
+#include "AbstractVideoProcessingModule.hpp"
 
 AbstractVideoProcessingModule::AbstractVideoProcessingModule()
 {

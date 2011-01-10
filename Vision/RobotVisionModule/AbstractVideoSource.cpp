@@ -1,4 +1,4 @@
-#include "AbstractVideoSource.h"
+#include "AbstractVideoSource.hpp"
 
 AbstractVideoSource::AbstractVideoSource()
 {
