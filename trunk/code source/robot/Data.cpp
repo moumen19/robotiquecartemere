@@ -23,12 +23,12 @@ Data::~Data()
 	_DEBUG("Destruction du module stockage de donnees", INFORMATION);
 }
 
-boost::any Data::get(int nb, DataOption::Place place)
+boost::any Data::get(int nb, DataOption::Place place, int in)
 {
 	if(place == DataOption::FIRST)
 		return this->get(nb, 0);
 	else
-		return this->get(nb, this->a_data[nb].size()-1);
+		return this->get(nb, this->a_data[nb].size()-1-in);
 }
 
 boost::any Data::get(int nb, int index)

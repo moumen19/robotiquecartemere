@@ -41,7 +41,7 @@
 			Communication(Sensors &, Data &, Data &, Strategy &, Planning &);
 			~Communication();
 
-			void send(Port::Port, std::string);
+			void send(Port::Port, int, int, int, int);
 			
 			// Gestion du thread
 			bool isActive();

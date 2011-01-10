@@ -11,12 +11,16 @@
  */
 
 #include "Planning.hpp"
-//#include "plan_flou.c"
+#include "plan_flou.c"
+#include "RS232Asservissement.hpp"
+#include "RS232Sensor.hpp"
+#include <math.h>
 
-Planning::Planning(Data & environment, Constraint & constraint, Strategy & strategy) :
+Planning::Planning(Data & environment, Constraint & constraint, Strategy & strategy, Sensors & sensors) :
 	a_environmentData(environment),
 	a_constraint(constraint),
-	a_strategy(strategy)
+	a_strategy(strategy),
+	a_sensors(sensors)
 {
 	a_lastStrategy = NONE;
 	_DEBUG("Initialisation du module de planification", INFORMATION);
@@ -41,7 +45,7 @@ void Planning::run()
 		case BAU_OFF:
 			break;
 		case GO_AHEAD:
-			//this->flou();
+			this->flou();
 			break;
 		default:
 			_DEBUG("La strategie ne correspond à aucune", WARNING);
@@ -49,31 +53,69 @@ void Planning::run()
 
 }
 
-/*void Planning::flou()
+Point Planning::get()
+{
+	if(a_trajectory.size() == 0)
+		throw std::out_of_range("ERREUR : Aucune trajectoire stocke... !");
+
+	return a_trajectory.at(a_trajectory.size()-1);
+}
+
+void Planning::flou()
 {
 	float capteurs[10];
 	
-	messageSensor msg = boost::any_cast<messageSensor>(a_sensorsData.get(50, DataOption::LAST));
-	capteurs[0] = (float)msg.data.getValue();
-	messageSensor msg = boost::any_cast<messageSensor>(a_sensorsData.get(54, DataOption::LAST));
-	capteurs[1] = (float)msg.data.getValue();
+	capteurs[0] = 0;
+	capteurs[1] = 0;
 	capteurs[2] = 1.5;
-	messageSensor msg = boost::any_cast<messageSensor>(a_sensorsData.get(56, DataOption::LAST));
-	capteurs[3] = (float)msg.data.getValue();
+	capteurs[3] = 0;
 	capteurs[4] = 1.5;
-	messageSensor msg = boost::any_cast<messageSensor>(a_sensorsData.get(60, DataOption::LAST));
-	capteurs[5] = (float)msg.data.getValue();
-	messageSensor msg = boost::any_cast<messageSensor>(a_sensorsData.get(58, DataOption::LAST));
-	capteurs[6] = (float)msg.data.getValue();
+	capteurs[5] = 0;	
+	capteurs[6] = 0;
 	capteurs[7] = 0;
 	capteurs[8] = 0;
 	capteurs[9] = 3;
+	try
+	{
+		for(int in = 0; in < 1; in++)
+		{
+			messageSensor msg = boost::any_cast<messageSensor>(a_environmentData.get(50, DataOption::LAST, in));
+			capteurs[0] += (float)msg.data.getValue()/1000;
+			msg = boost::any_cast<messageSensor>(a_environmentData.get(54, DataOption::LAST, in));
+			capteurs[1] += (float)msg.data.getValue()/1000;
+			msg = boost::any_cast<messageSensor>(a_environmentData.get(56, DataOption::LAST, in));
+			capteurs[3] += (float)msg.data.getValue()/1000;
+			msg = boost::any_cast<messageSensor>(a_environmentData.get(60, DataOption::LAST, in));
+			capteurs[5] += (float)msg.data.getValue()/1000;
+			msg = boost::any_cast<messageSensor>(a_environmentData.get(58, DataOption::LAST, in));
+			capteurs[6] += (float)msg.data.getValue()/1000;
+		}
 
-	float *x;
-	float *y;
-	float *position_angle;
-	Point vitesse;
+		capteurs[0] /= 1;
+		capteurs[1] /= 1;
+		capteurs[3] /= 1;
+		capteurs[5] /= 1;
+		capteurs[6] /= 1;
+
+		messageAsservissement msgA = boost::any_cast<messageAsservissement>(a_environmentData.get(7, DataOption::LAST));
+
+		float *x = new float;
+		float *y = new float;
+		float *position_angle = new float;
+
+		*x = msgA.y.value;
+		*y = -1*msgA.x.value;
+		*position_angle = -1*msgA.alpha.value;
+
+		Point vitesse;
 	
-	floue(capteurs, x, y, position_angle, 0, 300, &vitesse.x, &vitesse.y)
-}*/
+		floue(capteurs, x, y, position_angle, 3, 0, &vitesse.x, &vitesse.y);
+
+		a_trajectory.push_back(vitesse);
+	}
+	catch(std::exception & e)
+	{
+		//_DEBUG(e.what(), WARNING);
+	}
+}
 

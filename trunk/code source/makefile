@@ -19,7 +19,7 @@
 
 CC=g++
 CFLAGS=-W -Wall -g
-LDFLAGS=-lserial -lboost_thread -lsfml-graphics -lsfml-window -lsfml-system
+LDFLAGS=-lserial -lboost_thread -lsfml-graphics -lsfml-window -lsfml-system -lm
 EXEC=robot_prgm
 
 
@@ -75,6 +75,9 @@ Strategy.o: ./robot/Strategy.cpp ./robot/Strategy.hpp
 
 display.o: display.cpp display.h
 	$(CC) $(CFLAGS) -c $< -o $@
+
+#plan_flou.o: ./robot/plan_flou.c
+#	$(CC) $(CFLAGS) -c $< -o $@
 
 
 .PHONY: clean rebuild $(EXEC)

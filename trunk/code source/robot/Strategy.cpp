@@ -58,7 +58,7 @@ void Strategy::bau_on()
 {
 	if(this->get() != BAU_ON)
 	{
-		_DEBUG("BAU_ON actif", INFORMATION);
+		_DEBUG("Strategie BAU_ON active", INFORMATION);
 		this->a_strategySave = this->a_strategy;
 		this->a_strategy = BAU_ON;
 	}
@@ -68,14 +68,14 @@ void Strategy::bau_off()
 {
 	if(this->a_strategySave != this->get())
 	{
-		_DEBUG("BAU_OFF actif", INFORMATION);
+		_DEBUG("Strategie BAU_OFF active", INFORMATION);
 		this->set(a_strategySave);
 	}
 }
 
 void Strategy::go_ahead()
 {
-	_DEBUG("GO_AHEAD actif", INFORMATION);
+	_DEBUG("Strategy GO_AHEAD active", INFORMATION);
 	this->a_strategy = GO_AHEAD;
 }
 

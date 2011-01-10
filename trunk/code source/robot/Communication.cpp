@@ -36,10 +36,16 @@ Communication::~Communication()
 	_DEBUG("Destruction du module de communication", INFORMATION);
 }
 
-void Communication::send(Port::Port port, std::string msg)
+void Communication::send(Port::Port port, int vg, int vd, int a, int c)
 {
 	if(port == Port::ASSERVISSEMENT)
-	{
+	{		
+		messageAsservissement msg;
+		msg.id = 42;
+		msg.x.value = vg;
+		msg.y.value = vd;
+		msg.alpha.value = a;
+		msg.commande = c;
 		this->a_RS232Asservissement.send(msg);
 	}
 	else if(port == Port::SENSOR)
@@ -75,7 +81,7 @@ void Communication::run()
 {
 	_DEBUG("Debut de la routine d'ecoute des ports de communications", INFORMATION);
 	
-	this->test(4);
+	//this->test(4);
 	while(this->a_thread_active)
 	{
 		if(this->a_RS232Asservissement.isDataAvailable())
@@ -99,7 +105,8 @@ void Communication::run()
 
 				switch(msg.commande)
 				{
-					case 0:
+					case 7:
+						a_sensorsData.set((int)msg.commande, msg);
 						break;
 					default:
 						_DEBUG("Le message asservissement n'a pas pu etre traite, la commande ne correspon a aucune action repertoriee", WARNING);
@@ -124,8 +131,8 @@ void Communication::run()
 
 if(true && (int)msg.id_sensor == 144)
 {
-				_DISPLAY((int)msg.id << " : ");
-				_DISPLAY((int)msg.id_sensor << " : ");
+				//_DISPLAY((int)msg.id << " : ");
+				//_DISPLAY((int)msg.id_sensor << " : ");
 				/*
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.time.getData(i) << " : ");
@@ -134,8 +141,8 @@ if(true && (int)msg.id_sensor == 144)
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.crc.getData(i) << " : ");
 				//*/
-				_DISPLAY(msg.time.getValue() << " : " << msg.data.getValue() << " : " << msg.crc.getValue());
-				_DISPLAY(std::endl);
+				//_DISPLAY(msg.time.getValue() << " : " << msg.data.getValue() << " : " << msg.crc.getValue());
+				//_DISPLAY(std::endl);
 
 				//*
 				messageAsservissement msgSend;
