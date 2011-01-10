@@ -20,7 +20,8 @@
 Robot::Robot(Robot_Configuration config) :
 	a_dataFusion(a_sensorsData, a_environmentData),
 	a_strategy(a_environmentData, a_constraint),
-	a_planning(a_environmentData, a_constraint, a_strategy),
+	//a_planning(a_environmentData, a_constraint, a_strategy),
+	a_planning(a_sensorsData, a_constraint, a_strategy, a_sensors),
 	a_communication(a_sensors, a_sensorsData, a_environmentData, a_strategy, a_planning)
 {
 	this->a_threadConfiguration = config;
@@ -184,6 +185,16 @@ void Robot::run()
 		}
 
 		this->a_planning.run();
+
+		try
+		{		
+			Point p = a_planning.get();
+			a_communication.send(Port::ASSERVISSEMENT, 20*p.x, 20*p.y, 0, 4);
+		}
+		catch(std::exception & e)
+		{
+
+		}
 			
 		//_DEBUG("Robot", INFORMATION);
 	}

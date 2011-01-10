@@ -20,21 +20,24 @@
 	#include "Data.hpp"
 	#include "Constraint.hpp"
 	#include "Strategy.hpp"
+	#include "Sensors.hpp"
 
 	struct Point
 	{
-		double x;
-		double y;
+		float x;
+		float y;
 	};
 
 	class Planning
 	{
 		public:
-			Planning(Data &, Constraint &, Strategy &);
+			Planning(Data &, Constraint &, Strategy &, Sensors &);
 			~Planning();
 
 			void clearTrajectory();
-			//void planning();
+			void flou();
+
+			Point get();
 
 			void run();
 
@@ -42,6 +45,7 @@
 			Data & a_environmentData;
 			Constraint & a_constraint;
 			Strategy & a_strategy;
+			Sensors & a_sensors;
 			std::vector<Point> a_trajectory;
 			Strat a_lastStrategy;
 	};

@@ -34,7 +34,7 @@
 			Data();
 			~Data();
 
-			boost::any get(int, DataOption::Place);
+			boost::any get(int, DataOption::Place, int in = 0);
 			boost::any get(int, int);
 			void set(int, boost::any);
 
