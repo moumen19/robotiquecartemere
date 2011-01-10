@@ -35,20 +35,21 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Unit filename="AbstractVideoProcessingModule.cpp" />
-		<Unit filename="AbstractVideoProcessingModule.h" />
+		<Unit filename="AbstractVideoProcessingModule.hpp" />
 		<Unit filename="AbstractVideoSource.cpp" />
-		<Unit filename="AbstractVideoSource.h" />
+		<Unit filename="AbstractVideoSource.hpp" />
 		<Unit filename="Camera.cpp" />
-		<Unit filename="Camera.h" />
+		<Unit filename="Camera.hpp" />
+		<Unit filename="Stereovision.cpp" />
+		<Unit filename="Stereovision.hpp" />
 		<Unit filename="VideoFile.cpp" />
-		<Unit filename="VideoFile.h" />
-		<Unit filename="Vision.cpp" />
-		<Unit filename="Vision.h" />
+		<Unit filename="VideoFile.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="makefile" />
 		<Extensions>
 			<code_completion />
 			<debugger />
+			<envvars />
 		</Extensions>
 	</Project>
 </CodeBlocks_project_file>
