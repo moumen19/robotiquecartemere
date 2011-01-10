@@ -1,7 +1,7 @@
 #ifndef VIDEOFILE_H
 #define VIDEOFILE_H
 
-#include <AbstractVideoSource.h>
+#include "AbstractVideoSource.h"
 
 
 class VideoFile : public AbstractVideoSource
