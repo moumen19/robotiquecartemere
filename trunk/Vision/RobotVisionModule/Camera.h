@@ -1,7 +1,7 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <AbstractVideoSource.h>
+#include "AbstractVideoSource.h"
 
 
 class Camera : public AbstractVideoSource
