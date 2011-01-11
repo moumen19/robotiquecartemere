@@ -51,17 +51,21 @@ void Stereovision::run()
     int       key = 0;
 
     /* initialize camera */
-    capture = cvCaptureFromCAM( 0 );
+    capture = cvCaptureFromCAM( -1 );
+
 
     /* always check */
     if ( !capture ) {
         fprintf( stderr, "Cannot open initialize webcam!\n" );
         exit(1);
     }
+
      /* create a window for the video */
     cvNamedWindow( "result", CV_WINDOW_AUTOSIZE);
 
-    while( key != 'q' ) {
+    while( key <= 0 ) {
+
+        frame = cvQueryFrame(capture);
 
         /* always check */
         if( !frame ) break;
@@ -70,7 +74,7 @@ void Stereovision::run()
         cvShowImage( "result", frame );
 
         /* exit if user press 'q' */
-        key = cvWaitKey( 10 );
+        key = cvWaitKey( 2 );
     }
 
     /* free memory */

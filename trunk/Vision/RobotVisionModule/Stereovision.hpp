@@ -1,6 +1,7 @@
 #ifndef STEREOVISION_H
 #define STEREOVISION_H
 
+#include <iostream>
 #include "AbstractVideoProcessingModule.hpp"
 #include "Camera.hpp"
 
