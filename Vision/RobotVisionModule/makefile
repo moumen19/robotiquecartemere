@@ -9,12 +9,13 @@
 
 CC=g++
 CFLAGS=-W -Wall -g
-LDFLAGS= -lcv -lhighgui -lcvaux #-lserial -lboost_thread
+LDFLAGS= -lopencv_core -lopencv_imgproc -lopencv_calib3d -lopencv_video -lopencv_features2d -lopencv_ml -lopencv_highgui -lopencv_objdetect -lopencv_contrib -lopencv_legacy
+#-lserial -lboost_thread
 EXEC=RobotVisionModule
 
 all: $(EXEC)
 
-$(EXEC): main.o AbstractVideoProcessingModule.o AbstractVideoSource.o Camera.o VideoFile.o Stereovision.o
+$(EXEC): main.o AbstractVideoProcessingModule.o Stereovision.o
 	$(CC) $^ $(LDFLAGS) -o $@
 
 %.o: %.cpp %.hpp

@@ -2,8 +2,8 @@
 #define STEREOVISION_H
 
 #include <iostream>
+
 #include "AbstractVideoProcessingModule.hpp"
-#include "Camera.hpp"
 
 class Stereovision : public AbstractVideoProcessingModule
 {
@@ -14,12 +14,9 @@ class Stereovision : public AbstractVideoProcessingModule
         virtual bool setup();
         virtual void run();
         virtual void send();
-        virtual cv::Mat getFrame();
         virtual void display();
     protected:
     private:
-        Camera * m_LeftCamera;
-        Camera * m_RightCamera;
 };
 
 #endif // STEREOVISION_H
