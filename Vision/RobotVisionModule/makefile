@@ -15,7 +15,7 @@ EXEC=RobotVisionModule
 
 all: $(EXEC)
 
-$(EXEC): main.o AbstractVideoProcessingModule.o Stereovision.o CircularBuffer.o
+$(EXEC): main.o AbstractVideoProcessingModule.o Stereovision.o Camera.o
 	$(CC) $^ $(LDFLAGS) -o $@
 
 %.o: %.cpp %.hpp

@@ -18,7 +18,7 @@ void AbstractVideoProcessingModule::RawVideoDisplay(cv::VideoCapture &cameraToDi
             cameraToDisplay >> frame;
         }
         catch(std::exception e){
-            cerr<<e.what(); exit(1);
+            std::cerr<<e.what(); exit(1);
         }
 
         if( frame.empty())

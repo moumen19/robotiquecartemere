@@ -1,13 +1,12 @@
 #ifndef ABSTRACTVIDEOPROCESSINGMODULE_H
 #define ABSTRACTVIDEOPROCESSINGMODULE_H
 
+#include <iostream>
 #include <vector>
 
 #include <opencv2/video/tracking.hpp>
 #include <opencv2/highgui/highgui.hpp>
 //#include <opencv2/imgproc/imgproc.hpp>
-
-#include "CircularBuffer.hpp"
 
 using namespace std;
 

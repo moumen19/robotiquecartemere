@@ -2,7 +2,9 @@
 #define STEREOVISION_H
 
 #include <iostream>
+
 #include "AbstractVideoProcessingModule.hpp"
+#include "Camera.hpp"
 
 using namespace std;
 
@@ -17,8 +19,8 @@ class Stereovision : public AbstractVideoProcessingModule
         virtual void Send(){;}
     protected:
     private:
-        cv::VideoCapture * m_LeftCamera;
-        cv::VideoCapture * m_RightCamera;
+        Camera * m_LeftCamera;
+        Camera * m_RightCamera;
 };
 
 #endif // STEREOVISION_H
