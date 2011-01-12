@@ -17,7 +17,7 @@ void Stereovision::Setup()
 {
     try{
     // setup left camera
-    m_LeftCamera = new cv::VideoCapture(0);
+    m_LeftCamera = new Camera(0);
     if(!m_LeftCamera->isOpened())
         throw (new std::exception());
 
