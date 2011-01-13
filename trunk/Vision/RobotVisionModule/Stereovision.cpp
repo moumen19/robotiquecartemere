@@ -64,22 +64,6 @@ void Stereovision::RawVideoDisplay()
 // main routine of the video processing module
 void Stereovision::Run()
 {
-    cv::VideoCapture m_LeftCamera("webcam1.avi");
-    cv::Mat frame;
-    cv::namedWindow( "rawDisplay_Left", CV_WINDOW_AUTOSIZE);
+    RawVideoDisplay();
 
-    char c = 0;
-
-    while(c<1)
-    {
-        c = (char)cv::waitKey(2); // shortest possible delay(experience result)
-
-        // left
-        m_LeftCamera >> frame;
-
-        if(frame.empty()) break;
-
-        cv::imshow( "rawDisplay_Left", frame );
-
-    }
 }
