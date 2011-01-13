@@ -66,7 +66,7 @@ void Stereovision::Run()
 {
     IplImage* img;
     CvCapture * capture;
-    capture = cvCreateFileCapture("test.avi");
+    capture = cvCreateFileCapture("webcam1.avi");
 
      if( !capture )
         exit(1);
