@@ -1,7 +1,12 @@
 #include "Camera.hpp"
 
 //ctor
-Camera::Camera(unsigned int index):cv::VideoCapture(index)
+Camera::Camera(int cameraIndex):cv::VideoCapture(cameraIndex)
+{
+
+}
+
+Camera::Camera(const string& filename):cv::VideoCapture(filename)
 {
 
 }

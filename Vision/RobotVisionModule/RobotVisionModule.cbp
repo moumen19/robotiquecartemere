@@ -36,6 +36,8 @@
 		</Compiler>
 		<Unit filename="AbstractVideoProcessingModule.cpp" />
 		<Unit filename="AbstractVideoProcessingModule.hpp" />
+		<Unit filename="Camera.cpp" />
+		<Unit filename="Camera.hpp" />
 		<Unit filename="Stereovision.cpp" />
 		<Unit filename="Stereovision.hpp" />
 		<Unit filename="main.cpp" />

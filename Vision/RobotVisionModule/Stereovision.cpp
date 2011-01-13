@@ -16,24 +16,53 @@ Stereovision::~Stereovision()
 void Stereovision::Setup()
 {
     try{
-    // setup left camera
-    m_LeftCamera = new Camera(0);
-    if(!m_LeftCamera->isOpened())
-        throw (new std::exception());
+        // setup left camera
+        m_LeftCamera = new Camera(0);
+        if(!m_LeftCamera->isOpened())
+           throw (new std::exception());
 
-    // setup right camera
-//    m_RightCamera = new cv::VideoCapture(1);
-//    if(!m_RightCamera->isOpened())
-//        exit(1);
+        // setup right camera
+        m_RightCamera = new Camera(1);
+        if(!m_RightCamera->isOpened())
+            throw (new std::exception());
+
     }
     catch(std::exception e){
         cerr<<e.what(); exit(1);
     }
 }
 
+
+// display both cameras untouched
+void Stereovision::RawVideoDisplay()
+{
+    cv::Mat frame;
+    cv::namedWindow( "rawDisplay_Left", CV_WINDOW_AUTOSIZE);
+    cv::namedWindow( "rawDisplay_Right", CV_WINDOW_AUTOSIZE);
+    char c = 0;
+
+    while(c<1)
+    {
+        c = (char)cv::waitKey(2); // shortest possible delay(experience result)
+
+        // left
+        *m_LeftCamera >> frame;
+
+        if(frame.empty()) break;
+
+        cv::imshow( "rawDisplay_Left", frame );
+
+        // right
+        *m_RightCamera >> frame;
+
+        if(frame.empty())break;
+
+        cv::imshow( "rawDisplay_Right", frame );
+    }
+}
+
 // main routine of the video processing module
 void Stereovision::Run()
 {
-    RawVideoDisplay(*m_LeftCamera);
+    RawVideoDisplay();
 }
-
