@@ -17,12 +17,12 @@ void Stereovision::Setup()
 {
     try{
         // setup left camera
-        m_LeftCamera = new Camera(0);
+        m_LeftCamera = new Camera("webcam1.avi");
         if(!m_LeftCamera->isOpened())
            throw (new std::exception());
 
         // setup right camera
-        m_RightCamera = new Camera(1);
+        m_RightCamera = new Camera("webcam2.avi");
         if(!m_RightCamera->isOpened())
             throw (new std::exception());
 
