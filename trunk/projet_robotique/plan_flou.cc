@@ -5,8 +5,6 @@
 #include <math.h>
 #include <sys/time.h>
 
-#include "args.h"
-
 
 
 // Calcul de la valeur flous de la distance
@@ -444,99 +442,5 @@ void floue(float capteurs[10],float *x,float *y,float *position_angle,float obje
 
 	*vg = 2*(newspeed - (newturnrate *d));
 	*vd = 2*(newspeed + (newturnrate *d));
-}
-
-
-// MAIN
-
-int main(int argc, char **argv)
-{
-
-    parse_args(argc,argv);
-
-  try
-  {
-    using namespace PlayerCc;
-
-    PlayerClient robot (gHostname, gPort);
-    Position2dProxy pp (&robot, gIndex);
-    SonarProxy sp (&robot, 0);
-    SonarProxy spi (&robot, 1);
-    SonarProxy spa (&robot, 2);
-
-    std::cout << robot << std::endl;
-
-    pp.SetMotorEnable (true);
-
-    // Vitesse roue gauche et roue droite
-    float *vg = (float*)malloc(sizeof(float));
-    float *vd = (float*)malloc(sizeof(float));
-    // Position du robot en x, en y, et l'angle
-    float *x = (float*)malloc(sizeof(float));
-    float *y = (float*)malloc(sizeof(float));
-    float *position_angle = (float*)malloc(sizeof(float));
-
-    float newspeed,newturnrate,d;
-    d=0.20;
-
-    *vg = 0.0;
-    *vd = 0.0;
-    *x=0.0;
-    *y=0.0;
-    *position_angle = 0.0;
-    float capteurs[10];
-
-    // Definition de l'objectif
-
-    float objectif_x = 20.0; // distance de l'objectif devant du robot
-    float objectif_y = 20.0; // distance de l'objectif à gauche du robot
-
-std::cout << "objectif x" << std::endl;
-std::cin >> objectif_x ;
-std::cout << "objectif y" << std::endl;
-std::cin >> objectif_y ;
-    
-    timeval tim;
-    double t1,t2;
-    gettimeofday(&tim, NULL);
-    t1=tim.tv_sec+(tim.tv_usec/1000000.0);
-    double temps;
-
-    
-    for(;;)				//Boucle infinie
-    {
-
-	//Lecture des informations en provenance du robot
-	robot.Read();
-      
-	capteurs[0]=sp[0];
-	capteurs[1]=sp[1];
-	capteurs[2]=sp[2];
-	capteurs[3]=sp[3];
-	capteurs[4]=sp[4];
-	capteurs[5]=sp[5];
-	capteurs[6]=sp[6];
-	capteurs[7]=spi[0];
-	capteurs[8]=spi[1];
-	capteurs[9]=spa[0];
-
-	*x = pp.GetXPos();
-	*y = pp.GetYPos();
-	*position_angle = pp.GetYaw();
-
-	floue(capteurs,x,y,position_angle,objectif_x,objectif_y,vg,vd);
-
-	// commander le robot 
-	newspeed = (*vg + *vd)/2;
-	newturnrate = (*vd - *vg)/(2*d);
-	pp.SetSpeed(newspeed, newturnrate);
-
-    }
-  }
-  catch (PlayerCc::PlayerError e)
-  {
-    std::cerr << e << std::endl;
-    return -1;
-  }
 }
 
