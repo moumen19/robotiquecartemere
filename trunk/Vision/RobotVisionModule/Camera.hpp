@@ -4,11 +4,17 @@
 #include <opencv2/video/tracking.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+using namespace std;
+
 class Camera: public cv::VideoCapture
 {
     public:
-        Camera(unsigned int index = 0);
+        Camera(int cameraIndex = 0);
+        Camera(const string& filename);
         virtual ~Camera();
+
+        void loadIntrinsec(const string &filename){;}
+        void loadExtrasdec(const string &filename){;}
     protected:
     private:
         cv::Mat intrinsecMatrix;

@@ -3,24 +3,26 @@
 
 #include <iostream>
 
-#include "AbstractVideoProcessingModule.hpp"
 #include "Camera.hpp"
 
 using namespace std;
 
-class Stereovision : public AbstractVideoProcessingModule
+class Stereovision
 {
     public:
         Stereovision();
         virtual ~Stereovision();
 
+        void Calibrate () {;}
+        virtual void Send(){;}
         virtual void Setup();
         virtual void Run();
-        virtual void Send(){;}
+        void RawVideoDisplay();
     protected:
     private:
         Camera * m_LeftCamera;
         Camera * m_RightCamera;
+
 };
 
 #endif // STEREOVISION_H
