@@ -64,44 +64,22 @@ void Stereovision::RawVideoDisplay()
 // main routine of the video processing module
 void Stereovision::Run()
 {
-    IplImage* img;
-    CvCapture * capture;
-    capture = cvCreateFileCapture("webcam1.avi");
+    cv::VideoCapture m_LeftCamera("webcam1.avi");
+    cv::Mat frame;
+    cv::namedWindow( "rawDisplay_Left", CV_WINDOW_AUTOSIZE);
 
-     if( !capture )
-        exit(1);
+    char c = 0;
 
-    cvNamedWindow("video", CV_WINDOW_AUTOSIZE);
-    char key = 0;
-
-    // On essaye de capturer une frame
-    if(!cvGrabFrame( capture ))
-        exit(1);
-
-    // Tant qu'on n'a pas appuyé sur Q, on continue :
-    while(key != 'q')
+    while(c<1)
     {
-        // On décompresse la dernière frame récupérée...
-        img = cvRetrieveFrame( capture );
+        c = (char)cv::waitKey(2); // shortest possible delay(experience result)
 
-        // ... et on la montre à l'écran.
-        cvShowImage( "video", img );
+        // left
+        m_LeftCamera >> frame;
 
-        // On attend 10 ms : IMPORTANT !
-        key = cvWaitKey(10);
+        if(frame.empty()) break;
 
-        // On essaye de capturer la frame suivante
-        if(!cvGrabFrame( capture ))
-            key = 'q';
+        cv::imshow( "rawDisplay_Left", frame );
+
     }
-
-    // On détruit les fenêtres créées : nouvelle fonction. ;)
-    cvDestroyAllWindows();
-
-    // On n'a pas besoin de détruire l'image.
-    img = NULL;
-
-    // On détruit la capture
-    cvReleaseCapture( &capture );
-
 }
