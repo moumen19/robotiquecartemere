@@ -109,7 +109,7 @@ void Communication::run()
 						a_sensorsData.set((int)msg.commande, msg);
 						break;
 					default:
-						_DEBUG("Le message asservissement n'a pas pu etre traite, la commande ne correspon a aucune action repertoriee", WARNING);
+						_DEBUG("Le message asservissement n'a pas pu etre traite, la commande ne correspond a aucune action repertoriee", WARNING);
 				}
 
 			}

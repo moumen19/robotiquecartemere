@@ -67,9 +67,9 @@ void Planning::flou()
 	
 	capteurs[0] = 0;
 	capteurs[1] = 0;
-	capteurs[2] = 1.5;
+	capteurs[2] = 1;
 	capteurs[3] = 0;
-	capteurs[4] = 1.5;
+	capteurs[4] = 1;
 	capteurs[5] = 0;	
 	capteurs[6] = 0;
 	capteurs[7] = 0;
@@ -92,8 +92,8 @@ void Planning::flou()
 		}
 
 		capteurs[0] /= 1;
-		capteurs[1] /= 1;
-		capteurs[3] /= 1;
+		capteurs[1] = 1;
+		capteurs[3] = 1;
 		capteurs[5] /= 1;
 		capteurs[6] /= 1;
 
