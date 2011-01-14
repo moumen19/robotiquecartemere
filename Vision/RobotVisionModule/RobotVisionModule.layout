@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
-	<File name="Camera.cpp" open="1" top="1" tabpos="6">
-		<Cursor position="212" topLine="0" />
+	<File name="Camera.cpp" open="1" top="0" tabpos="6">
+		<Cursor position="157" topLine="0" />
 	</File>
 	<File name="Camera.hpp" open="1" top="0" tabpos="5">
-		<Cursor position="299" topLine="0" />
+		<Cursor position="35" topLine="0" />
 	</File>
 	<File name="Stereovision.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="606" topLine="15" />
+		<Cursor position="1400" topLine="41" />
 	</File>
 	<File name="Stereovision.hpp" open="1" top="0" tabpos="3">
-		<Cursor position="271" topLine="0" />
+		<Cursor position="553" topLine="0" />
 	</File>
 	<File name="main.cpp" open="1" top="0" tabpos="2">
-		<Cursor position="144" topLine="0" />
+		<Cursor position="174" topLine="0" />
 	</File>
 	<File name="makefile" open="1" top="0" tabpos="1">
 		<Cursor position="148" topLine="0" />
