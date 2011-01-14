@@ -3,6 +3,8 @@
 //ctor
 Stereovision::Stereovision():m_LeftCamera(NULL),m_RightCamera(NULL)
 {
+    m_LeftImageBuffer.clear();
+    m_RightImageBuffer.clear();
 }
 
 //dtor
@@ -60,23 +62,60 @@ void Stereovision::RawVideoDisplay()
 // main routine of the video processing module
 void Stereovision::Run()
 {
-    cv::Mat frameL, frameR;
+    cv::Mat frameL, frameR; // untouched
+
     cv::namedWindow( "rawDisplay_Left", CV_WINDOW_AUTOSIZE);
     cv::namedWindow( "rawDisplay_Right", CV_WINDOW_AUTOSIZE);
 
-    while(cv::waitKey(20) < 1)
+    vector<vector<cv::Point> > contours;
+    vector<cv::Vec4i> hierarchy;
+
+    if(1) //while(cv::waitKey(20) < 1)
     {
         // left
         *m_LeftCamera >> frameL;
-        if(frameL.empty()) break;
-
-        // right
+        m_LeftImageBuffer.push_back(frameL);
         *m_RightCamera >> frameR;
-        if(frameR.empty())break;
+        m_RightImageBuffer.push_back(frameR);
+        /////////////////////////////////////////////////
+        cv::cvtColor(m_LeftImageBuffer.back(), frameL, CV_BGR2GRAY);
+        cv::cvtColor(m_LeftImageBuffer.back(), frameR, CV_BGR2GRAY);
+        m_LeftImageBuffer.push_back(frameL);
+        m_RightImageBuffer.push_back(frameR);
 
-        cv::imshow( "rawDisplay_Left", frameL );
-        cv::imshow( "rawDisplay_Right", frameR );
+        m_LeftImageBuffer.push_back(frameL);
+        cv::imshow( "rawDisplay_Left", m_LeftImageBuffer.back() );
+
+
+
+
+        cv::Mat gray0(frameR.size(), CV_8U);
+//        mixChannels(&timg, 1, &gray0, 1, ch, 1);
+//        gray = gray0 >= (l+1)*255/N;
+
+        cv::cvtColor(m_RightImageBuffer.back(), gray0, CV_BGR2GRAY);
+        m_RightImageBuffer.push_back(gray0);
+
+        //cv::threshold(m_LeftImageBuffer.back(),frameL,120,250,cv::THRESH_BINARY);
+
+        // reduire 24 => 8bits?
+//        cv::findContours(m_LeftImageBuffer.back(), contours,hierarchy, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
+//
+//        cv::Scalar color( rand()&255, rand()&255, rand()&255 );
+//
+//        cv::drawContours( frameL, contours, -1, color);//, CV_FILLED, 8, hierarchy );
+//
+//        m_LeftImageBuffer.push_back(frameL);
+
+//        adaptiveThreshold(m_LeftImageBuffer.back(),frameL, 120, cv::ADAPTIVE_THRESH_MEAN_C,cv::THRESH_BINARY,7,5);
+//        m_LeftImageBuffer.push_back(frameL);
+        //////////////////////////////////////////////////
+
+        cv::imshow( "rawDisplay_Left", m_LeftImageBuffer.back() );
+        cv::imshow( "rawDisplay_Right", m_RightImageBuffer.back() );
+
     }
+    cv::waitKey(0);
 }
 
 void Stereovision::test()
@@ -93,9 +132,9 @@ void Stereovision::test()
     cv::cvtColor(img2raw, img2, CV_BGR2GRAY);
 
     // detecting keypoints
-    cv::FastFeatureDetector detector;
+    //cv::FastFeatureDetector detector;
     //cv::SiftFeatureDetector detector;
-	//cv::SurfFeatureDetector detector(10000);
+	cv::SurfFeatureDetector detector(10000);
 	vector<cv::KeyPoint> keypoints1, keypoints2;
 	detector.detect(img1, keypoints1);
 	detector.detect(img2, keypoints2);
