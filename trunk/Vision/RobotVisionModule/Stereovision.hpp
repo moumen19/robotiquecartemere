@@ -21,11 +21,12 @@ class Stereovision
         virtual ~Stereovision();
 
         void Calibrate () {;}
-        void RawVideoDisplay();
+        void RawDisplay();
         void Setup();
         void Run();
-        void Send(){;}
         void test();
+
+        virtual void Send(){;}
     protected:
         Camera * m_LeftCamera;
         Camera * m_RightCamera;

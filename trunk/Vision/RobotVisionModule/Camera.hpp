@@ -18,6 +18,7 @@ class Camera: public cv::VideoCapture
     private:
         cv::Mat intrinsecMatrix;
         cv::Mat extrasinceMatrix;
+        // communication protocole: USB for camera, none for file
 };
 
 #endif // CAMERA_H

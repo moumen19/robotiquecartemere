@@ -38,7 +38,7 @@ void Stereovision::Setup()
 
 
 // display both cameras untouched
-void Stereovision::RawVideoDisplay()
+void Stereovision::RawDisplay()
 {
     cv::Mat frameL, frameR;
     cv::namedWindow( "rawDisplay_Left", CV_WINDOW_AUTOSIZE);
@@ -59,6 +59,7 @@ void Stereovision::RawVideoDisplay()
     }
 }
 
+
 // main routine of the video processing module
 void Stereovision::Run()
 {
@@ -67,54 +68,40 @@ void Stereovision::Run()
     cv::namedWindow( "rawDisplay_Left", CV_WINDOW_AUTOSIZE);
     cv::namedWindow( "rawDisplay_Right", CV_WINDOW_AUTOSIZE);
 
-    vector<vector<cv::Point> > contours;
-    vector<cv::Vec4i> hierarchy;
+    // normal image stored on the right
+    *m_LeftCamera >> frameL;
+    m_LeftImageBuffer.push_back(frameL);
+    m_RightImageBuffer.push_back(m_LeftImageBuffer.back());
 
-    if(1) //while(cv::waitKey(20) < 1)
-    {
-        // left
-        *m_LeftCamera >> frameL;
-        m_LeftImageBuffer.push_back(frameL);
-        *m_RightCamera >> frameR;
-        m_RightImageBuffer.push_back(frameR);
-        /////////////////////////////////////////////////
-        cv::cvtColor(m_LeftImageBuffer.back(), frameL, CV_BGR2GRAY);
-        cv::cvtColor(m_LeftImageBuffer.back(), frameR, CV_BGR2GRAY);
-        m_LeftImageBuffer.push_back(frameL);
-        m_RightImageBuffer.push_back(frameR);
+    cv::cvtColor(m_LeftImageBuffer.back(), frameL, CV_BGR2GRAY);
+    m_LeftImageBuffer.push_back(frameL);
 
-        m_LeftImageBuffer.push_back(frameL);
-        cv::imshow( "rawDisplay_Left", m_LeftImageBuffer.back() );
-
-
-
-
-        cv::Mat gray0(frameR.size(), CV_8U);
-//        mixChannels(&timg, 1, &gray0, 1, ch, 1);
-//        gray = gray0 >= (l+1)*255/N;
-
-        cv::cvtColor(m_RightImageBuffer.back(), gray0, CV_BGR2GRAY);
-        m_RightImageBuffer.push_back(gray0);
 
         //cv::threshold(m_LeftImageBuffer.back(),frameL,120,250,cv::THRESH_BINARY);
 
         // reduire 24 => 8bits?
-//        cv::findContours(m_LeftImageBuffer.back(), contours,hierarchy, CV_RETR_LIST, CV_CHAIN_APPROX_NONE);
-//
-//        cv::Scalar color( rand()&255, rand()&255, rand()&255 );
-//
-//        cv::drawContours( frameL, contours, -1, color);//, CV_FILLED, 8, hierarchy );
-//
-//        m_LeftImageBuffer.push_back(frameL);
 
+    vector<vector<cv::Point> > contours;
+    vector<cv::Vec4i> hierarchy;
+
+    cv::Laplacian(
+
+
+    //cv::drawContours( frameL, contours, -1, color);//, CV_FILLED, 8, hierarchy );
+   // m_LeftImageBuffer.push_back(frameL);
+//        m_LeftImageBuffer.push_back(frameL);
 //        adaptiveThreshold(m_LeftImageBuffer.back(),frameL, 120, cv::ADAPTIVE_THRESH_MEAN_C,cv::THRESH_BINARY,7,5);
 //        m_LeftImageBuffer.push_back(frameL);
         //////////////////////////////////////////////////
 
-        cv::imshow( "rawDisplay_Left", m_LeftImageBuffer.back() );
-        cv::imshow( "rawDisplay_Right", m_RightImageBuffer.back() );
 
-    }
+    cv::imshow( "rawDisplay_Left", m_LeftImageBuffer.back() );
+    cv::imshow( "rawDisplay_Right", m_RightImageBuffer.back() );
+
+    cout<<endl<<"nb images Left: "<<m_LeftImageBuffer.size()<<endl;
+    cout<<endl<<"nb images Right: "<<m_RightImageBuffer.size()<<endl;
+    if(contours.size() >0) cout<<endl<<"contours:"<<contours.back().size();
+
     cv::waitKey(0);
 }
 
