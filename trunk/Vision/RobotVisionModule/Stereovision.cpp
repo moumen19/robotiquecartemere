@@ -19,16 +19,24 @@ void Stereovision::Setup()
 {
     try{
         // setup left camera
-        m_LeftCamera = new Camera("webcam1.avi");
+        m_LeftCamera = new Camera("webcam2.avi");
         //m_LeftCamera = new Camera(0);
-        if(!m_LeftCamera->isOpened())
-           throw (new std::exception());
+        if(!m_LeftCamera->isOpened()){
+            cerr<<"Fail to open the left camera !"<<endl;
+            throw (new std::exception());
+        }
+
+        m_LeftCamera->SetImageCapture(true);
+        m_LeftCamera->SetVideoCapture(true);
+        m_LeftCamera->LiveDisplay();
 
         // setup right camera
         m_RightCamera = new Camera("webcam2.avi");
         //m_RightCamera = new Camera(1);
-        if(!m_RightCamera->isOpened())
+        if(!m_RightCamera->isOpened()){
+            cerr<<"Fail to open the right camera !"<<endl;
             throw (new std::exception());
+        }
 
     }
     catch(std::exception e){
@@ -37,7 +45,7 @@ void Stereovision::Setup()
 }
 
 
-// display both cameras untouched
+// display both cameras untouched (same as LiveDisplay in class Camera)
 void Stereovision::RawDisplay()
 {
     cv::Mat frameL, frameR;
@@ -84,7 +92,15 @@ void Stereovision::Run()
     vector<vector<cv::Point> > contours;
     vector<cv::Vec4i> hierarchy;
 
-    cv::Laplacian(
+    //cv::Laplacian(
+                    /* Mat frame;
+        cap >> frame; // get a new frame from camera
+        cvtColor(frame, edges, CV_BGR2GRAY);
+        GaussianBlur(edges, edges, Size(7,7), 1.5, 1.5);
+        Canny(edges, edges, 0, 30, 3);
+        imshow("edges", edges);
+        if(waitKey(30) >= 0) break;
+*/
 
 
     //cv::drawContours( frameL, contours, -1, color);//, CV_FILLED, 8, hierarchy );
