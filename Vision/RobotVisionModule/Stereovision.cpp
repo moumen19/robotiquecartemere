@@ -58,6 +58,12 @@ void Stereovision::RawDisplay()
         *m_RightCamera >> frameR;
         if(frameR.empty())break;
 
+//        char keyPressed = cv::waitKey(20);
+//        if(keyPressed == 105){ // key 'i'
+//            imwrite(string("left.jpg"), frameL);
+//            imwrite(string("right.jpg"), frameR);
+//        }
+
         cv::imshow( "rawDisplay_Left", frameL );
         cv::imshow( "rawDisplay_Right", frameR );
     }
@@ -70,7 +76,7 @@ void Stereovision::CannyEdgeDetection()
     cv::namedWindow( "Canny Left", CV_WINDOW_AUTOSIZE);
     cv::namedWindow( "Canny Right", CV_WINDOW_AUTOSIZE);
 
-    while(true)//(cv::waitKey(20) < 1)
+    while(cv::waitKey(20) < 1)
     {
         // left
         *m_LeftCamera >> frameL;
@@ -94,14 +100,6 @@ void Stereovision::CannyEdgeDetection()
         cv::cvtColor(m_RightImageBuffer.back(), frameR, CV_BGR2GRAY);
         cv::GaussianBlur(frameR, frameR, cv::Size(7,7), 1.5, 1.5);
         cv::Canny(frameR, frameR, 0, 30, 3);
-
-
-        char keyPressed = cv::waitKey(20);
-        if(keyPressed == 105){
-            imwrite(string("Canny_left0.jpg"), frameL);
-            imwrite(string("Canny_right0.jpg"), frameR);
-        }
-
 
         cv::imshow( "Canny Left", frameL );
         cv::imshow( "Canny Right", frameR );

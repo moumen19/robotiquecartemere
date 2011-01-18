@@ -33,8 +33,9 @@ class Camera: public cv::VideoCapture
         void SetVideoCapture(bool activated);
 
         // useful for stereovision
-        void loadIntrinsec(const string &filename){;}
-        void loadExtrasec(const string &filename){;}
+        void Calibrate(){;}
+        void LoadIntrinsec(const string &filename){;}
+        void LoadExtrasec(const string &filename){;}
 
     protected:
         string m_Name;
