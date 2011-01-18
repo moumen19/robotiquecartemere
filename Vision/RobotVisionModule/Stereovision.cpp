@@ -70,7 +70,7 @@ void Stereovision::CannyEdgeDetection()
     cv::namedWindow( "Canny Left", CV_WINDOW_AUTOSIZE);
     cv::namedWindow( "Canny Right", CV_WINDOW_AUTOSIZE);
 
-    while(cv::waitKey(20) < 1)
+    while(true)//(cv::waitKey(20) < 1)
     {
         // left
         *m_LeftCamera >> frameL;
@@ -81,19 +81,27 @@ void Stereovision::CannyEdgeDetection()
         cv::cvtColor(m_LeftImageBuffer.back(), frameL, CV_BGR2GRAY);
         // sigma = 1.5
         // ksize = (sigma * 5)|1 = 7
-        //cv::GaussianBlur(frameL, frameL, cv::Size(7,7), 1.5, 1.5);
-        //cv::Canny(frameL, frameL, 0, 30, 3);
-        cv::Sobel(frameL,frameL,frameL.depth(),2,2);
+        cv::GaussianBlur(frameL, frameL, cv::Size(7,7), 1.5, 1.5);
+        cv::Canny(frameL, frameL, 0, 30, 3);
+        //cv::Sobel(frameL,frameL,frameL.depth(),2,2);
         /////////////////////////////////////////////////////////////
 
         // right
         *m_RightCamera >> frameR;
         if(frameR.empty())break;
+        m_RightImageBuffer.push_back(frameR);
 
-//        m_RightImageBuffer.push_back(frameR);
-//        cv::cvtColor(m_RightImageBuffer.back(), frameR, CV_BGR2GRAY);
-//        cv::GaussianBlur(frameR, frameR, cv::Size(7,7), 1.5, 1.5);
-//        cv::Canny(frameR, frameR, 0, 30, 3);
+        cv::cvtColor(m_RightImageBuffer.back(), frameR, CV_BGR2GRAY);
+        cv::GaussianBlur(frameR, frameR, cv::Size(7,7), 1.5, 1.5);
+        cv::Canny(frameR, frameR, 0, 30, 3);
+
+
+        char keyPressed = cv::waitKey(20);
+        if(keyPressed == 105){
+            imwrite(string("Canny_left0.jpg"), frameL);
+            imwrite(string("Canny_right0.jpg"), frameR);
+        }
+
 
         cv::imshow( "Canny Left", frameL );
         cv::imshow( "Canny Right", frameR );
@@ -172,9 +180,9 @@ void Stereovision::test()
 	detector.detect(img2, keypoints2);
 
 	// computing descriptors
-	cv::SurfDescriptorExtractor extractor;
-	//cv::SiftDescriptorExtractor extractor;
 	//cv::SurfDescriptorExtractor extractor;
+	//cv::SiftDescriptorExtractor extractor;
+	cv::SurfDescriptorExtractor extractor;
 	cv::Mat descriptors1, descriptors2;
 	extractor.compute(img1, keypoints1, descriptors1);
 	extractor.compute(img2, keypoints2, descriptors2);
