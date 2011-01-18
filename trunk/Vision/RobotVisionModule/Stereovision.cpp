@@ -19,16 +19,12 @@ void Stereovision::Setup()
 {
     try{
         // setup left camera
-        m_LeftCamera = new Camera("webcam2.avi");
+        m_LeftCamera = new Camera("webcam1.avi");
         //m_LeftCamera = new Camera(0);
         if(!m_LeftCamera->isOpened()){
             cerr<<"Fail to open the left camera !"<<endl;
             throw (new std::exception());
         }
-
-        m_LeftCamera->SetImageCapture(true);
-        m_LeftCamera->SetVideoCapture(true);
-        m_LeftCamera->LiveDisplay();
 
         // setup right camera
         m_RightCamera = new Camera("webcam2.avi");
@@ -68,6 +64,42 @@ void Stereovision::RawDisplay()
 }
 
 
+void Stereovision::CannyEdgeDetection()
+{
+    cv::Mat frameL, frameR;
+    cv::namedWindow( "Canny Left", CV_WINDOW_AUTOSIZE);
+    cv::namedWindow( "Canny Right", CV_WINDOW_AUTOSIZE);
+
+    while(cv::waitKey(20) < 1)
+    {
+        // left
+        *m_LeftCamera >> frameL;
+        if(frameL.empty()) break;
+        m_LeftImageBuffer.push_back(frameL);
+
+        //////////*     Core Algorithm           *//////////////////
+        cv::cvtColor(m_LeftImageBuffer.back(), frameL, CV_BGR2GRAY);
+        // sigma = 1.5
+        // ksize = (sigma * 5)|1 = 7
+        //cv::GaussianBlur(frameL, frameL, cv::Size(7,7), 1.5, 1.5);
+        //cv::Canny(frameL, frameL, 0, 30, 3);
+        cv::Sobel(frameL,frameL,frameL.depth(),2,2);
+        /////////////////////////////////////////////////////////////
+
+        // right
+        *m_RightCamera >> frameR;
+        if(frameR.empty())break;
+
+//        m_RightImageBuffer.push_back(frameR);
+//        cv::cvtColor(m_RightImageBuffer.back(), frameR, CV_BGR2GRAY);
+//        cv::GaussianBlur(frameR, frameR, cv::Size(7,7), 1.5, 1.5);
+//        cv::Canny(frameR, frameR, 0, 30, 3);
+
+        cv::imshow( "Canny Left", frameL );
+        cv::imshow( "Canny Right", frameR );
+    }
+}
+
 // main routine of the video processing module
 void Stereovision::Run()
 {
@@ -78,45 +110,42 @@ void Stereovision::Run()
 
     // normal image stored on the right
     *m_LeftCamera >> frameL;
+    *m_RightCamera >> frameR;
     m_LeftImageBuffer.push_back(frameL);
     m_RightImageBuffer.push_back(m_LeftImageBuffer.back());
 
     cv::cvtColor(m_LeftImageBuffer.back(), frameL, CV_BGR2GRAY);
     m_LeftImageBuffer.push_back(frameL);
 
-
-        //cv::threshold(m_LeftImageBuffer.back(),frameL,120,250,cv::THRESH_BINARY);
-
-        // reduire 24 => 8bits?
-
+    cv::Mat bw = frameR < 100;
+////////////////////////////////////////////////////////////
     vector<vector<cv::Point> > contours;
     vector<cv::Vec4i> hierarchy;
 
-    //cv::Laplacian(
-                    /* Mat frame;
-        cap >> frame; // get a new frame from camera
-        cvtColor(frame, edges, CV_BGR2GRAY);
-        GaussianBlur(edges, edges, Size(7,7), 1.5, 1.5);
-        Canny(edges, edges, 0, 30, 3);
-        imshow("edges", edges);
-        if(waitKey(30) >= 0) break;
-*/
+    cv::findContours( m_LeftImageBuffer.back(), contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE );
 
+	cv::Mat dst = cv::Mat::zeros(m_LeftImageBuffer.back().size(), CV_8UC3);
 
-    //cv::drawContours( frameL, contours, -1, color);//, CV_FILLED, 8, hierarchy );
-   // m_LeftImageBuffer.push_back(frameL);
-//        m_LeftImageBuffer.push_back(frameL);
-//        adaptiveThreshold(m_LeftImageBuffer.back(),frameL, 120, cv::ADAPTIVE_THRESH_MEAN_C,cv::THRESH_BINARY,7,5);
-//        m_LeftImageBuffer.push_back(frameL);
-        //////////////////////////////////////////////////
-
+    if( contours.size() > 0 )
+    {
+        // iterate through all the top-level contours,
+        // draw each connected component with its own random color
+        int idx = 0;
+        for( ; idx >= 0; idx = hierarchy[idx][0] )
+        {
+            cv::Scalar color( (rand()&255), (rand()&255), (rand()&255) );
+            cv::drawContours( dst, contours, idx, color, CV_FILLED, 8, hierarchy );
+        }
+    }
+    m_RightImageBuffer.push_back(frameR);
+	////////////////////////////////////////////////////////////
 
     cv::imshow( "rawDisplay_Left", m_LeftImageBuffer.back() );
-    cv::imshow( "rawDisplay_Right", m_RightImageBuffer.back() );
+    cv::imshow( "rawDisplay_Right", bw );
 
     cout<<endl<<"nb images Left: "<<m_LeftImageBuffer.size()<<endl;
     cout<<endl<<"nb images Right: "<<m_RightImageBuffer.size()<<endl;
-    if(contours.size() >0) cout<<endl<<"contours:"<<contours.back().size();
+   // if(contours.size() >0) cout<<endl<<"contours:"<<contours.back().size();
 
     cv::waitKey(0);
 }
