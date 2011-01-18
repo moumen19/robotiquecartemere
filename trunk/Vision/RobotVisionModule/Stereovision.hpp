@@ -23,7 +23,7 @@ class Stereovision
 
         // To implement
         virtual void Send(){;}
-        void Calibrate () {;}
+        void CalibrateStereo () {;}
 
         // Mandatory
         void Setup();

@@ -1,7 +1,16 @@
 #ifndef GENERICIMAGEPROCESSING_H
 #define GENERICIMAGEPROCESSING_H
 
+#include <opencv2/core/core.hpp>
+#include <opencv2/features2d/features2d.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/video/tracking.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
 #include "Camera.hpp"
+
+using namespace std;
+
 class GenericImageProcessing
 {
     public:
@@ -17,7 +26,7 @@ class GenericImageProcessing
         /////////// edge detection
         // Sobel
         // Laplace
-        // Canny
+        static cv::Mat Canny(cv::Mat image);
         // return findContours
 
         /////////// features detection/description/match
