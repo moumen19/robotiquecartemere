@@ -11,6 +11,7 @@
 //#include <opencv2/objdetect/objdetect.hpp>
 
 #include "Camera.hpp"
+#include "GenericImageProcessing.hpp"
 
 using namespace std;
 
@@ -20,13 +21,19 @@ class Stereovision
         Stereovision();
         virtual ~Stereovision();
 
+        // To implement
+        virtual void Send(){;}
         void Calibrate () {;}
-        void RawDisplay();
+
+        // Mandatory
         void Setup();
         void Run();
+
+        // different video processing tools
+        void RawDisplay();
+        void CannyEdgeDetection();
         void test();
 
-        virtual void Send(){;}
     protected:
         Camera * m_LeftCamera;
         Camera * m_RightCamera;

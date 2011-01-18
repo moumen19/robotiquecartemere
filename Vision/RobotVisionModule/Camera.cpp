@@ -66,7 +66,7 @@ void Camera::LiveDisplay()
                     stringstream convert;
                     convert << imageOutputCount++ ;
 
-                    imwrite(string("Img_") + convert.str() + string(".jpg"), Frame); // Writes the image
+                    imwrite(string("Images/Img_") + convert.str() + string(".jpg"), Frame); // Writes the image
                 }
                 else{
                     cout<<"The capture mode need to be activated before recording !";
@@ -82,7 +82,7 @@ void Camera::LiveDisplay()
 
                         stringstream convert;
                         convert << videoOutputCount++ ;
-                        videoWriter.open(string("Vid_")+ convert.str() +string(".avi"), CV_FOURCC('M', 'J', 'P', 'G'), RECORDING_FPS, Frame.size()); // Opens the video
+                        videoWriter.open(string("Videos/Vid_")+ convert.str() +string(".avi"), CV_FOURCC('M', 'J', 'P', 'G'), RECORDING_FPS, Frame.size()); // Opens the video
 
                         if(!videoWriter.isOpened()) { cerr<<"Error trying to open the video writer!" <<endl; break;}
                     }
@@ -99,13 +99,12 @@ void Camera::LiveDisplay()
                cout<< "recording" <<endl;
             }
 
-
             // Display frame
             cv::imshow(string("Display ")+ m_Name, Frame );
         }
     }
     else{
-        cerr<<"Camera is not opened !"<<endl;
+        cerr<<"The camera is not opened !"<<endl;
     }
 }
 

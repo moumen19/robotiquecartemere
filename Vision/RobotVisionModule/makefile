@@ -15,7 +15,7 @@ EXEC=RobotVisionModule
 
 all: $(EXEC)
 
-$(EXEC): main.o Stereovision.o Camera.o
+$(EXEC): main.o Stereovision.o Camera.o GenericImageProcessing.o
 	$(CC) $^ $(LDFLAGS) -o $@
 
 %.o: %.cpp %.hpp
