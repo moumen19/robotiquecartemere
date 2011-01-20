@@ -18,22 +18,25 @@ Stereovision::~Stereovision()
 void Stereovision::Setup()
 {
     try{
-        // setup left camera
-        m_LeftCamera = new Camera("webcam1.avi");
+        /////////// setup leftt camera //////////////
+        // from file
+         m_LeftCamera = new Camera("//host//TRAVAIL//M2//Vision//Webcam_videos//ground1//Vid_Left_1.avi");
+         // from camera
         //m_LeftCamera = new Camera(0);
         if(!m_LeftCamera->isOpened()){
             cerr<<"Fail to open the left camera !"<<endl;
             throw (new std::exception());
         }
 
-        // setup right camera
-        m_RightCamera = new Camera("webcam2.avi");
+        /////////// setup right camera //////////////
+        // from file
+        m_RightCamera = new Camera("//host//TRAVAIL//M2//Vision//Webcam_videos//ground1//Vid_Right_1.avi");
+        // from camera
         //m_RightCamera = new Camera(1);
         if(!m_RightCamera->isOpened()){
             cerr<<"Fail to open the right camera !"<<endl;
             throw (new std::exception());
         }
-
     }
     catch(std::exception e){
         cerr<<e.what(); exit(1);
@@ -44,12 +47,22 @@ void Stereovision::Setup()
 // display both cameras untouched (same as LiveDisplay in class Camera)
 void Stereovision::RawDisplay()
 {
+    char keyPressed = -1;
+    int videoOutputCount = 0;
+    bool videoBeingRecorded = false;
+    cv::VideoWriter videoWriterL, videoWriterR;
     cv::Mat frameL, frameR;
     cv::namedWindow( "rawDisplay_Left", CV_WINDOW_AUTOSIZE);
     cv::namedWindow( "rawDisplay_Right", CV_WINDOW_AUTOSIZE);
 
-    while(cv::waitKey(20) < 1)
+    while(true)
     {
+        // Get key presses value
+        keyPressed = cv::waitKey(WAITING_TIME_MS);
+
+        // Exit loop
+        if(keyPressed == STOP_DISPLAY_KEY) break;
+
         // left
         *m_LeftCamera >> frameL;
         if(frameL.empty()) break;
@@ -63,43 +76,63 @@ void Stereovision::RawDisplay()
 //            imwrite(string("left.jpg"), frameL);
 //            imwrite(string("right.jpg"), frameR);
 //        }
+        // Video Capture
+        if(keyPressed == VIDEO_RECORD_KEY){
+                if(!videoBeingRecorded){
+                    videoBeingRecorded = true; // starts recording
+
+                    stringstream convert;
+                    convert << videoOutputCount++ ;
+                    videoWriterL.open(string("Videos/Vid_Left_")+ convert.str() +string(".avi"), CV_FOURCC('M', 'J', 'P', 'G'), 24, frameL.size()); // Opens the video
+                    videoWriterR.open(string("Videos/Vid_Right_")+ convert.str() +string(".avi"), CV_FOURCC('M', 'J', 'P', 'G'), 24, frameR.size());
+                    if(!videoWriterL.isOpened() || !videoWriterL.isOpened()) { cerr<<"Error trying to open the video writer!" <<endl; break;}
+                }
+                else{
+                    videoBeingRecorded = false; // stops recording
+                }
+
+        }
+        if(videoBeingRecorded){
+           videoWriterL << frameL;
+           videoWriterR << frameR;
+           cout<< "recording vids" <<endl;
+        }
 
         cv::imshow( "rawDisplay_Left", frameL );
         cv::imshow( "rawDisplay_Right", frameR );
     }
 }
 
-
 void Stereovision::CannyEdgeDetection()
 {
+    float sigma = 2.5;
+    float ksize = 15 ;
+
     cv::Mat frameL, frameR;
     cv::namedWindow( "Canny Left", CV_WINDOW_AUTOSIZE);
     cv::namedWindow( "Canny Right", CV_WINDOW_AUTOSIZE);
 
-    while(cv::waitKey(20) < 1)
+    while(cv::waitKey(100) < 1)
     {
         // left
         *m_LeftCamera >> frameL;
         if(frameL.empty()) break;
         m_LeftImageBuffer.push_back(frameL);
 
-        //////////*     Core Algorithm           *//////////////////
-        cv::cvtColor(m_LeftImageBuffer.back(), frameL, CV_BGR2GRAY);
-        // sigma = 1.5
-        // ksize = (sigma * 5)|1 = 7
-        cv::GaussianBlur(frameL, frameL, cv::Size(7,7), 1.5, 1.5);
-        cv::Canny(frameL, frameL, 0, 30, 3);
-        //cv::Sobel(frameL,frameL,frameL.depth(),2,2);
-        /////////////////////////////////////////////////////////////
-
-        // right
+                // right
         *m_RightCamera >> frameR;
         if(frameR.empty())break;
         m_RightImageBuffer.push_back(frameR);
 
+        //////////*     Core Algorithm           *//////////////////
+        cv::cvtColor(m_LeftImageBuffer.back(), frameL, CV_BGR2GRAY);
+        cv::GaussianBlur(frameL, frameL, cv::Size(ksize,ksize), sigma, sigma);
+        cv::Canny(frameL, frameL, 0, 32, 3);
+
         cv::cvtColor(m_RightImageBuffer.back(), frameR, CV_BGR2GRAY);
-        cv::GaussianBlur(frameR, frameR, cv::Size(7,7), 1.5, 1.5);
-        cv::Canny(frameR, frameR, 0, 30, 3);
+        cv::GaussianBlur(frameR, frameR, cv::Size(ksize,ksize), sigma, sigma);
+        cv::Canny(frameR, frameR, 0, 32, 3);
+        /////////////////////////////////////////////////////////////
 
         cv::imshow( "Canny Left", frameL );
         cv::imshow( "Canny Right", frameR );
@@ -109,92 +142,70 @@ void Stereovision::CannyEdgeDetection()
 // main routine of the video processing module
 void Stereovision::Run()
 {
-    cv::Mat frameL, frameR; // untouched
+    cv::Mat frameL, frameR;
+    cv::namedWindow( "Canny Left", CV_WINDOW_AUTOSIZE);
+    cv::namedWindow( "Canny Right", CV_WINDOW_AUTOSIZE);
 
-    cv::namedWindow( "rawDisplay_Left", CV_WINDOW_AUTOSIZE);
-    cv::namedWindow( "rawDisplay_Right", CV_WINDOW_AUTOSIZE);
-
-    // normal image stored on the right
-    *m_LeftCamera >> frameL;
-    *m_RightCamera >> frameR;
-    m_LeftImageBuffer.push_back(frameL);
-    m_RightImageBuffer.push_back(m_LeftImageBuffer.back());
-
-    cv::cvtColor(m_LeftImageBuffer.back(), frameL, CV_BGR2GRAY);
-    m_LeftImageBuffer.push_back(frameL);
-
-    cv::Mat bw = frameR < 100;
-////////////////////////////////////////////////////////////
-    vector<vector<cv::Point> > contours;
-    vector<cv::Vec4i> hierarchy;
-
-    cv::findContours( m_LeftImageBuffer.back(), contours, hierarchy, CV_RETR_CCOMP, CV_CHAIN_APPROX_SIMPLE );
-
-	cv::Mat dst = cv::Mat::zeros(m_LeftImageBuffer.back().size(), CV_8UC3);
-
-    if( contours.size() > 0 )
+    while(cv::waitKey(200) < 1)
     {
-        // iterate through all the top-level contours,
-        // draw each connected component with its own random color
-        int idx = 0;
-        for( ; idx >= 0; idx = hierarchy[idx][0] )
-        {
-            cv::Scalar color( (rand()&255), (rand()&255), (rand()&255) );
-            cv::drawContours( dst, contours, idx, color, CV_FILLED, 8, hierarchy );
-        }
+        *m_LeftCamera >> frameL;
+        if(frameL.empty()) break;
+        *m_RightCamera >> frameR;
+        if(frameR.empty())break;
+
+        m_LeftImageBuffer.push_back(frameL);
+        m_RightImageBuffer.push_back(frameR);
+
+        // Edge Detection
+        cv::cvtColor(m_LeftImageBuffer.back(), frameL, CV_BGR2GRAY);
+        cv::cvtColor(m_RightImageBuffer.back(), frameR, CV_BGR2GRAY);
+        cv::GaussianBlur(frameL, frameL, cv::Size(7,7), 1.5, 1.5);
+        cv::GaussianBlur(frameR, frameR, cv::Size(7,7), 1.5, 1.5);
+        cv::Canny(frameL, frameL, 0, 30, 3);
+        cv::Canny(frameR, frameR, 0, 30, 3);
+
+        // Morphological operation
+        cv::morphologyEx(frameL,frameL,cv::MORPH_CLOSE,cv::Mat(2,3,CV_8U),cv::Point(-1,-1), 2);
+        cv::morphologyEx(frameR,frameR,cv::MORPH_OPEN,cv::Mat(3,3,CV_8U),cv::Point(-1,-1), 2);
+        //cv::dilate(frameL,frameL,cv::Mat(2,2,CV_8U));
+        //cv::erode(frameL,frameL,cv::Mat(2,2,CV_8U));
+
+        cv::imshow( "Canny Left", frameL );
+        cv::imshow( "Canny Right", frameR );
     }
-    m_RightImageBuffer.push_back(frameR);
-	////////////////////////////////////////////////////////////
-
-    cv::imshow( "rawDisplay_Left", m_LeftImageBuffer.back() );
-    cv::imshow( "rawDisplay_Right", bw );
-
-    cout<<endl<<"nb images Left: "<<m_LeftImageBuffer.size()<<endl;
-    cout<<endl<<"nb images Right: "<<m_RightImageBuffer.size()<<endl;
-   // if(contours.size() >0) cout<<endl<<"contours:"<<contours.back().size();
-
-    cv::waitKey(0);
 }
 
 void Stereovision::test()
 {
-    cv::Mat img1raw, img2raw;
-    cv::Mat img1, img2;
-
-    // left
-    *m_LeftCamera >> img1raw;
-    *m_RightCamera>> img2raw;
+    float sigma = 2.5;
+    float ksize = 15 ;
 
 
-    cv::cvtColor(img1raw, img1, CV_BGR2GRAY);
-    cv::cvtColor(img2raw, img2, CV_BGR2GRAY);
+    cv::Mat frameL= cv::imread("Images//L0.jpg",1);
+    cv::Mat frameR= cv::imread("Images//L0.jpg",1);
 
-    // detecting keypoints
-    //cv::FastFeatureDetector detector;
-    //cv::SiftFeatureDetector detector;
-	cv::SurfFeatureDetector detector(10000);
-	vector<cv::KeyPoint> keypoints1, keypoints2;
-	detector.detect(img1, keypoints1);
-	detector.detect(img2, keypoints2);
+    m_LeftImageBuffer.push_back(frameL);
+    m_RightImageBuffer.push_back(frameR);
 
-	// computing descriptors
-	//cv::SurfDescriptorExtractor extractor;
-	//cv::SiftDescriptorExtractor extractor;
-	cv::SurfDescriptorExtractor extractor;
-	cv::Mat descriptors1, descriptors2;
-	extractor.compute(img1, keypoints1, descriptors1);
-	extractor.compute(img2, keypoints2, descriptors2);
+    ///////////////////////////////////////////////////
+//    cv::cvtColor(m_RightImageBuffer.back(), frameR, CV_BGR2GRAY);
+//    cv::GaussianBlur(frameR, frameR, cv::Size(ksize,ksize), sigma, sigma);
+//    cv::Canny(frameR, frameR, 0, 32, 3);
+//
+//    cv::cvtColor(m_LeftImageBuffer.back(), frameL, CV_BGR2GRAY);
+//    cv::GaussianBlur(frameL, frameL, cv::Size(ksize,ksize), sigma, sigma);
+//    cv::Canny(frameL, frameL, 0, 32, 3);
+    /////////////////////////////////////////////////////////////////
+          //cv::morphologyEx(frameL,frameL,cv::MORPH_DILATE,cv::Mat(),cv::Point(-1,-1),5);
+    //cv::HoughLines(frameL,)
 
-	// matching descriptors
-	cv::BruteForceMatcher<cv::L2<float> > matcher;
-    vector<cv::DMatch> matches;
-    matcher.match(descriptors1, descriptors2, matches);
 
-	// drawing the results
-	cv::namedWindow("matches", 1);
-	cv::Mat img_matches;
-	cv::drawMatches(img1, keypoints1, img2, keypoints2, matches, img_matches);
-	cv::imshow("matches", img_matches);
-	cv::waitKey(0);
+
+
+    cv::namedWindow( "Cany", CV_WINDOW_AUTOSIZE);
+    cv::namedWindow( "RAW", CV_WINDOW_AUTOSIZE);
+    cv::imshow( "Cany", frameL );
+    cv::imshow( "RAW", frameR );
+    cv::waitKey(0);
 
 }
