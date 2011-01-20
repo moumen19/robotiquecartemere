@@ -84,7 +84,7 @@ void improve_and_apply_grayScaleMask(IplImage ** mask, IplImage * img, IplImage 
     IplConvKernel* circleKernel = cvCreateStructuringElementEx(7,7,3,3,CV_SHAPE_ELLIPSE, NULL);
 
     cvMorphologyEx(mask,temp,temp2,circleKernel,CV_MOP_CLOSE,3);
-    *mask = cvClone(temp);
+    *mask = cvCloneImage(temp);
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     improvedMaskOnBGR = cvCloneImage(img);

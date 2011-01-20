@@ -7,19 +7,30 @@
 #
 # makefile
 
-CC=g++
+CC=gcc
+CPP=g++
 CFLAGS=-W -Wall -g
-LDFLAGS= -lopencv_core -lopencv_imgproc -lopencv_calib3d -lopencv_video -lopencv_features2d -lopencv_ml -lopencv_highgui -lopencv_objdetect -lopencv_contrib -lopencv_legacy
+LDFLAGS= -lcxcore -lcv -lhighgui -lcvaux
+#LDFLAGS= -lopencv_core -lopencv_imgproc -lopencv_calib3d -lopencv_video -lopencv_features2d -lopencv_ml -lopencv_highgui -lopencv_objdetect -lopencv_contrib -lopencv_legacy
 #-lserial -lboost_thread
 EXEC=RobotVisionModule
 
 all: $(EXEC)
 
-$(EXEC): main.o Stereovision.o Camera.o GenericImageProcessing.o
+#$(EXEC): main.o Stereovision.o Camera.o GenericImageProcessing.o colorSegmentation.o
+$(EXEC): colorSegmentation.o main.o
 	$(CC) $^ $(LDFLAGS) -o $@
 
-%.o: %.cpp %.hpp
+colorSegmentation.o: colorSegmentation.c colorSegmentation.h
 	$(CC) -o $@ -c $< $(CFLAGS)
+
+main.o: main.cpp
+	$(CC) -o $@ -c $< $(CFLAGS)
+
+
+
+#%.o: %.cpp %.hpp
+#	$(CC) -o $@ -c $< $(CFLAGS)
 
 
 .PHONY: clean rebuild $(EXEC)
