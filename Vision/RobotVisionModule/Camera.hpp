@@ -34,6 +34,7 @@ class Camera: public cv::VideoCapture
 
         // useful for stereovision
         void Calibrate(){;}
+        void UndistorFrame(){;} // useful, even if imperfections can't be seen?
         void LoadIntrinsec(const string &filename){;}
         void LoadExtrasec(const string &filename){;}
 

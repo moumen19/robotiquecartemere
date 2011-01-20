@@ -6,6 +6,7 @@
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/video/tracking.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/objdetect/objdetect.hpp>
 
 #include "Camera.hpp"
 
@@ -23,25 +24,25 @@ class GenericImageProcessing
           // switch (config) {} for many methods ?
 
 
-        /////////// edge detection
+        /////////// Edges Detection
         // Sobel
         // Laplace
-        static cv::Mat Canny(cv::Mat image);
-        // return findContours
+        static cv::Mat Canny(cv::Mat image, bool settingsActivated);
+        static cv::Mat findContours(){return cv::Mat();} // Only on binary images !
 
-        /////////// features detection/description/match
+        /////////// Segmentation
+        // color segmentation => click on a pixel to set the color center (thresholds 2x HSV)
+        // TPs ...
+
+        /////////// Features detection/description/match
         //
         //
 
-        ////////////////////////////////
+        ///////////////////////////////////////////////////
         // getImageFullDescription (channels, depth etc...)
 
-        // TPs !!
 
-//        static qqch(cv::Mat)
-//        static qqch(CameraS)
-
-        // HIGH  GUI for tests !
+        // HIGH  GUI for tests ! buttons, etc
 
     protected:
     private:

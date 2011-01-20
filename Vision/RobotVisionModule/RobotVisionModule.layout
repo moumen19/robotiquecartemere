@@ -2,25 +2,25 @@
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Debug" />
 	<File name="Camera.cpp" open="1" top="0" tabpos="6">
-		<Cursor position="1797" topLine="0" />
+		<Cursor position="1448" topLine="33" />
 	</File>
 	<File name="Camera.hpp" open="1" top="0" tabpos="5">
-		<Cursor position="905" topLine="9" />
+		<Cursor position="917" topLine="0" />
 	</File>
 	<File name="GenericImageProcessing.cpp" open="1" top="0" tabpos="8">
-		<Cursor position="105" topLine="0" />
+		<Cursor position="360" topLine="0" />
 	</File>
 	<File name="GenericImageProcessing.hpp" open="1" top="0" tabpos="7">
-		<Cursor position="636" topLine="9" />
+		<Cursor position="479" topLine="12" />
 	</File>
-	<File name="Stereovision.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="557" topLine="9" />
+	<File name="Stereovision.cpp" open="1" top="1" tabpos="4">
+		<Cursor position="3254" topLine="0" />
 	</File>
 	<File name="Stereovision.hpp" open="1" top="0" tabpos="3">
-		<Cursor position="412" topLine="0" />
+		<Cursor position="510" topLine="0" />
 	</File>
-	<File name="main.cpp" open="1" top="1" tabpos="2">
-		<Cursor position="269" topLine="0" />
+	<File name="main.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="198" topLine="0" />
 	</File>
 	<File name="makefile" open="1" top="0" tabpos="1">
 		<Cursor position="174" topLine="5" />
