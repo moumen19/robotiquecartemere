@@ -8,8 +8,10 @@ int main( int argc, char **argv )
 {
     Stereovision system1;
     system1.Setup();
-    system1.CannyEdgeDetection();
+    //system1.CannyEdgeDetection();
     //system1.RawDisplay();
+    //system1.Run();
+    system1.test();
 
 //    Camera cam1;
 //    cam1.SetImageCapture(true);
