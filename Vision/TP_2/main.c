@@ -62,13 +62,13 @@ int main(int argc, char *argv[])
     for(i=0;i<nbImages;i++)
     {
         // Left camera
-        sprintf(imageFileName,"Calibration_TP2\gauche%d.jpg",i+1);
+        sprintf(imageFileName,"Calibration_TP2/gauche%d.jpg",i+1);
 
         // this allows to fill in a 1D array for several images, with a function still able to work on individual images
         compute_and_display_image_corners(imageFileName, &imgSize, chessboardSize, &cornersList_Left[i*nbCorners]);
 
         // Right camera
-        sprintf(imageFileName,"Calibration_TP2\droite%d.jpg",i+1);
+        sprintf(imageFileName,"Calibration_TP2/droite%d.jpg",i+1);
 
 
         compute_and_display_image_corners(imageFileName, &imgSize, chessboardSize, &cornersList_Right[i*nbCorners]);
@@ -102,14 +102,14 @@ int main(int argc, char *argv[])
     fy_Right = cvmGet(intrinsicMatrix_Right,1,1);
 
     // save parameters into files
-    cvSave("..\\..\\Calibration_TP2\\Parameters\\Intrinsic_Left_Cam.xml", intrinsicMatrix_Left,0,0,cvAttrList(NULL,NULL));
-    cvSave("..\\..\\Calibration_TP2\\Parameters\\Distortion_Left_Cam.xml", distortionCoeffs_Left,0,0,cvAttrList(NULL,NULL));
-    cvSave("..\\..\\Calibration_TP2\\Parameters\\Intrinsic_Right_Cam.xml", intrinsicMatrix_Right,0,0,cvAttrList(NULL,NULL));
-    cvSave("..\\..\\Calibration_TP2\\Parameters\\Distortion_Right_Cam.xml", distortionCoeffs_Right,0,0,cvAttrList(NULL,NULL));
+    cvSave("Calibration_TP2//Parameters//Intrinsic_Left_Cam.xml", intrinsicMatrix_Left,0,0,cvAttrList(NULL,NULL));
+    cvSave("Calibration_TP2//Parameters//Distortion_Left_Cam.xml", distortionCoeffs_Left,0,0,cvAttrList(NULL,NULL));
+    cvSave("Calibration_TP2//Parameters//Intrinsic_Right_Cam.xml", intrinsicMatrix_Right,0,0,cvAttrList(NULL,NULL));
+    cvSave("Calibration_TP2//Parameters//Distortion_Right_Cam.xml", distortionCoeffs_Right,0,0,cvAttrList(NULL,NULL));
 
     // Check parameters
-    get_balls_pixelsSizes(ballsPixelsSizes_Left, "..\\..\\Images_TP2\\SIER_balle_ga.jpg");
-    get_balls_pixelsSizes(ballsPixelsSizes_Right, "..\\..\\Images_TP2\\SIER_balle_dr.jpg");
+    get_balls_pixelsSizes(ballsPixelsSizes_Left, "Images_TP2/SIER_balle_ga.jpg");
+    get_balls_pixelsSizes(ballsPixelsSizes_Right, "Images_TP2/SIER_balle_dr.jpg");
 
     ///////////////////
     // Z = D/d*f /10 //
@@ -168,14 +168,14 @@ int main(int argc, char *argv[])
     );
 
     // save parameters into files
-    cvSave("..\\..\\Calibration_TP2\\Parameters\\Rotation.xml", RotationMatrix,0,0,cvAttrList(NULL,NULL));
-    cvSave("..\\..\\Calibration_TP2\\Parameters\\Translation.xml", TranslationMatrix,0,0,cvAttrList(NULL,NULL));
-    cvSave("..\\..\\Calibration_TP2\\Parameters\\Essential.xml", EssentialMatrix,0,0,cvAttrList(NULL,NULL));
-    cvSave("..\\..\\Calibration_TP2\\Parameters\\Fundamental.xml", FundamentalMatrix,0,0,cvAttrList(NULL,NULL));
+    cvSave("Calibration_TP2//Parameters//Rotation.xml", RotationMatrix,0,0,cvAttrList(NULL,NULL));
+    cvSave("Calibration_TP2//Parameters//Translation.xml", TranslationMatrix,0,0,cvAttrList(NULL,NULL));
+    cvSave("Calibration_TP2//Parameters//Essential.xml", EssentialMatrix,0,0,cvAttrList(NULL,NULL));
+    cvSave("Calibration_TP2//Parameters//Fundamental.xml", FundamentalMatrix,0,0,cvAttrList(NULL,NULL));
 
     // Check parameters: get points with mouse cursor
-    light_Left = get_one_pixel ("..\\..\\Images_TP2\\SIER_gauche.jpg");
-    light_Right = get_one_pixel ("..\\..\\Images_TP2\\SIER_droite.jpg");
+    light_Left = get_one_pixel ("Images_TP2/SIER_gauche.jpg");
+    light_Right = get_one_pixel ("Images_TP2/SIER_droite.jpg");
     cvStereoTriangulation(light_Left,light_Right,0); // 1 to display
 
     // End
