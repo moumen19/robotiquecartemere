@@ -15,11 +15,6 @@ void compute_and_display_image_corners(char * imageName, CvSize * imageSize, CvS
 
     img = cvLoadImage(imageName, -1);
 
-    cvNamedWindow(imageName, CV_WINDOW_AUTOSIZE);
-    cvShowImage(imageName, img );
-    cvWaitKey(0);
-
-
     *imageSize = cvGetSize(img); // useful only for calibration function
 
 
@@ -34,14 +29,15 @@ void compute_and_display_image_corners(char * imageName, CvSize * imageSize, CvS
     // display_array_values(cornersArrayToFillIn,chessboardSize.height*chessboardSize.width);
 
     // visual only part
-    //cvDrawChessboardCorners(img, chessboardSize, cornersArrayToFillIn, cornersCount, patternWasFound);
-    //cvNamedWindow(imageName, CV_WINDOW_AUTOSIZE);
-    //cvMoveWindow(imageName, 100, 100);
-    //cvShowImage(imageName, img );
+    cvDrawChessboardCorners(img, chessboardSize, cornersArrayToFillIn, cornersCount, patternWasFound);
+    cvNamedWindow(imageName, CV_WINDOW_AUTOSIZE);
+    cvMoveWindow(imageName, 100, 100);
+    cvShowImage(imageName, img );
 
     // end
-    //cvWaitKey(10);
+    cvWaitKey(400);
     cvReleaseImage(&img );
+    cvDestroyWindow(imageName);
 }
 
 
