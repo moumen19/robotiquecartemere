@@ -40,13 +40,13 @@ float xl[3];
 CvMat *xL_2D=cvCreateMat(1,3,CV_32FC2);		//0=gauche   1=droite
 CvMat *xR_2D=cvCreateMat(1,3,CV_32FC2);
 
-CvMat *intrinseque_droite= (CvMat*)cvLoad("..\\..\\Calibration_TP2\\Parameters\\Intrinsic_Right_Cam.xml",0,0,0);
-CvMat *distortion_droite = (CvMat*)cvLoad("..\\..\\Calibration_TP2\\Parameters\\Distortion_Right_Cam.xml",0,0,0);
-CvMat *intrinseque_gauche= (CvMat*)cvLoad("..\\..\\Calibration_TP2\\Parameters\\Intrinsic_Left_Cam.xml",0,0,0);
-CvMat *distortion_gauche = (CvMat*)cvLoad("..\\..\\Calibration_TP2\\Parameters\\Distortion_Left_Cam.xml",0,0,0);
+CvMat *intrinseque_droite= (CvMat*)cvLoad("Calibration_TP2//Parameters//Intrinsic_Right_Cam.xml",0,0,0);
+CvMat *distortion_droite = (CvMat*)cvLoad("Calibration_TP2//Parameters//Distortion_Right_Cam.xml",0,0,0);
+CvMat *intrinseque_gauche= (CvMat*)cvLoad("Calibration_TP2//Parameters//Intrinsic_Left_Cam.xml",0,0,0);
+CvMat *distortion_gauche = (CvMat*)cvLoad("Calibration_TP2//Parameters//Distortion_Left_Cam.xml",0,0,0);
 
-CvMat *translation= (CvMat*)cvLoad("..\\..\\Calibration_TP2\\Parameters\\Translation.xml",0,0,0);
-CvMat *rotation = (CvMat*)cvLoad("..\\..\\Calibration_TP2\\Parameters\\Rotation.xml",0,0,0);
+CvMat *translation= (CvMat*)cvLoad("Calibration_TP2//Parameters//Translation.xml",0,0,0);
+CvMat *rotation = (CvMat*)cvLoad("Calibration_TP2//Parameters//Rotation.xml",0,0,0);
 
 // pas utile ?
 // CvMat *Rot = (CvMat*)cvLoad("./calibration/Rot.xml",0,0,0);
