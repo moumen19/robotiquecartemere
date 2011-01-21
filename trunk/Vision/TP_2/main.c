@@ -108,8 +108,8 @@ int main(int argc, char *argv[])
     cvSave("Calibration_TP2//Parameters//Distortion_Right_Cam.xml", distortionCoeffs_Right,0,0,cvAttrList(NULL,NULL));
 
     // Check parameters
-    get_balls_pixelsSizes(ballsPixelsSizes_Left, "Images_TP2/SIER_balle_ga.jpg");
-    get_balls_pixelsSizes(ballsPixelsSizes_Right, "Images_TP2/SIER_balle_dr.jpg");
+    get_balls_pixelsSizes(ballsPixelsSizes_Left, "Images_TP2//SIER_balle_ga.jpg");
+    get_balls_pixelsSizes(ballsPixelsSizes_Right, "Images_TP2//SIER_balle_dr.jpg");
 
     ///////////////////
     // Z = D/d*f /10 //

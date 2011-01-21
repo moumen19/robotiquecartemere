@@ -61,10 +61,10 @@ void get_balls_pixelsSizes(int * ballsPixelsSizes, char * fileToAnalyse)
 
         cvShowImage("mask", grayMaskHSV );
         cvShowImage("mask applied", improvedMaskOnBGR);
-        cvWaitKey(200);
+        cvWaitKey(0);
 
         // Getting size of remaining circle
-        improve_and_apply_grayScaleMask(&grayMaskHSV,imgBGR,&improvedMaskOnBGR);
+        //improve_and_apply_grayScaleMask(&grayMaskHSV,imgBGR,&improvedMaskOnBGR);
         ballsPixelsSizes[colorConfiguration] = pixelSize_of_binary_blob(grayMaskHSV);
     }
 
@@ -308,8 +308,8 @@ void colorMouseEventHandler(int event, int x, int y, int flags, void *param)
     if(event == CV_EVENT_MOUSEMOVE)
     {
         // improve and apply gray level mask on BGR image
-        improve_and_apply_grayScaleMask(&grayMaskHSV,imgBGR,&improvedMaskOnBGR);
-        cvShowImage("mask applied", improvedMaskOnBGR);
+        //improve_and_apply_grayScaleMask(&grayMaskHSV,imgBGR,&improvedMaskOnBGR);
+        cvShowImage("mask", grayMaskHSV);
     }
 }
 
