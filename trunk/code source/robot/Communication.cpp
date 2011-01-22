@@ -80,7 +80,9 @@ void Communication::stop()
 void Communication::run()
 {
 	_DEBUG("Debut de la routine d'ecoute des ports de communications", INFORMATION);
-	
+	bool stop_BAU = false;
+	bool stop_obs = false;
+
 	//this->test(4);
 	while(this->a_thread_active)
 	{
@@ -90,7 +92,7 @@ void Communication::run()
 			{
 				messageAsservissement msg = boost::any_cast<messageAsservissement>(this->a_RS232Asservissement.getData());
 				
-				_DISPLAY((int)msg.id << " : ");
+				//_DISPLAY((int)msg.id << " : ");
 				/*
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.x.data[i] << " : ");
@@ -100,8 +102,8 @@ void Communication::run()
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.alpha.data[i] << " : ");
 				//*/
-				_DISPLAY(msg.x.value << " : " << msg.y.value << " : " << msg.alpha.value << " : ");
-				_DISPLAY((int)msg.commande << std::endl);
+				//_DISPLAY(msg.x.value << " : " << msg.y.value << " : " << msg.alpha.value << " : ");
+				//_DISPLAY((int)msg.commande << std::endl);
 
 				switch(msg.commande)
 				{
@@ -151,32 +153,41 @@ if(true && (int)msg.id_sensor == 144)
 					case 144:
 						if(msg.data.getValue() == 0)
 						{
-							a_strategy.set(BAU_OFF);
-							msgSend.id = 42;
-							msgSend.x.value = 0;
-							msgSend.y.value = 0;
-							msgSend.alpha.value = 0;
-							msgSend.commande = 9;
-							this->a_RS232Asservissement.send(msgSend);
-							_DISPLAY("Message asservissement : tout est OK [ENVOYE]"<<std::endl);
+							if(stop_BAU == true)
+							{
+								a_strategy.set(BAU_OFF);
+								msgSend.id = 42;
+								msgSend.x.value = 0;
+								msgSend.y.value = 0;
+								msgSend.alpha.value = 0;
+								msgSend.commande = 9;
+								this->a_RS232Asservissement.send(msgSend);
+								_DISPLAY("Message asservissement : tout est OK [ENVOYE]"<<std::endl);
+							}
+							stop_BAU = false;
 						}
 						else
 						{
-							a_strategy.set(BAU_ON);
-							msgSend.id = 42;
-							msgSend.x.value = 0;
-							msgSend.y.value = 0;
-							msgSend.alpha.value = 0;
-							msgSend.commande = 8;
-							this->a_RS232Asservissement.send(msgSend);							
-							_DISPLAY("Message asservissement : ARRET [ENVOYE]"<<std::endl);
+							if(stop_BAU == false)
+							{
+								a_strategy.set(BAU_ON);
+								msgSend.id = 42;
+								msgSend.x.value = 0;
+								msgSend.y.value = 0;
+								msgSend.alpha.value = 0;
+								msgSend.commande = 8;
+								this->a_RS232Asservissement.send(msgSend);							
+								_DISPLAY("Message asservissement : ARRET [ENVOYE]"<<std::endl);
+							}
+							stop_BAU = true;
 						}
+						///*
 						msgSend.id = 42;
 						msgSend.x.value = 0;
 						msgSend.y.value = 0;
 						msgSend.alpha.value = 0;
 						msgSend.commande = 7;
-						this->a_RS232Asservissement.send(msgSend);
+						this->a_RS232Asservissement.send(msgSend);//*/
 						break;
 					default:
 						break;
@@ -192,7 +203,44 @@ if(true && (int)msg.id_sensor == 144)
 
 		}
 
-		
+		try
+		{
+			messageSensor msg = boost::any_cast<messageSensor>(a_sensorsData.get(50, DataOption::LAST));
+			if((float)msg.data.getValue() <= 14)
+			{
+				if(stop_obs == false)
+				{
+					messageAsservissement msgSend;
+					msgSend.id = 42;
+					msgSend.x.value = 0;
+					msgSend.y.value = 0;
+					msgSend.alpha.value = 0;
+					msgSend.commande = 8;
+					this->a_RS232Asservissement.send(msgSend);
+					_DISPLAY("STOP D'URGENCE !!! Obstacle à "<<(float)msg.data.getValue()<<" mm"<<std::endl);
+				}
+				stop_obs = true;
+			}
+			else
+			{
+				if(stop_BAU == false && stop_obs == true)
+				{
+					messageAsservissement msgSend;
+					msgSend.id = 42;
+					msgSend.x.value = 5;
+					msgSend.y.value = 5;
+					msgSend.alpha.value = 0;
+					msgSend.commande = 9;
+					this->a_RS232Asservissement.send(msgSend);
+					_DISPLAY("Obstacle : none"<<std::endl);
+					stop_obs = false;
+				}
+			}
+
+		}
+		catch(std::exception & e)
+		{
+		}
 		
 		 	//a_renderer.setSensorDistance(0x30, 50);
 		 	//sleep(2);
