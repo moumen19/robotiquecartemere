@@ -189,7 +189,7 @@ void Robot::run()
 		try
 		{		
 			Point p = a_planning.get();
-			a_communication.send(Port::ASSERVISSEMENT, 20*p.x, 20*p.y, 0, 4);
+			a_communication.send(Port::ASSERVISSEMENT, 10*p.x, 10*p.y, 0, 4);
 		}
 		catch(std::exception & e)
 		{
