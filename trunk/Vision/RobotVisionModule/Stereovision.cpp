@@ -20,9 +20,9 @@ void Stereovision::Setup()
     try{
         /////////// setup leftt camera //////////////
         // from file
-         m_LeftCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//ground1//Vid_Left_0.avi");
+        //m_LeftCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//ground1//Vid_Left_0.avi");
          // from camera
-        //m_LeftCamera = new Camera(0);
+        m_LeftCamera = new Camera(0);
         if(!m_LeftCamera->isOpened()){
             cerr<<"Fail to open the left camera !"<<endl;
             throw (new std::exception());
@@ -30,9 +30,9 @@ void Stereovision::Setup()
 
         /////////// setup right camera //////////////
         // from file
-        m_RightCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//ground1//Vid_Right_0.avi");
+        //m_RightCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//ground1//Vid_Right_0.avi");
         // from camera
-        //m_RightCamera = new Camera(1);
+        m_RightCamera = new Camera(1);
         if(!m_RightCamera->isOpened()){
             cerr<<"Fail to open the right camera !"<<endl;
             throw (new std::exception());
@@ -83,8 +83,8 @@ void Stereovision::RawDisplay()
 
                     stringstream convert;
                     convert << videoOutputCount++ ;
-                    videoWriterL.open(string("Videos/Vid_Left_")+ convert.str() +string(".avi"), CV_FOURCC('M', 'J', 'P', 'G'), 10, frameL.size()); // Opens the video
-                    videoWriterR.open(string("Videos/Vid_Right_")+ convert.str() +string(".avi"), CV_FOURCC('M', 'J', 'P', 'G'), 10, frameR.size());
+                    videoWriterL.open(string("Videos/Vid_Left_")+ convert.str() +string(".avi"), CV_FOURCC('M', 'J', 'P', 'G'), 20, frameL.size()); // Opens the video
+                    videoWriterR.open(string("Videos/Vid_Right_")+ convert.str() +string(".avi"), CV_FOURCC('M', 'J', 'P', 'G'), 20, frameR.size());
                     if(!videoWriterL.isOpened() || !videoWriterL.isOpened()) { cerr<<"Error trying to open the video writer!" <<endl; break;}
                 }
                 else{
