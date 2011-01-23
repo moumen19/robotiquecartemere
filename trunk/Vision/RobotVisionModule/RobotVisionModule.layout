@@ -13,22 +13,16 @@
 	<File name="GenericImageProcessing.hpp" open="1" top="0" tabpos="7">
 		<Cursor position="479" topLine="12" />
 	</File>
-	<File name="Stereovision.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="3164" topLine="75" />
+	<File name="Stereovision.cpp" open="1" top="1" tabpos="4">
+		<Cursor position="6163" topLine="40" />
 	</File>
 	<File name="Stereovision.hpp" open="1" top="0" tabpos="3">
-		<Cursor position="510" topLine="0" />
+		<Cursor position="389" topLine="0" />
 	</File>
-	<File name="colorSegmentation.c" open="1" top="0" tabpos="10">
-		<Cursor position="571" topLine="0" />
-	</File>
-	<File name="colorSegmentation.h" open="1" top="0" tabpos="9">
-		<Cursor position="0" topLine="0" />
-	</File>
-	<File name="main.cpp" open="1" top="1" tabpos="2">
-		<Cursor position="612" topLine="0" />
+	<File name="main.cpp" open="1" top="0" tabpos="2">
+		<Cursor position="52" topLine="0" />
 	</File>
 	<File name="makefile" open="1" top="0" tabpos="1">
-		<Cursor position="527" topLine="0" />
+		<Cursor position="448" topLine="3" />
 	</File>
 </CodeBlocks_layout_file>

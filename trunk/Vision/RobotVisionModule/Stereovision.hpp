@@ -6,6 +6,9 @@
 #include "Camera.hpp"
 #include "GenericImageProcessing.hpp"
 
+#define CAMERA_MODE 0
+#define VIDEO_FILE_MODE 1
+
 using namespace std;
 
 class Stereovision
@@ -19,12 +22,13 @@ class Stereovision
         void CalibrateStereo () {;}
 
         // Mandatory
-        void Setup();
+        void Setup(int mode);
         void Run();
 
         // different video processing tools
         void RawDisplay();
         void CannyEdgeDetection();
+        void FloodFilling();
         void test();
 
     protected:
