@@ -15,32 +15,48 @@ Stereovision::~Stereovision()
 }
 
 // connect sources, external..
-void Stereovision::Setup()
+void Stereovision::Setup(int mode)
 {
     try{
-        /////////// setup leftt camera //////////////
-        // from file
-        //m_LeftCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//ground1//Vid_Left_0.avi");
-         // from camera
-        m_LeftCamera = new Camera(0);
-        if(!m_LeftCamera->isOpened()){
-            cerr<<"Fail to open the left camera !"<<endl;
-            throw (new std::exception());
-        }
 
-        /////////// setup right camera //////////////
-        // from file
-        //m_RightCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//ground1//Vid_Right_0.avi");
-        // from camera
-        m_RightCamera = new Camera(1);
-        if(!m_RightCamera->isOpened()){
-            cerr<<"Fail to open the right camera !"<<endl;
-            throw (new std::exception());
+        if(mode == CAMERA_MODE){  // setup from camera
+
+            // left
+            m_LeftCamera = new Camera(0);
+            if(!m_LeftCamera->isOpened()){
+                cerr<<"Fail to open the left camera !"<<endl;
+                throw (new std::exception());
+            }
+            // right
+            m_RightCamera = new Camera(1);
+            if(!m_RightCamera->isOpened()){
+                cerr<<"Fail to open the right camera !"<<endl;
+                throw (new std::exception());
+            }
+        }
+        else if(mode == VIDEO_FILE_MODE){ // setup from file
+
+            // left
+            m_LeftCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//ground1//Vid_Left_0.avi");
+            if(!m_LeftCamera->isOpened()){
+                cerr<<"Fail to open the left video !"<<endl;
+                throw (new std::exception());
+            }
+            // right
+            m_RightCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//ground1//Vid_Right_0.avi");
+            if(!m_RightCamera->isOpened()){
+                cerr<<"Fail to open the right video !"<<endl;
+                throw (new std::exception());
+            }
+        }
+        else{
+            cerr<<"\nNo video source specified !"; exit(1);
         }
     }
     catch(std::exception e){
         cerr<<e.what(); exit(1);
     }
+    cout<<"Sources initialised successfuly\n";
 }
 
 
@@ -140,6 +156,74 @@ void Stereovision::CannyEdgeDetection()
         cv::imshow( "Canny Left", frameL );
         cv::imshow( "Canny Right", frameR );
     }
+}
+
+void Stereovision::FloodFilling()
+{
+    cv::Mat image0 = cv::imread("//host//TRAVAIL//M2//Vision//Echantillons//stereo_images//Img_right_4.jpg",1);
+
+    cv::Mat image, gray, mask;
+    int ffillMode = 1;
+    int loDiff = 20, upDiff = 20;
+    int connectivity = 4;
+    int isColor = true;
+    bool useMask = true;
+    int newMaskVal = 255;
+
+
+    image0.copyTo(image);
+    cv::cvtColor(image0, gray, CV_BGR2GRAY);
+
+
+    cv::Point seed = cv::Point(300,350);
+    int lo = ffillMode == 0 ? 0 : loDiff;
+    int up = ffillMode == 0 ? 0 : upDiff;
+    int flags = connectivity + (newMaskVal << 8) +
+                (ffillMode == 1 ? CV_FLOODFILL_FIXED_RANGE : 0);
+    int b = (unsigned)cv::theRNG() & 255;
+    int g = (unsigned)cv::theRNG() & 255;
+    int r = (unsigned)cv::theRNG() & 255;
+    cv::Rect ccomp;
+
+    cv::Scalar newVal = isColor ? cv::Scalar(b, g, r) : cv::Scalar(r*0.299 + g*0.587 + b*0.114);
+    cv::Mat dst = isColor ? image : gray;
+    int area;
+
+    //mask
+    mask.create(image0.rows+2, image0.cols+2, CV_8UC1);
+
+    cv::rectangle(mask, cv::Point(200,100), cv::Point(300,300), cv::Scalar(b, g, r));
+    cv::rectangle(mask, cv::Point(350,100), cv::Point(500,300), cv::Scalar(b, g, r));
+
+    cv::imshow( "mask", mask );
+    cv::waitKey(0);
+
+    if( useMask )
+    {
+        //cv::threshold(mask, mask, 1, 128, CV_THRESH_BINARY);
+
+
+        area = cv::floodFill(dst, mask, seed, newVal, &ccomp, cv::Scalar(lo, lo, lo),
+                  cv::Scalar(up, up, up), flags);
+        cv::imshow( "mask", mask );
+    }
+    else
+    {
+        area = cv::floodFill(dst, seed, newVal, &ccomp, cv::Scalar(lo, lo, lo),
+                  cv::Scalar(up, up, up), flags);
+    }
+
+
+
+    cv::namedWindow( "image", 1 );
+    cv::imshow("image", isColor ? image : gray);
+
+
+    cv::imshow("image", dst);
+    cout << area << " pixels were repainted\n";
+
+        cv::waitKey(0);
+
 }
 
 // main routine of the video processing module

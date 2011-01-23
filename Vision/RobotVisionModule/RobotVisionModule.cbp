@@ -40,10 +40,6 @@
 		<Unit filename="GenericImageProcessing.hpp" />
 		<Unit filename="Stereovision.cpp" />
 		<Unit filename="Stereovision.hpp" />
-		<Unit filename="colorSegmentation.c">
-			<Option compilerVar="CC" />
-		</Unit>
-		<Unit filename="colorSegmentation.h" />
 		<Unit filename="include/colorsegmentation.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="makefile" />
