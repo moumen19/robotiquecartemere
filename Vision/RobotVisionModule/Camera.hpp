@@ -1,10 +1,13 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
+#include <opencv/cv.h>
 #include <opencv2/highgui/highgui.hpp>
 
 #include <string>
 #include <iostream>
+#include <fstream>
+
 
 ///////////////// Values for recording modes ////////////
 #define WAITING_TIME_MS 1000 // 2 ms minimum between frames
@@ -33,17 +36,20 @@ class Camera: public cv::VideoCapture
         void SetVideoCapture(bool activated);
 
         // useful for stereovision
-        void Calibrate(){;}
+        void CalibrateFromImageSet(){;}
+        void CalibrateFromCamera();
         void UndistorFrame(){;} // useful, even if imperfections can't be seen?
         void LoadIntrinsec(const string &filename){;}
         void LoadExtrasec(const string &filename){;}
+        void SaveMatrix(const string &filename);
+
 
     protected:
         string m_Name;
         // communication protocole: e.g USB for camera, none for file
         this->r
         cv::Mat m_intrinsecMatrix;
-        cv::Mat m_extrasinceMatrix;
+        cv::Mat m_distortionMatrix;
 
         // to record frames
         bool m_ImageCaptureActivated;
