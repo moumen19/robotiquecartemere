@@ -15,7 +15,12 @@ GenericImageProcessing::~GenericImageProcessing()
 cv::Mat GenericImageProcessing::Canny(cv::Mat image, bool displaySettingsActivated)
 {
     cv::Mat frame;
-    cv::cvtColor(image, frame, CV_BGR2GRAY);
+
+    if(image.channels() > 1)
+        cv::cvtColor(image, frame, CV_BGR2GRAY);
+    else
+        image.copyTo(frame);
+
     // sigma = 1.5
     // ksize = (sigma * 5)|1 = 7
     cv::GaussianBlur(frame, frame, cv::Size(7,7), 1.5, 1.5);
