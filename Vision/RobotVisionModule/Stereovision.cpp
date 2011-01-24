@@ -38,13 +38,13 @@ void Stereovision::Setup(int mode)
         else if(mode == VIDEO_FILE_MODE){ // setup from file
 
             // left
-            m_LeftCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//capture2//webcam1.avi");
+            m_LeftCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//ground1//Vid_Left_1.avi");
             if(!m_LeftCamera->isOpened()){
                 cerr<<"Fail to open the left video !"<<endl;
                 throw (new std::exception());
             }
             // right
-            m_RightCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//capture2//webcam2.avi");
+            m_RightCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//ground1//Vid_Right_1.avi");
             if(!m_RightCamera->isOpened()){
                 cerr<<"Fail to open the right video !"<<endl;
                 throw (new std::exception());
@@ -199,10 +199,10 @@ void Stereovision::FloodFilling()
 
     cv::Mat image, gray, mask;
     int ffillMode = 1;
-    int loDiff = 60, upDiff = 25;
+    int loDiff = 60, upDiff = 20;
     int connectivity = 4;
     int isColor = true;
-    bool useMask = false;
+    bool useMask = true;
     int newMaskVal = 255;
 
     int lo = ffillMode == 0 ? 0 : loDiff;
@@ -217,7 +217,7 @@ void Stereovision::FloodFilling()
 
     // initialisation
     AcquireFrames();
-    cv::Point seed = cv::Point(m_LeftFrame.cols/2 ,m_LeftFrame.rows -2);
+    cv::Point seed = cv::Point(m_LeftFrame.cols/2 ,m_LeftFrame.rows -10);
     mask.create(m_LeftFrame.rows+2, m_LeftFrame.cols+2, CV_8UC1);
 
 
@@ -247,6 +247,7 @@ void Stereovision::FloodFilling()
 
 
         if( useMask ) {
+            cv::dilate(mask,mask,cv::Mat(),cv::Point(-1,-1),1);
             cv::threshold(mask, mask, 1, 128, CV_THRESH_BINARY);
             area = cv::floodFill(dst, mask, seed, newVal, &ccomp, cv::Scalar(lo, lo, lo), cv::Scalar(up, up, up), flags);
         }
@@ -261,7 +262,7 @@ void Stereovision::FloodFilling()
         }
 
         if(m_videoBeingRecorded){ // records the video
-           m_LeftVideoWriter << m_LeftFrame;
+           m_LeftVideoWriter << dst;
            m_RightVideoWriter << m_RightFrame;
            cout<< "recording vid ..." <<endl;
         }
