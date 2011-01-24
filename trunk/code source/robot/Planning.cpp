@@ -100,8 +100,8 @@ void Planning::flou()
 			msg = boost::any_cast<messageSensor>(a_environmentData.get(58, DataOption::LAST, in));
 			capteurs[6] += (float)msg.data.getValue()/1000;
 
-			//msg = boost::any_cast<messageSensor>(a_environmentData.get(62, DataOption::LAST, in));//
-			//capteurs[9] += (float)msg.data.getValue()/1000;//
+			msg = boost::any_cast<messageSensor>(a_environmentData.get(62, DataOption::LAST, in));//
+			capteurs[9] += (float)msg.data.getValue()/1000;//
 		}
 
 		capteurs[0] /= 1;
@@ -122,15 +122,16 @@ void Planning::flou()
 		float *y = new float;
 		float *position_angle = new float;
 
-		*x = msgA.y.value;
-		*y = -1*msgA.x.value;
+		*x = msgA.y.value/100;
+		*y = -1*msgA.x.value/100;
 		*position_angle = -1*msgA.alpha.value;
 
 		Point vitesse;
 	
-		floue(capteurs, x, y, position_angle, 3, 0, &vitesse.x, &vitesse.y);
+		//floue(capteurs, x, y, position_angle, 3, 5, &vitesse.x, &vitesse.y);
+		floue(capteurs, x, y, position_angle, 5, -3, &vitesse.x, &vitesse.y);
 		
-		//_DISPLAY(vitesse.x << " | " << vitesse.y);
+		//_DISPLAY(10*vitesse.x << " | " << 10*vitesse.y << std::endl);
 
 		a_trajectory.push_back(vitesse);
 	}

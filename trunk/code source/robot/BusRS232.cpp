@@ -161,7 +161,6 @@ void BusRS232::receive()
 					this->a_mutex.lock();
 					buffer = this->a_rs232.ReadByte(0);	// On recupere un octet (timeout = 0 : processus bloquant)
 					//_DISPLAY(buffer << std::endl);
-					//boost::interprocess::scoped_lock<boost::mutex> lock(a_mutex, boost::interprocess::try_to_lock);
 					this->a_buffer << buffer;		// On ajoute un octet au buffer
 					this->a_mutex.unlock();			// On deverouille le mutex
 				}
@@ -203,7 +202,6 @@ boost::any BusRS232::onReceive()
 	if(!this->isDataAvailable())
 		_DEBUG("Pas de donnée disponible...", WARNING);	// A remplacer par une vraie excpetion
 
-	//boost::interprocess::scoped_lock<boost::mutex> lock(a_mutex, boost::interprocess::try_to_lock);	
 	this->a_mutex.lock();			// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 	unsigned char c;
 	this->a_buffer >> c; 			// On recupere un octet
@@ -221,9 +219,7 @@ boost::any BusRS232::onReceive()
  * @see onReceive()
  */
 bool BusRS232::isDataAvailable()
-{
-	//boost::interprocess::scoped_lock<boost::mutex> lock(a_mutex, boost::interprocess::try_to_lock);
-					
+{					
 	this->a_mutex.lock();					// On protege les donnees (a_buffer, a_bufferWriteCursor, a_bufferReadCursor)
 	int bufferAvailable = a_buffer.dataAvailable();		// On recupere le nombre d'octet non lu
 	this->a_mutex.unlock();					// On deverouille le mutex

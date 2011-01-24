@@ -26,10 +26,13 @@
 	#include "Communication.hpp"
 	#include "Sensors.hpp"
 
+	/**
+ 	 * Enumeration de configuration du thread principal du robot robot
+	 */
 	enum Robot_Configuration
 	{
-		ACTIVE_MAIN_THREADING,
-		DESACTIVE_MAIN_THREADING
+		ACTIVE_MAIN_THREADING,		// Cree un thread a part pour le robot
+		DESACTIVE_MAIN_THREADING	// Utilise le thread principal pour le robot
 	};
 
 	/**
@@ -53,7 +56,7 @@
 			void stop();								// Desactive le robot
 			void wait();								// Attend jusqu'a ce que le robot soit desactive
 
-			void test(int i = 0);//////////
+			//void test(int i = 0);//////////
 
 		protected:
 			void run();								// Thread traitant les donnees capteurs et planifiant la trajectoire

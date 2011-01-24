@@ -34,7 +34,7 @@ Robot::Robot(Robot_Configuration config) :
 	a_sensors.addSensor(56, "US5", 2);
 	a_sensors.addSensor(58, "US6", 2);
 	a_sensors.addSensor(60, "US7", 2);
-	//a_sensors.addSensor(62, "US8", 2);
+	a_sensors.addSensor(62, "US8", 2);
 
 	/*a_sensors.addSensor(80, "IR1", 2);	
 	a_sensors.addSensor(83, "IR2", 2);
@@ -176,6 +176,9 @@ void Robot::run()
 			msg = boost::any_cast<messageSensor>(a_sensorsData.get(60, DataOption::LAST));
 			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());
 
+			msg = boost::any_cast<messageSensor>(a_sensorsData.get(62, DataOption::LAST));
+			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());
+
 			msg = boost::any_cast<messageSensor>(a_sensorsData.get(144, DataOption::LAST));
 			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());//*/
 		}
@@ -184,19 +187,16 @@ void Robot::run()
 			//_DEBUG(e.what(), WARNING);
 		}
 
-		this->a_planning.run();
+		this->a_planning.run();		// Lance l'algo de planification
 
 		try
 		{		
 			Point p = a_planning.get();
-			a_communication.send(Port::ASSERVISSEMENT, 10*p.x, 10*p.y, 0, 4);
+			a_communication.send(Port::ASSERVISSEMENT, 10*p.x, 10*p.y, 0, 4);	// Envoi a l'asservissement les commandes de deplacement roue gauche/droite
 		}
 		catch(std::exception & e)
 		{
-
 		}
-			
-		//_DEBUG("Robot", INFORMATION);
 	}
 
 	delete a_rendererSensor;
@@ -205,8 +205,8 @@ void Robot::run()
 	_DEBUG("Fin de la routine de calcul des trajectoires", INFORMATION);
 }
 
-void Robot::test(int i)
+/*void Robot::test(int i)
 {
 	this->a_communication.test(i);
-}
+}*/
 
