@@ -18,6 +18,9 @@
 	#include "Constraint.hpp"
 	#include "Data.hpp"
 
+	/**
+ 	 * Enumeration des differentes strategies
+ 	 */
 	enum Strat
 	{
 		NONE,
@@ -26,25 +29,30 @@
 		GO_AHEAD
 	};
 
+	/**
+ 	 * Class gerant la strategie en cours
+	 */
 	class Strategy
 	{
 		public:
-			Strategy(Data &, Constraint &);
-			~Strategy();
+			Strategy(Data &, Constraint &);	// Constructeur
+			~Strategy();			// Destructeur
 
-			void init(Strat);
-			Strat get();
-			void set(Strat);
+			void init(Strat);		// Initialisation de la strategie
+			Strat get();			// Retourne la strategie en cours
+			void set(Strat);		// Definie la strategie
 	
-			void bau_on();
-			void bau_off();
-			void go_ahead();
+		protected:
+			void bau_on();			// Strategie BAU activee
+			void bau_off();			// Strategie BAU relache
+			void go_ahead();		// Strategie principale
 
 		private:
-			Constraint & a_constraint;
-			Data & a_environmentData;
-			Strat a_strategy;
-			Strat a_strategySave;
+			Constraint & a_constraint;	// Module de contraitnes
+			Data & a_environmentData;	// Module des donnees d'environnement
+
+			Strat a_strategy;		// Strategie en cours
+			Strat a_strategySave;		// Strategie sauvegarder
 	};
 
 #endif

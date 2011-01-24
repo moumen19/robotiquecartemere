@@ -12,6 +12,11 @@
 
 #include "Strategy.hpp"
 
+/** 
+ * Constructeur
+ * @param environment - le module de stockage de donnees de l'environnement
+ * @param constraint - le module de contraintes
+ */
 Strategy::Strategy(Data & environment, Constraint & constraint) :
 	a_constraint(constraint),
 	a_environmentData(environment)
@@ -20,22 +25,37 @@ Strategy::Strategy(Data & environment, Constraint & constraint) :
 	_DEBUG("Initialisation du module de strategie", INFORMATION);
 }
 
+/**
+ * Destructeur
+ */
 Strategy::~Strategy()
 {
 	_DEBUG("Destruction du module de strategie", INFORMATION);
 }
 
+/**
+ * Methode qui initialise la strategie
+ * @param strategy - la strategie
+ */
 void Strategy::init(Strat strategy)
 {
 	a_strategySave = strategy;
 	this->set(strategy);
 }
 
+/**
+ * Methode retournant la strategie en cours
+ * @return la strategie en cours
+ */
 Strat Strategy::get()
 {
 	return this->a_strategy;
 }
 
+/**
+ * Methode definissant la strategie a adopter
+ * @param strategie - la strategie a adopter
+ */
 void Strategy::set(Strat strategy)
 {
 	switch(strategy)
@@ -54,6 +74,9 @@ void Strategy::set(Strat strategy)
 	}
 }
 
+/**
+ * Strategie BAU active
+ */
 void Strategy::bau_on()
 {
 	if(this->get() != BAU_ON)
@@ -64,6 +87,9 @@ void Strategy::bau_on()
 	}
 }
 
+/**
+ * Strategie BAU desactive
+ */
 void Strategy::bau_off()
 {
 	if(this->a_strategySave != this->get())
@@ -73,6 +99,9 @@ void Strategy::bau_off()
 	}
 }
 
+/**
+ * Strategie principale
+ */
 void Strategy::go_ahead()
 {
 	_DEBUG("Strategy GO_AHEAD active", INFORMATION);

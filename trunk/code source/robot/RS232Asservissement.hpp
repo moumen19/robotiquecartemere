@@ -45,7 +45,7 @@
 	class RS232Asservissement : public BusRS232
 	{
 		public:
-			RS232Asservissement(std::string port = "/dev/ttyUSB0");
+			RS232Asservissement(std::string port = "/dev/ttyUSB0");	// Constructeur
 			virtual ~RS232Asservissement();	// Destructeur virtuel
 			virtual bool isDataAvailable();	// Teste si une donnée provenant de l'asservissement est présente dans le buffer circulaire 
 			static const int messageSize;	// Taille du message asservissement

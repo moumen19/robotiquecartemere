@@ -14,8 +14,11 @@
 
 #include <boost/interprocess/sync/scoped_lock.hpp>
 
-const int RS232Asservissement::messageSize = 14;
+const int RS232Asservissement::messageSize = 14;	// Taille du message asservissement
 
+/**
+ * Constructeur
+ */
 RS232Asservissement::RS232Asservissement(std::string port) :
 	BusRS232(port)
 

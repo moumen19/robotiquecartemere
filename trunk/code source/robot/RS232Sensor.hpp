@@ -39,15 +39,15 @@
 	{
 		public:
 			RS232Sensor(Sensors &, std::string port = "/dev/ttyUSB0");			// Constructeur
-			virtual ~RS232Sensor();			// Destructeur virtuel
-			virtual bool isDataAvailable();		// Teste si une donnée provenant des capteurs est présente dans le buffer circulaire 
+			virtual ~RS232Sensor();								// Destructeur virtuel
+			virtual bool isDataAvailable();							// Teste si une donnée provenant des capteurs est présente dans le buffer circulaire 
 
 		protected:
 			virtual SerialPort::DataBuffer onSend(const boost::any &);	// Methode appele a l'appel de send() (transforme la donnee capteur en tableau de char)
 			virtual boost::any onReceive();					// Methode appele a l'appel de getData() (transforme les octets du buffer en donnee capteur)
 
 		private:
-			Sensors & a_sensors;
+			Sensors & a_sensors;			// Module des capteurs
 	};
 
 #endif
