@@ -28,7 +28,9 @@ class GenericImageProcessing
         // Sobel
         // Laplace
         static cv::Mat Canny(cv::Mat image, bool settingsActivated);
-        static cv::Mat findContours(){return cv::Mat();} // Only on binary images !
+        static cv::Mat FindContours(){return cv::Mat();} // Only on binary images !
+        static cv::Mat ColorSegmentation(cv::Mat imageToSegment, cv::Scalar colorToFind, bool displaySettingsActivated);
+        static cv::Mat MorphologyEx(cv::Mat binaryImage, int operation, const cv::Mat& element =cv::Mat(), cv::Point anchor =cv::Point(-1,-1), int iterations =1);
 
         /////////// Segmentation
         // color segmentation => click on a pixel to set the color center (thresholds 2x HSV)

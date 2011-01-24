@@ -472,3 +472,41 @@ void Stereovision::test()
 //    cv::Mat corner_mask = corners == dilated_corners;
 
 }
+
+void Stereovision::BlobTracking(cv::Scalar colorToTrack)
+{
+    char keyPressed = -1;
+    cv::namedWindow( "rawDisplay_Left", CV_WINDOW_AUTOSIZE);
+    cv::namedWindow( "rawDisplay_Right", CV_WINDOW_AUTOSIZE);
+    cv::Mat SegmentedLeft, SegmentedRight;
+
+    while(true)
+    {
+        // takes one frame of each Camera
+        if(!AcquireFrames()) break;
+
+        ///////////////* Color Segmentation *//////////////////////////////////
+        SegmentedLeft = GenericImageProcessing::ColorSegmentation(m_LeftFrame, colorToTrack, false);
+        SegmentedRight = GenericImageProcessing::ColorSegmentation(m_RightFrame, colorToTrack, false);
+
+        SegmentedLeft = GenericImageProcessing::MorphologyEx(SegmentedLeft, cv::MORPH_CLOSE, cv::Mat(), cv::Point(-1,-1), 3 );
+        ///////////////////////////////////////////////////////////////////////
+
+        keyPressed = cv::waitKey(WAITING_TIME_MS);
+        if(keyPressed != -1){   // if a key is pressed,
+            if(!GetUserInputs(keyPressed)) break; // get the key value
+        }
+
+        if(m_videoBeingRecorded){ // recording video
+           m_LeftVideoWriter << SegmentedLeft;
+           m_RightVideoWriter << SegmentedRight;
+           cout<< "recording vid ..." <<endl;
+        }
+
+        // display
+        cv::imshow( "rawDisplay_Left", SegmentedLeft );
+        cv::imshow( "rawDisplay_Right", SegmentedRight );
+    }
+}
+
+
