@@ -7,7 +7,7 @@
 #include <iostream>
 
 ///////////////// Values for recording modes ////////////
-#define WAITING_TIME_MS 50 // 2 ms minimum between frames
+#define WAITING_TIME_MS 1000 // 2 ms minimum between frames
 #define RECORDING_FPS 10.0
 
 #define STOP_DISPLAY_KEY 27 // Escape
@@ -41,7 +41,7 @@ class Camera: public cv::VideoCapture
     protected:
         string m_Name;
         // communication protocole: e.g USB for camera, none for file
-
+        this->r
         cv::Mat m_intrinsecMatrix;
         cv::Mat m_extrasinceMatrix;
 
