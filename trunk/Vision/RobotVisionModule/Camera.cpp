@@ -47,11 +47,12 @@ void Camera::CalibrateFromCamera()
 	CvSize board_sz = cvSize( board_w, board_h );
 
 	// CvCapture* capture = cvCaptureFromCAM(CV_CAP_ANY);
-	CvCapture* capture = cvCreateCameraCapture( 0 );
-	//cvSetCaptureProperty( capture, CV_CAP_PROP_MODE, MODE_640x480_YUV411 );
-	assert( capture );
+	cv::Mat capture;
 
-	cvNamedWindow( "Calibration" );
+	//cvSetCaptureProperty( capture, CV_CAP_PROP_MODE, MODE_640x480_YUV411 );
+	//assert( capture );
+
+	cv::namedWindow("Calibration", CV_WINDOW_AUTOSIZE);
 	// Allocate Sotrage
 	CvMat* image_points		= cvCreateMat( n_boards*board_n, 2, CV_32FC1 );
 	CvMat* object_points		= cvCreateMat( n_boards*board_n, 3, CV_32FC1 );
@@ -64,15 +65,24 @@ void Camera::CalibrateFromCamera()
 	int successes = 0;
 	int step, frame = 0;
 
+    IplImage * image;
+
 	std::cout << "Started calibration of Intrinsic parameters" << std::endl;
 
-	IplImage *image = cvQueryFrame( capture );
+while( successes < n_boards ){
+
+    *this>>capture;
+
+    IplImage tempcapture = capture;
+    image = & tempcapture;
+
+//	IplImage *image = cvQueryFrame( &cvcapture );
 	IplImage *gray_image = cvCreateImage( cvGetSize( image ), 8, 1 );
 
 	// Capture Corner views loop until we've got n_boards
 	// succesful captures (all corners on the board are found)
 
-	while( successes < n_boards ){
+
 		// Skip every board_dt frames to allow moving the chessboard
 		if( frame++ % board_dt == 0 ){
 			// Find chessboard corners:
@@ -105,16 +115,20 @@ void Camera::CalibrateFromCamera()
 
 		// Handle pause/unpause and ESC
 		int c = cvWaitKey( 15 );
-		if( c == 'p' ){
+
+	 if( c == 'p' ){
 			c = 0;
 			while( c != 'p' && c != 27 && c!= 'x' ){
 				c = cvWaitKey( 250 );
 			}
-		}
-		if( c == 'x' || c == 27 );
-			return ;
 
-		image = cvQueryFrame( capture ); // Get next image
+		}
+//		if( c == 'x' || c == 27 );
+//			return ;
+
+//	IplImage tempcapture = capture;
+//    IplImage * image = & tempcapture; // Get next image
+
 	} // End collection while loop
 
 	// Allocate matrices according to how many chessboards found
@@ -160,13 +174,21 @@ void Camera::CalibrateFromCamera()
 void Camera::SaveMatrix(const string &filename)
 {
 
-    cv::FileStorage intrinsec("Parameters\\Intrinsecs" + filename  +  ".xml", cv::FileStorage::WRITE);
+    cv::FileStorage intrinsec("Parameters//Intrinsecs" + filename  +  ".xml", cv::FileStorage::WRITE);
+    if (!intrinsec.isOpened())
+    {  intrinsec.open("Parameters//Intrinsecs" + filename  +  ".xml", FileStorage::WRITE);
+        intrinsec << m_intrinsecMatrix;
+        intrinsec.release();
+    }
 
-    intrinsec << m_intrinsecMatrix;
+    cv::FileStorage distortion("Parameters//Distortion" + filename  +  ".xml", cv::FileStorage::WRITE);
+    if (!distortion.isOpened())
+    {  distortion.open("Parameters//Distortion" + filename  +  ".xml", FileStorage::WRITE);
+        distortion << m_distortionMatrix;
+        distortion.release();
+    }
 
-    cv::FileStorage distortion("Parameters\\Distortion" + filename  +  ".xml", cv::FileStorage::WRITE);
-
-    distortion << m_distortionMatrix;
+	std::cout << "Success: Saved..." << std::endl;
 
 }
 
