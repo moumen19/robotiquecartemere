@@ -10,6 +10,7 @@
  *
  */
 
+// Non utilise actuellement
 #include "Constraint.hpp"
 
 Constraint::Constraint()

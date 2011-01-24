@@ -138,7 +138,8 @@ void display::changeDistanceUS(int id, float dist)
 	else if(dist <= 150)
 	{
 		color = sf::Color::Red;
-		dist = 140;
+		if(dist != 0)
+			dist = 140;
 	}
      //std::cout << dist << std::endl;
 	//_window->Clear();

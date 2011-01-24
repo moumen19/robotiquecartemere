@@ -10,6 +10,7 @@
  *
  */
 
+// Non utilise actuellement
 #ifndef DEF_CONSTRAINT
 #define DEF_CONSTRAINT
 

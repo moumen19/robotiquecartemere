@@ -13,6 +13,14 @@
 #include "Communication.hpp"
 #include <sstream>
 
+/**
+ * Constructeur
+ * @param sensors - Module des capteurs
+ * @param sensorsData - Module des données capteurs
+ * @param environment - Module de données environnement
+ * @param strategy - Module de strategie
+ * @param planning - Module de planification
+ */
 Communication::Communication(Sensors & sensors, Data & sensorsData, Data & environment, Strategy & strategy, Planning & planning) :
 	a_sensors(sensors),
 	a_sensorsData(sensorsData),
@@ -29,13 +37,23 @@ Communication::Communication(Sensors & sensors, Data & sensorsData, Data & envir
 
 	_DEBUG("Initialisation du module de communication", INFORMATION);
 }
-
+/**
+ * Destructeur
+ */
 Communication::~Communication()
 {
 	this->stop();
 	_DEBUG("Destruction du module de communication", INFORMATION);
 }
 
+/**
+ * Methode envoyant un message à un peripherique (seul l'asservissement est implemente)
+ * @param port - le nom du peripherique
+ * @param vg - vitesse gauche
+ * @param vd -  vitesse droite
+ * @param a - angle
+ * @param c - commande
+ */
 void Communication::send(Port::Port port, int vg, int vd, int a, int c)
 {
 	if(port == Port::ASSERVISSEMENT)
@@ -50,49 +68,59 @@ void Communication::send(Port::Port port, int vg, int vd, int a, int c)
 	}
 	else if(port == Port::SENSOR)
 	{
-		//this->a_RS232Sensor->send(msg);
+		
 	}
 	else
 		_DEBUG("Envoie des données à un port non existant !", WARNING);
 }
 
-/*void Communication::receive()
-{
-
-}*/
-
+/**
+ * Test si le thread est lance
+ * @return true si le thread est lance, false sinon
+ */
 bool Communication::isActive()
 {
 	return this->a_thread_active;
 }
 
+/**
+ * Demarre le thread
+ */
 void Communication::start()
 {
 	this->a_thread_active = true;
 	a_thread = new boost::thread(&Communication::run, this);
 }
 
+/**
+ * Arrete le thread
+ */
 void Communication::stop()
 {
 	this->a_thread_active = false;
 }
 
+/**
+ * Methode execute par le thread
+ * Cette methode recupere et traite les differents messages provenant des peripheriques
+ */
 void Communication::run()
 {
 	_DEBUG("Debut de la routine d'ecoute des ports de communications", INFORMATION);
 	bool stop_BAU = false;
 	bool stop_obs = false;
 
-	//this->test(4);
+	// Tant qu'on a pas arrete le thread
 	while(this->a_thread_active)
 	{
+		// Recuperation du message asservissement
 		if(this->a_RS232Asservissement.isDataAvailable())
 		{
 			try
 			{
 				messageAsservissement msg = boost::any_cast<messageAsservissement>(this->a_RS232Asservissement.getData());
 				
-				//_DISPLAY((int)msg.id << " : ");
+				_DISPLAY((int)msg.id << " : ");
 				/*
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.x.data[i] << " : ");
@@ -102,9 +130,10 @@ void Communication::run()
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.alpha.data[i] << " : ");
 				//*/
-				//_DISPLAY(msg.x.value << " : " << msg.y.value << " : " << msg.alpha.value << " : ");
-				//_DISPLAY((int)msg.commande << std::endl);
+				_DISPLAY(msg.x.value << " : " << msg.y.value << " : " << msg.alpha.value << " : ");
+				_DISPLAY((int)msg.commande << std::endl);
 
+				// Traitement du message				
 				switch(msg.commande)
 				{
 					case 7:
@@ -122,6 +151,7 @@ void Communication::run()
 
 		}
 
+		// Recuperation du message capteur
 		if(this->a_RS232Sensor.isDataAvailable())
 		{
 			try
@@ -129,10 +159,10 @@ void Communication::run()
 				boost::any msg_boost = this->a_RS232Sensor.getData();
 				messageSensor msg = boost::any_cast<messageSensor>(msg_boost);
 				
+				// Stockage du message capteur dans le module de stockage de donnee capteur
 				a_sensorsData.set((int)msg.id_sensor, msg);
 
-if(true && (int)msg.id_sensor == 144)
-{
+
 				//_DISPLAY((int)msg.id << " : ");
 				//_DISPLAY((int)msg.id_sensor << " : ");
 				/*
@@ -145,15 +175,18 @@ if(true && (int)msg.id_sensor == 144)
 				//*/
 				//_DISPLAY(msg.time.getValue() << " : " << msg.data.getValue() << " : " << msg.crc.getValue());
 				//_DISPLAY(std::endl);
+				
 
-				//*
+				// Traitement du message capteur
 				messageAsservissement msgSend;
 				switch(msg.id_sensor)
 				{
+					// Capteur BAU
 					case 144:
 						if(msg.data.getValue() == 0)
 						{
-							if(stop_BAU == true)
+							// Desactivation de l'arret d'urgence
+							if(stop_BAU == true && stop_obs == false)
 							{
 								a_strategy.set(BAU_OFF);
 								msgSend.id = 42;
@@ -168,6 +201,7 @@ if(true && (int)msg.id_sensor == 144)
 						}
 						else
 						{
+							// Activation de l'arret d'urgence
 							if(stop_BAU == false)
 							{
 								a_strategy.set(BAU_ON);
@@ -181,77 +215,72 @@ if(true && (int)msg.id_sensor == 144)
 							}
 							stop_BAU = true;
 						}
-						///*
+						// Pingage des codeuse à chaque fois que l'on reçoit le message BAU
 						msgSend.id = 42;
 						msgSend.x.value = 0;
 						msgSend.y.value = 0;
 						msgSend.alpha.value = 0;
 						msgSend.commande = 7;
-						this->a_RS232Asservissement.send(msgSend);//*/
+						this->a_RS232Asservissement.send(msgSend);
+						break;
+					// Arret d'urgence capteurs
+					case 48:
+					case 50:
+					case 52:
+					case 54:
+					case 56:
+					case 58:
+					case 60:
+					case 62:
+						if(msg.data.getValue() <= 150)	// Si un obstacle est trop proche d'un capteur, il entre en arret d'urgence
+						{
+							if(stop_obs == false)
+							{
+								messageAsservissement msgSend;
+								msgSend.id = 42;
+								msgSend.x.value = 0;
+								msgSend.y.value = 0;
+								msgSend.alpha.value = 0;
+								msgSend.commande = 8;
+								this->a_RS232Asservissement.send(msgSend);
+								_DEBUG("STOP D'URGENCE !!! Obstacle trop proche", INFORMATION);
+							}
+							stop_obs = true;
+						}
+						else
+						{
+							if(stop_BAU == false && stop_obs == true)
+							{
+								messageAsservissement msgSend;
+								msgSend.id = 42;
+								msgSend.x.value = 5;
+								msgSend.y.value = 5;
+								msgSend.alpha.value = 0;
+								msgSend.commande = 9;
+								this->a_RS232Asservissement.send(msgSend);
+								_DEBUG("Arret d'urgence desactive", INFORMATION);
+								stop_obs = false;
+							}
+						}
 						break;
 					default:
 						break;
 						//_DEBUG("Le message capteur n'a pas pu etre traite...", WARNING);
 				}
-				//*/
-}
 			}
 			catch(std::exception & e)
 			{
 				_DEBUG(e.what(), WARNING);
 			}
-
-		}
-
-		try
-		{
-			messageSensor msg = boost::any_cast<messageSensor>(a_sensorsData.get(50, DataOption::LAST));
-			if((float)msg.data.getValue() <= 14)
-			{
-				if(stop_obs == false)
-				{
-					messageAsservissement msgSend;
-					msgSend.id = 42;
-					msgSend.x.value = 0;
-					msgSend.y.value = 0;
-					msgSend.alpha.value = 0;
-					msgSend.commande = 8;
-					this->a_RS232Asservissement.send(msgSend);
-					_DISPLAY("STOP D'URGENCE !!! Obstacle à "<<(float)msg.data.getValue()<<" mm"<<std::endl);
-				}
-				stop_obs = true;
-			}
-			else
-			{
-				if(stop_BAU == false && stop_obs == true)
-				{
-					messageAsservissement msgSend;
-					msgSend.id = 42;
-					msgSend.x.value = 5;
-					msgSend.y.value = 5;
-					msgSend.alpha.value = 0;
-					msgSend.commande = 9;
-					this->a_RS232Asservissement.send(msgSend);
-					_DISPLAY("Obstacle : none"<<std::endl);
-					stop_obs = false;
-				}
-			}
-
-		}
-		catch(std::exception & e)
-		{
-		}
-		
-		 	//a_renderer.setSensorDistance(0x30, 50);
-		 	//sleep(2);
-	    	
+		}	    	
 	}
+
 	this->a_RS232Asservissement.close();
 	this->a_RS232Sensor.close();
 	_DEBUG("Fin de la routine d'ecoute des ports de communications", INFORMATION);
 }
 
-void Communication::test(int i)
+/*void Communication::test(int i)
 {
 	//*
 	messageAsservissement msg;
@@ -271,7 +300,7 @@ void Communication::test(int i)
 			std::cin >> vg;
 			std::cout << "Vitesse droite : ";
 			std::cin >> vd;//*/
-			msg.id = 42;
+			/*msg.id = 42;
 			msg.x.value = vg;
 			msg.y.value = vd;
 			msg.alpha.value = 0;
@@ -324,6 +353,6 @@ void Communication::test(int i)
 
 	msg.push_back(4);//*/
 
-	this->a_RS232Asservissement.send(msg);
-}
+/*	this->a_RS232Asservissement.send(msg);
+}*/
 

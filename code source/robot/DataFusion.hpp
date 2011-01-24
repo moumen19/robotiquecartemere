@@ -10,6 +10,7 @@
  *
  */
 
+// Non utilise actuellement
 #ifndef DEF_DATAFUSION
 #define DEF_DATAFUSION
 

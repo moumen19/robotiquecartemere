@@ -10,6 +10,7 @@
  *
  */
 
+// Non utilise actuellement
 #include "DataFusion.hpp"
 
 DataFusion::DataFusion(Data & sensor, Data & environment) :
