@@ -22,32 +22,40 @@
 	#include "Strategy.hpp"
 	#include "Sensors.hpp"
 
+	/**
+ 	 * Structure point/vitesse
+	 */
 	struct Point
 	{
 		float x;
 		float y;
 	};
 
+	/**
+  	 * Classe de planification
+ 	 */
 	class Planning
 	{
 		public:
-			Planning(Data &, Constraint &, Strategy &, Sensors &);
-			~Planning();
+			Planning(Data &, Constraint &, Strategy &, Sensors &);	// Constructeur
+			~Planning();						// Destructeur
 
-			void clearTrajectory();
-			void flou();
+			void clearTrajectory();					// Efface les points de la trajectoire
+			Point get();						// Retourne le dernier point stocke
 
-			Point get();
+			void run();						// Execute la planification
 
-			void run();
+		protected:			
+			void flou();						// Planification flou
 
 		private:
-			Data & a_environmentData;
-			Constraint & a_constraint;
-			Strategy & a_strategy;
-			Sensors & a_sensors;
-			std::vector<Point> a_trajectory;
-			Strat a_lastStrategy;
+			Data & a_environmentData;				// Module de stockage des infos d'environnement
+			Constraint & a_constraint;				// Module de stockage des contraintes
+			Strategy & a_strategy;					// Module de strategie
+			Sensors & a_sensors;					// Module des capteurs
+
+			std::vector<Point> a_trajectory;			// Trajectoire de point ou de vitesse
+			//Strat a_lastStrategy;					// Dernière strategie 
 	};
 
 #endif

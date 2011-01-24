@@ -44,8 +44,6 @@
 			Robot(Robot_Configuration config = ACTIVE_MAIN_THREADING);		// Constructeur
 			~Robot();								// Destructeur
 
-			void interruptuion_arret_urgence();////////////	
-
 			bool isCommunicationActive();						// Teste si le module de communication est lance
 			void startCommunication();						// Lance le dialogue avec les capteurs et l'asservissement
 			void stopCommunication();						// Arrete le dialogue avec les capteurs et l'asservissement
@@ -75,7 +73,7 @@
 			bool a_thread_active;							// Un flag d'arret du thread
 			Robot_Configuration a_threadConfiguration;				// Configuration du multi threading
 
-			display * a_rendererSensor;
+			display * a_rendererSensor;						// Affichage graphique des capteurs
 	};
 
 #endif
