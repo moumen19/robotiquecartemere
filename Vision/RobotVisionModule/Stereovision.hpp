@@ -25,17 +25,41 @@ class Stereovision
         void Setup(int mode);
         void Run();
 
-        // different video processing tools
+        // recurrent functions
+        bool AcquireFrames();
         void RawDisplay();
+        bool GetUserInputs(char key);
+
+        // different video processing tools
+        void ProximityMap();
         void CannyEdgeDetection();
         void FloodFilling();
         void test();
 
+        // Features
+        void MatchCorners();
+        void crossCheckMatching( cv::Ptr<cv::DescriptorMatcher>& descriptorMatcher,
+                         const cv::Mat& descriptors1, const cv::Mat& descriptors2,
+                         vector<cv::DMatch>& filteredMatches12, int knn=1 );
+
     protected:
+        // core vision attributes
         Camera * m_LeftCamera;
         Camera * m_RightCamera;
+        cv::Mat m_LeftFrame;
+        cv::Mat m_RightFrame;
+
+        // optional features
         vector<cv::Mat > m_LeftImageBuffer;
         vector<cv::Mat > m_RightImageBuffer;
+
+        // recording attributes
+        cv::VideoWriter m_LeftVideoWriter;
+        cv::VideoWriter m_RightVideoWriter;
+        bool m_videoBeingRecorded;
+        int m_videoOutputCount;
+        int m_imageOutputCount;
+
 };
 
 #endif // STEREOVISION_H

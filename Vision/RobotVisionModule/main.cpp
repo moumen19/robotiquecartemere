@@ -8,10 +8,11 @@ int main( int argc, char **argv )
 {
     Stereovision system1;
     system1.Setup(VIDEO_FILE_MODE);
-    system1.FloodFilling();
-    //system1.CannyEdgeDetection();
     //system1.RawDisplay();
-    //system1.Run();
+    //system1.FloodFilling();
+    //system1.CannyEdgeDetection();
+    system1.MatchCorners();
+    //system1.ProximityMap();
     //system1.test();
 
 //    Camera cam1;
