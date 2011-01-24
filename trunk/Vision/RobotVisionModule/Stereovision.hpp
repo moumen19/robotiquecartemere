@@ -6,6 +6,10 @@
 #include "Camera.hpp"
 #include "GenericImageProcessing.hpp"
 
+// for previous functions
+#include <opencv/cv.h>
+#include <opencv/highgui.h>
+
 #define CAMERA_MODE 0
 #define VIDEO_FILE_MODE 1
 
@@ -35,6 +39,7 @@ class Stereovision
         void CannyEdgeDetection();
         void FloodFilling();
         void test();
+        void BlobTracking(cv::Scalar colorToTrack);
 
         // Features
         void MatchCorners();

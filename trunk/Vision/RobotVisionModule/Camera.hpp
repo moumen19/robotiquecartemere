@@ -10,8 +10,8 @@
 
 
 ///////////////// Values for recording modes ////////////
-#define WAITING_TIME_MS 1000 // 2 ms minimum between frames
-#define RECORDING_FPS 10.0
+#define WAITING_TIME_MS 2 // 2 ms minimum between frames
+#define RECORDING_FPS 15.0
 
 #define STOP_DISPLAY_KEY 27 // Escape
 #define VIDEO_RECORD_KEY 118 // V
