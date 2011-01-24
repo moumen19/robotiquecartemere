@@ -19,6 +19,7 @@
 ////////////////////////////////////////////////////////
 
 using namespace std;
+using namespace cv;
 
 
 
@@ -47,7 +48,6 @@ class Camera: public cv::VideoCapture
     protected:
         string m_Name;
         // communication protocole: e.g USB for camera, none for file
-        this->r
         cv::Mat m_intrinsecMatrix;
         cv::Mat m_distortionMatrix;
 

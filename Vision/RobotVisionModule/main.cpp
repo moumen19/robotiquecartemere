@@ -6,9 +6,9 @@
 
 int main( int argc, char **argv )
 {
-    Stereovision system1;
-    system1.Setup(CAMERA_MODE);
-    system1.RawDisplay();
+//    Stereovision system1;
+//    system1.Setup(CAMERA_MODE);
+//    system1.RawDisplay();
 
     //system1.FloodFilling();
     //system1.CannyEdgeDetection();
@@ -16,9 +16,12 @@ int main( int argc, char **argv )
     //system1.ProximityMap();
     //system1.test();
 
-//    Camera cam1;
-//    cam1.SetImageCapture(true);
-//    cam1.SetVideoCapture(true);
+    Camera cam1(0);
+    Camera cam2(1);
+    cam1.CalibrateFromCamera();
+    cam1.SaveMatrix("gauche");
+    cam2.CalibrateFromCamera();
+    cam2.SaveMatrix("droite");
 //    cam1.LiveDisplay();
 
 
