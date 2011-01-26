@@ -16,12 +16,14 @@ int main( int argc, char **argv )
     //system1.ProximityMap();
     //system1.test();
 
-    Camera cam1(0);
-    Camera cam2(1);
-    cam1.CalibrateFromCamera();
-    cam1.SaveMatrix("gauche");
-    cam2.CalibrateFromCamera();
-    cam2.SaveMatrix("droite");
+
+      Camera camL;
+      camL.CalibrateFromImageSet();
+//    Camera camR(1);
+//    camL.CalibrateFromCamera();
+//    camL.SaveMatrix("gauche");
+//    camR.CalibrateFromCamera();
+//    camR.SaveMatrix("droite");
 //    cam1.LiveDisplay();
 
 
