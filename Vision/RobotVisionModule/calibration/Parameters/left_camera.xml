@@ -13,7 +13,7 @@
   <dt>f</dt>
   <data>
     1.56113012e-02 -5.93487453e-03 -3.65598616e-03 1.19160500e-03</data></distortion>
-<object_point type_id="opencv-matrix">
+<chessboardplanCoordinates type_id="opencv-matrix">
   <rows>912</rows>
   <cols>3</cols>
   <dt>f</dt>
@@ -151,8 +151,8 @@
     12. 0. 9. 15. 0. 9. 18. 0. 9. 21. 0. 12. 0. 0. 12. 3. 0. 12. 6. 0.
     12. 9. 0. 12. 12. 0. 12. 15. 0. 12. 18. 0. 12. 21. 0. 15. 0. 0. 15.
     3. 0. 15. 6. 0. 15. 9. 0. 15. 12. 0. 15. 15. 0. 15. 18. 0. 15. 21.
-    0.</data></object_point>
-<image_points type_id="opencv-matrix">
+    0.</data></chessboardplanCoordinates>
+<cornersMat type_id="opencv-matrix">
   <rows>912</rows>
   <cols>2</cols>
   <dt>f</dt>
@@ -612,7 +612,11 @@
     2.43550735e+02 2.86199707e+02 2.76642181e+02 2.97496246e+02
     3.10932709e+02 3.09437103e+02 3.45942017e+02 3.21544250e+02
     3.80946960e+02 3.33465393e+02 4.16649414e+02 3.45756500e+02
-    4.52994690e+02 3.58296967e+02 4.90152496e+02 3.71175293e+02</data></image_points>
-<board_sz>
-  640 480</board_sz>
+    4.52994690e+02 3.58296967e+02 4.90152496e+02 3.71175293e+02</data></cornersMat>
+<nbTotalCorners type_id="opencv-matrix">
+  <rows>19</rows>
+  <cols>1</cols>
+  <dt>i</dt>
+  <data>
+    48 48 48 48 48 48 48 48 48 48 48 48 48 48 48 48 48 48 48</data></nbTotalCorners>
 </opencv_storage>

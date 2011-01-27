@@ -6,7 +6,7 @@
 
 int main( int argc, char **argv )
 {
-//    Stereovision system1;
+   Stereovision system1;
 //    system1.Setup(CAMERA_MODE);
 //    system1.RawDisplay();
 
@@ -17,8 +17,11 @@ int main( int argc, char **argv )
     //system1.test();
 
 
-      Camera camL;
-      camL.CalibrateFromImageSet();
+   Camera camL;
+   camL.CalibrateFromImageSet();
+
+   system1.LoadMatrix("left_camera.xml","right_camera.xml");
+   system1.StereoCalibrate();
 //    Camera camR(1);
 //    camL.CalibrateFromCamera();
 //    camL.SaveMatrix("gauche");
