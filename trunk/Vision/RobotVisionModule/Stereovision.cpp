@@ -19,22 +19,25 @@ Stereovision::~Stereovision()
 
 //To Implement
 
-//void Stereovision::StereoCalibrate()
-//{
-//
-//cv::TermCriteria term_crit=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,1e-6);
-//
-//
-//cv::stereoCalibrate(m_object_points,
-//                    m_image_points1,
-//                    m_image_points2,
-//                    m_intrinsecMatrix1, m_distortionMatrix1,
-//                    m_intrinsecMatrix2, m_distortionMatrix2,
-//                    m_board_sz,
-//                    m_rotationMatrix, m_translationMatrix, m_essentialMatrix, m_fundamentalMatrix,
-//                    cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,1e-6),
-//                    CALIB_FIX_INTRINSIC);
-//}
+void Stereovision::StereoCalibrate()
+{
+
+
+//Mat::zer
+
+cv::TermCriteria term_crit=cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,1e-6);
+
+
+cv::stereoCalibrate(m_object_points,
+                    m_image_points1,
+                    m_image_points2,
+                    m_intrinsecMatrix1, m_distortionMatrix1,
+                    m_intrinsecMatrix2, m_distortionMatrix2,
+                    m_board_sz,
+                    m_rotationMatrix, m_translationMatrix, m_essentialMatrix, m_fundamentalMatrix,
+                    cvTermCriteria(CV_TERMCRIT_ITER+CV_TERMCRIT_EPS,30,1e-6),
+                    CALIB_FIX_INTRINSIC);
+}
 
 
 void Stereovision::SaveMatrix()
@@ -56,11 +59,11 @@ void Stereovision::LoadMatrix(const string &filename, const string &filename2)
         fs["distortion"] >> m_distortionMatrix1;
         fs["object_point"] >> m_object_points;
         fs["image_points"] >> m_image_points1;
-        fs["board_sz"] >> m_board_sz;
+      //  fs["board_sz"] >> m_board_sz;
         fs.release();
-    }
 
-//    std::cout << "Success: Load Matrice 1..." << std::endl;
+
+    std::cout << "Success: Load Matrice 1..." << std::endl;
 
     cv::FileStorage fs2("Parameters//" + filename2  +  ".xml", cv::FileStorage::READ);
     if (!fs2.isOpened())
@@ -70,11 +73,11 @@ void Stereovision::LoadMatrix(const string &filename, const string &filename2)
         fs2["distortion"] >> m_distortionMatrix2;
         fs2["object_point"] >> m_object_points;
         fs2["image_points"] >> m_image_points2;
-        fs2["board_sz"] >> m_board_sz;
+       // fs2["board_sz"] >> m_board_sz;
         fs2.release();
-    }
 
-	//std::cout << "Success: Load Matrice 2..." << std::endl;
+
+	std::cout << "Success: Load Matrice 2..." << std::endl;
 
 }
 

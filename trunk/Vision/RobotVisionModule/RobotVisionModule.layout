@@ -13,11 +13,11 @@
 	<File name="GenericImageProcessing.hpp" open="1" top="0" tabpos="8">
 		<Cursor position="509" topLine="9" />
 	</File>
-	<File name="Stereovision.cpp" open="1" top="0" tabpos="4">
-		<Cursor position="1199" topLine="46" />
+	<File name="Stereovision.cpp" open="1" top="1" tabpos="4">
+		<Cursor position="1749" topLine="45" />
 	</File>
-	<File name="Stereovision.hpp" open="1" top="1" tabpos="3">
-		<Cursor position="606" topLine="29" />
+	<File name="Stereovision.hpp" open="1" top="0" tabpos="3">
+		<Cursor position="587" topLine="32" />
 	</File>
 	<File name="main.cpp" open="1" top="0" tabpos="2">
 		<Cursor position="387" topLine="0" />
