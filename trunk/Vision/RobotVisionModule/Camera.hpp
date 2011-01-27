@@ -22,8 +22,12 @@
 #define nbColumns 8
 #define nbCorners nbLines*nbColumns
 
+#define offsetX 1
+#define offsetY 1
+
 #define ratioPixelOverUnit 3 // size of a single square = 3x3 (cm)
 #define D 60 // ball real diameter (mm)
+
 
 
 ////////////////////////////////////////////////////////
@@ -66,9 +70,12 @@ class Camera: public cv::VideoCapture
         // communication protocole: e.g USB for camera, none for file
         cv::Mat m_intrinsecMatrix;
         cv::Mat m_distortionMatrix;
-        cv::Mat m_object_points;
-        cv::Mat m_image_points;
-        cv::Size m_board_sz;
+        cv::Mat m_chessboardplanCoordinates;
+        cv::Mat m_cornersMat_Left;
+        cv::Mat m_cornersMat_Right;
+
+        cv::Mat m_cornersMat;
+        cv::Mat m_nbTotalCorners;
 
         cv::Mat m_intrinsecMatrix_Right;
         cv::Mat m_intrinsecMatrix_Left;

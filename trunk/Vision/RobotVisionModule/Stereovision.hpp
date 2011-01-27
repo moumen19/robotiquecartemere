@@ -18,6 +18,7 @@
 #define CAMERA_MODE 0
 #define VIDEO_FILE_MODE 1
 
+
 using namespace std;
 
 class Stereovision
@@ -66,16 +67,17 @@ class Stereovision
         cv::Mat m_essentialMatrix;
         cv::Mat m_fundamentalMatrix;
 
-        cv::Mat m_intrinsecMatrix1;
-        cv::Mat m_distortionMatrix1;
-        cv::Mat m_object_points;
-        cv::Mat m_image_points1;
-        cv::Size m_board_sz;
+        cv::Mat m_intrinsecMatrix_left;
+        cv::Mat m_distortionMatrix_left;
+        cv::Mat m_chessboardplanCoordinates;
+        cv::Mat m_cornersMat_Left;
+        cv::Mat m_nbTotalCorners;
 
 
-        cv::Mat m_intrinsecMatrix2;
-        cv::Mat m_distortionMatrix2;
-        cv::Mat m_image_points2;
+        cv::Mat m_intrinsecMatrix_right;
+        cv::Mat m_distortionMatrix_right;
+        cv::Mat m_image_points_right;
+        cv::Mat m_cornersMat_Right;
 
 
         // optional features
