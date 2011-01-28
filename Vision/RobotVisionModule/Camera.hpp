@@ -59,8 +59,6 @@ class Camera: public cv::VideoCapture
 
         void CalibrateFromCamera();
         void UndistorFrame(){;} // useful, even if imperfections can't be seen?
-        void LoadIntrinsec(const string &filename){;}
-        void LoadExtrasec(const string &filename){;}
         void SaveMatrix(const string &filename);
         void test();
 
@@ -81,6 +79,7 @@ class Camera: public cv::VideoCapture
         cv::Mat m_intrinsecMatrix_Left;
         cv::Mat m_distortionMatrix_Right;
         cv::Mat m_distortionMatrix_Left;
+        cv::Size m_image_size;
 
         // to record frames
         bool m_ImageCaptureActivated;

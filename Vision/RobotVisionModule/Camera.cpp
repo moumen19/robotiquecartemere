@@ -101,6 +101,7 @@ void Camera::CalibrateFromImageSet()
     m_cornersMat_Left = cornersMat_Left;
     m_cornersMat_Right = cornersMat_Right;
     m_nbTotalCorners = nbTotalCorners;
+    cv::Size m_image_size(imgSize.width,imgSize.height);
 
 
 
@@ -258,7 +259,7 @@ void Camera::CalibrateFromCamera()
 	board_h = 8; // Board height
 	n_boards = 15; // Number of boards
 	int board_n = board_w * board_h;
-	CvSize board_sz = cvSize( board_w, board_h );
+	CvSize imagesize = cvSize( board_w, board_h );
 
 	// CvCapture* capture = cvCaptureFromCAM(CV_CAP_ANY);
 	cv::Mat capture;
@@ -300,7 +301,7 @@ while( successes < n_boards ){
 		// Skip every board_dt frames to allow moving the chessboard
 		if( frame++ % board_dt == 0 ){
 			// Find chessboard corners:
-			int found = cvFindChessboardCorners( image, board_sz, corners,
+			int found = cvFindChessboardCorners( image, imagesize, corners,
 				&corner_count, CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_FILTER_QUADS );
 
 			// Get subpixel accuracy on those corners
@@ -309,7 +310,7 @@ while( successes < n_boards ){
 				cvSize( -1, -1 ), cvTermCriteria( CV_TERMCRIT_EPS+CV_TERMCRIT_ITER, 30, 0.1 ));
 
 			// Draw it
-			cvDrawChessboardCorners( image, board_sz, corners, corner_count, found );
+			cvDrawChessboardCorners( image, imagesize, corners, corner_count, found );
 			cvShowImage( "Calibration", image );
 
 			// If we got a good board, add it to our data
@@ -382,7 +383,7 @@ while( successes < n_boards ){
     m_chessboardplanCoordinates = chessboardplanCoordinates;
     m_cornersMat = image_points;
     m_nbTotalCorners = point_counts;
-
+    m_image_size( imagesize.width, imagesize.height);
 
 	std::cout << "Success: calibration from target..." << std::endl;
 
