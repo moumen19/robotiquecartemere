@@ -184,7 +184,7 @@ bool Routine(int &center)
 //               if(trackWindow.height > 480 ) trackWindow.height = 480;
             circle(image, Point( x , y ), 22, Scalar(0,0,255), 3);
             //circle(image, Point(0, 0), 10, Scalar(0,0,255), 3);
-            badFrameDetected = false;
+
         }
 
         if( selectObject && selection.width > 0 && selection.height > 0 )
@@ -197,10 +197,7 @@ bool Routine(int &center)
         imshow( "Histogram", histimg );
 
         char c = (char)waitKey(10);
-        if( c == 27 ){
-            cerr<<"Exit program"<<endl;
-            return false;
-        }
+
         switch(c)
         {
         case 'b':
@@ -221,7 +218,12 @@ bool Routine(int &center)
             ;
         }
 
-        return true;
+        if(badFrameDetected){
+            badFrameDetected = false;
+            return false;
+        }
+        else
+            return true;
 
 }
 

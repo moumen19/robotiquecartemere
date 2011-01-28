@@ -11,9 +11,10 @@ int main( int argc, char** argv )
 
     for(;;)
     {
-        if(!Routine(center))
-            break;
-        std::cout<<center <<std::endl;
+        bool test;
+        test = Routine(center);
+        std::cout<<center <<"       "<< (bool)test<< std::endl;
+
     }
 
     return 0;
