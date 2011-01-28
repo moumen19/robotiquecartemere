@@ -108,7 +108,7 @@ Sensors::~Sensors()
  * @param id - l'identifiant du capteur
  * @param name - nom du capteur
  * @param size - la taille du message capteur
- */throw std::out_of_range("ERREUR : Aucune trajectoire stocke... !")
+ */
 void Sensors::addSensor(int id, std::string name, int size)
 {
 	Sensor * s = new Sensor(id, name, size);

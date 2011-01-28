@@ -163,8 +163,8 @@ void Communication::run()
 				a_sensorsData.set((int)msg.id_sensor, msg);
 
 
-				//_DISPLAY((int)msg.id << " : ");
-				//_DISPLAY((int)msg.id_sensor << " : ");
+				_DISPLAY((int)msg.id << " : ");
+				_DISPLAY((int)msg.id_sensor << " : ");
 				/*
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.time.getData(i) << " : ");
@@ -173,8 +173,8 @@ void Communication::run()
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.crc.getData(i) << " : ");
 				//*/
-				//_DISPLAY(msg.time.getValue() << " : " << msg.data.getValue() << " : " << msg.crc.getValue());
-				//_DISPLAY(std::endl);
+				_DISPLAY(msg.time.getValue() << " : " << msg.data.getValue() << " : " << msg.crc.getValue());
+				_DISPLAY(std::endl);
 				
 
 				// Traitement du message capteur
