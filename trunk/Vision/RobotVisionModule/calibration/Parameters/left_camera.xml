@@ -12,7 +12,7 @@
   <cols>1</cols>
   <dt>f</dt>
   <data>
-    1.56113012e-02 -5.93487453e-03 -3.65598616e-03 1.19160500e-03</data></distortion>
+    1.56113002e-02 -5.93487406e-03 -3.65598616e-03 1.19160500e-03</data></distortion>
 <chessboardplanCoordinates type_id="opencv-matrix">
   <rows>912</rows>
   <cols>3</cols>
