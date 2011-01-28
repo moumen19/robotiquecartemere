@@ -1,0 +1,14 @@
+stereo_calib/left1.jpg
+stereo_calib/right1.jpg
+stereo_calib/left2.jpg
+stereo_calib/right2.jpg
+stereo_calib/left3.jpg
+stereo_calib/right3.jpg
+stereo_calib/left4.jpg
+stereo_calib/right4.jpg
+stereo_calib/left5.jpg
+stereo_calib/right5.jpg
+stereo_calib/left6.jpg
+stereo_calib/right6.jpg
+stereo_calib/left7.jpg
+stereo_calib/right7.jpg
