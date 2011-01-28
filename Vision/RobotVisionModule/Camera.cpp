@@ -383,13 +383,15 @@ while( successes < n_boards ){
     m_chessboardplanCoordinates = chessboardplanCoordinates;
     m_cornersMat = image_points;
     m_nbTotalCorners = point_counts;
-    m_image_size( imagesize.width, imagesize.height);
+
+
+    m_image_size.width=  imagesize.width;
+    m_image_size.height= imagesize.height;
 
 	std::cout << "Success: calibration from target..." << std::endl;
 
 
 }
-
 
 
 
