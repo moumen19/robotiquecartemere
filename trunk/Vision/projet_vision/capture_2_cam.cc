@@ -29,14 +29,14 @@ int main()
     // On initialise le writer
     // Ne connaissant pas le frame rate de la webcam, on suppose que c'est 10 FPS
     CvVideoWriter* writer = cvCreateVideoWriter( 
-                                "/home/olivier/Vidéos/webcam1.avi",  // chemin du fichier
+                                "./webcam1.avi",  // chemin du fichier
                                 CV_FOURCC('X','V','I','D'),        // codec
                                 20. ,                              // frame-rate
                                 cvGetSize(img)                     // définition
                             );
   
     CvVideoWriter* writer2 = cvCreateVideoWriter( 
-                                "/home/olivier/Vidéos/webcam2.avi",  // chemin du fichier
+                                "./webcam2.avi",  // chemin du fichier
                                 CV_FOURCC('X','V','I','D'),        // codec
                                 20. ,                              // frame-rate
                                 cvGetSize(img2)                     // définition
