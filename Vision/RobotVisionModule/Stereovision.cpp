@@ -22,12 +22,25 @@ Stereovision::~Stereovision()
 void Stereovision::StereoCalibrate()
 {
 
-
+    int i;
+    int ballsPixelsSizes_Left[3] = {0,0,0};
+    int ballsPixelsSizes_Right[3] = {0,0,0};
+    float fx_Left=0,fy_Left=0,fx_Right=0,fy_Right=0;
+    float Z_Left [3][2]= {{0,0},{0,0},{0,0}}, Z_Right [3][2]= {{0,0},{0,0},{0,0}};
     int board_w = 6; // Board width in squares
 	int board_h = 8; // Board height
     int n_boards = 15; // Number of boards
 	int board_n = board_w * board_h;
-	CvSize imgSize = cvSize( board_w, board_h );
+	CvSize image_Size;
+
+
+
+    image_Size.width = m_image_size.width;
+    image_Size.height = m_image_size.height;
+
+    std::cout << "image Size" << m_image_size.width << m_image_size.height << endl;
+    printf("image size %d %d\n", image_Size.width, image_Size.height );
+
 
     CvMat * intrinsicMatrix_Left  = cvCreateMat(3,3,CV_32FC1);
     CvMat * intrinsicMatrix_Right  = cvCreateMat(3,3,CV_32FC1);
@@ -38,7 +51,7 @@ void Stereovision::StereoCalibrate()
     CvMat * cornersMat_Left = cvCreateMat(nbImages*nbCorners,2,CV_32FC1);   // 2D: x, y
     CvMat * cornersMat_Right = cvCreateMat(nbImages*nbCorners,2,CV_32FC1);
 
-    std::cout << "test1" << std::endl;
+
 
     CvMat chessboardplanCoordinates_temp = m_chessboardplanCoordinates;
     chessboardplanCoordinates = &chessboardplanCoordinates_temp;
@@ -52,6 +65,7 @@ void Stereovision::StereoCalibrate()
     CvMat nbTotalCorners_temp = m_nbTotalCorners;
     nbTotalCorners = &nbTotalCorners_temp;
 
+
     CvMat intrinsicMatrix_Left_temp = m_intrinsecMatrix_left;
     intrinsicMatrix_Left = &intrinsicMatrix_Left_temp;
 
@@ -61,34 +75,36 @@ void Stereovision::StereoCalibrate()
     CvMat distortionCoeffs_Right_temp = m_distortionMatrix_right;
     distortionCoeffs_Right = &distortionCoeffs_Right_temp;
 
-    CvMat * RotationMatrix = cvCreateMat(3,3,CV_32FC1); // Matrix
-    CvMat * TranslationMatrix = cvCreateMat(3,1,CV_32FC1); // Vector
-    CvMat * EssentialMatrix = cvCreateMat(3,3,CV_32FC1);
-    CvMat * FundamentalMatrix = cvCreateMat(3,3,CV_32FC1);
+    CvMat * RotationMatrix;// = cvCreateMat(3,3,CV_32FC1); // Matrix
+    CvMat * TranslationMatrix;// = cvCreateMat(3,1,CV_32FC1); // Vector
+    CvMat * EssentialMatrix = 0;// = cvCreateMat(3,3,CV_32FC1);
+    CvMat * FundamentalMatrix = 0;// = cvCreateMat(3,3,CV_32FC1);
 
     std::cout << "test2" << std::endl;
 
 
-cvStereoCalibrate ( chessboardplanCoordinates,
-                    cornersMat_Left,
-                    cornersMat_Right,
-                    nbTotalCorners,
-                    intrinsicMatrix_Left,
-                    distortionCoeffs_Left,
-                    intrinsicMatrix_Left,
-                    distortionCoeffs_Right,
-                    imgSize,
-                    RotationMatrix,
-                    TranslationMatrix,
-                    EssentialMatrix,
-                    FundamentalMatrix,
+    // Stereovision
+    cvStereoCalibrate (chessboardplanCoordinates,
+    cornersMat_Left,
+    cornersMat_Right,
+    nbTotalCorners,
+    intrinsicMatrix_Left,
+    distortionCoeffs_Left,
+    intrinsicMatrix_Left,
+    distortionCoeffs_Right,
+    image_Size,
+    RotationMatrix,
+    TranslationMatrix,
+    EssentialMatrix,
+    FundamentalMatrix,
 
-                    //cvTermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 100, 1e-5), // default
-                    cvTermCriteria( CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 30, 1e-6),
+    //cvTermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 100, 1e-5), // default
+    cvTermCriteria( CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 30, 1e-6),
 
-                    CV_CALIB_FIX_INTRINSIC //can be used if previous cameras calibration was accurate (as in this example)
-                    //CV_CALIB_USE_INTRINSIC_GUESS // can be used to refine previous intrinsic/distortion parameters
-                 );
+    //CV_CALIB_FIX_INTRINSIC //can be used if previous cameras calibration was accurate (as in this example)
+    CV_CALIB_USE_INTRINSIC_GUESS // can be used to refine previous intrinsic/distortion parameters
+    );
+
 
 
     std::cout << "Success: StereoCalibration..." << std::endl;
@@ -109,17 +125,24 @@ void Stereovision::SaveMatrix()
 void Stereovision::LoadMatrix(const string &filename, const string &filename2)
 {
 
-    cv::FileStorage fs("calibration//Parameters//" + filename  +  ".xml", cv::FileStorage::READ);
+    cv::FileStorage fs("calibration//Parameters//left_camera.xml", cv::FileStorage::READ);
     if (!fs.isOpened())
-    {  fs.open("calibration//Parameters//" + filename  +  ".xml", FileStorage::READ);
+    {  fs.open("calibration//Parameters//left_camera.xml", FileStorage::READ);
     }
         fs["intrinsec"] >> m_intrinsecMatrix_left;
         fs["distortion"] >> m_distortionMatrix_left;
         fs["chessboardplanCoordinates"] >> m_chessboardplanCoordinates;
         fs["cornersMat"] >> m_cornersMat_Left;
         fs["nbTotalCorners"] >> m_nbTotalCorners;
+        m_image_size.width = (int)fs["image_size_width"];
+        m_image_size.height = (int)fs["image_size_height"];
+
+
+
+
         fs.release();
 
+ std::cout << "image_size" << m_image_size.width << "\t" << m_image_size.height << std::endl;
 
     std::cout << "Success: Load Matrice 1..." << std::endl;
 
@@ -129,9 +152,9 @@ void Stereovision::LoadMatrix(const string &filename, const string &filename2)
     }
         fs2["intrinsec"] >> m_intrinsecMatrix_right;
         fs2["distortion"] >> m_distortionMatrix_right;
-        fs2["chessboardplanCoordinates"] >> m_chessboardplanCoordinates;
         fs2["cornersMat"] >> m_cornersMat_Right;
-        fs2["nbTotalCorners"] >> m_nbTotalCorners;
+
+
         fs2.release();
 
 

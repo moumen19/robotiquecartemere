@@ -79,7 +79,12 @@ class Camera: public cv::VideoCapture
         cv::Mat m_intrinsecMatrix_Left;
         cv::Mat m_distortionMatrix_Right;
         cv::Mat m_distortionMatrix_Left;
+
         cv::Size m_image_size;
+        CvSize image_size;
+
+//        int m_image_size.width;
+//        int m_image_size.height;
 
         // to record frames
         bool m_ImageCaptureActivated;
