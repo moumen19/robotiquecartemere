@@ -19,6 +19,8 @@
 #define VIDEO_FILE_MODE 1
 
 
+
+
 using namespace std;
 
 class Stereovision
@@ -72,6 +74,12 @@ class Stereovision
         cv::Mat m_chessboardplanCoordinates;
         cv::Mat m_cornersMat_Left;
         cv::Mat m_nbTotalCorners;
+
+        cv::Size m_image_size;
+
+        CvSize image_size;
+
+
 
 
         cv::Mat m_intrinsecMatrix_right;
