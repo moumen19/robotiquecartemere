@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
+#include "opencv/cv.h"
+#include "opencv/highgui.h"
 //#include <cvaux.h>
 //#include <cxcore.h>
 
@@ -62,14 +62,13 @@ int main(int argc, char *argv[])
     for(i=0;i<nbImages;i++)
     {
         // Left camera
-        sprintf(imageFileName,"Calibration_TP2/gauche%d.jpg",i+1);
+        sprintf(imageFileName,"Calibration_TP2//gauche%d.jpg",i+1);
 
         // this allows to fill in a 1D array for several images, with a function still able to work on individual images
         compute_and_display_image_corners(imageFileName, &imgSize, chessboardSize, &cornersList_Left[i*nbCorners]);
 
         // Right camera
-        sprintf(imageFileName,"Calibration_TP2/droite%d.jpg",i+1);
-
+        sprintf(imageFileName,"Calibration_TP2//droite%d.jpg",i+1);
 
         compute_and_display_image_corners(imageFileName, &imgSize, chessboardSize, &cornersList_Right[i*nbCorners]);
     }
@@ -174,8 +173,8 @@ int main(int argc, char *argv[])
     cvSave("Calibration_TP2//Parameters//Fundamental.xml", FundamentalMatrix,0,0,cvAttrList(NULL,NULL));
 
     // Check parameters: get points with mouse cursor
-    light_Left = get_one_pixel ("Images_TP2/SIER_gauche.jpg");
-    light_Right = get_one_pixel ("Images_TP2/SIER_droite.jpg");
+    light_Left = get_one_pixel ("Images_TP2//SIER_gauche.jpg");
+    light_Right = get_one_pixel ("Images_TP2//SIER_droite.jpg");
     cvStereoTriangulation(light_Left,light_Right,0); // 1 to display
 
     // End

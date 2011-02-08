@@ -392,10 +392,7 @@ while( successes < n_boards ){
     m_image_size.height= imagesize.height;
 
 	std::cout << "Success: calibration from target..." << std::endl;
-
-
 }
-
 
 
 void Camera::SaveMatrix(const string &filename)

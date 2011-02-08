@@ -482,7 +482,7 @@ void Stereovision::MatchCorners()
     cv::Mat descriptors2;
 
     //cv::GoodFeaturesToTrackDetector detector(GFTTparams);
-    cv::Ptr<cv::FeatureDetector> detector = cv::FeatureDetector::create( "STAR" );
+    cv::Ptr<cv::FeatureDetector> detector = cv::FeatureDetector::create( "SURF" );
     cv::Ptr<cv::DescriptorExtractor> descriptorExtractor = cv::DescriptorExtractor::create( "SURF" );
     cv::Ptr<cv::DescriptorMatcher> descriptorMatcher = cv::DescriptorMatcher::create("BruteForce" );
 
@@ -508,7 +508,7 @@ void Stereovision::MatchCorners()
         detector->detect(grayScaleR, keypoints2, mask);
         cv::drawKeypoints( grayScaleR, keypoints2, m_RightFrame);
 
-        //cout<<keypoints1.size();
+        cout<<keypoints1.size();
 
         descriptorExtractor->compute(grayScaleL,keypoints1,descriptors1);
         descriptorExtractor->compute(grayScaleR,keypoints2,descriptors2);
@@ -516,8 +516,9 @@ void Stereovision::MatchCorners()
         cv::Mat drawImg;
         vector<cv::DMatch> filteredMatches;
         filteredMatches.clear();
-        crossCheckMatching( descriptorMatcher, descriptors1, descriptors2, filteredMatches, 1 );
+        crossCheckMatching( descriptorMatcher, descriptors1, descriptors2, filteredMatches, 2 );
         cv::drawMatches( grayScaleL, keypoints1, grayScaleR, keypoints2, filteredMatches, drawImg );
+        cv::waitKey(0);
 
         ////////////////////////////////////////////////////////
         keyPressed = cv::waitKey(WAITING_TIME_MS);

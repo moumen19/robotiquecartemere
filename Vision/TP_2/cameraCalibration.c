@@ -13,28 +13,33 @@ void compute_and_display_image_corners(char * imageName, CvSize * imageSize, CvS
     int patternWasFound = 0;
     int i;
 
-    img = cvLoadImage(imageName, -1);
+
+    img = cvLoadImage(imageName, 1);
 
     *imageSize = cvGetSize(img); // useful only for calibration function
-
 
     //initialisation of the given array
     for(i=0;i<chessboardSize.height*chessboardSize.width;i++){ cornersArrayToFillIn[i].x= 0; cornersArrayToFillIn[i].y= 0; }
 
+    printf("OK1\n");
     // core algorithm
     patternWasFound = cvFindChessboardCorners(img, chessboardSize, cornersArrayToFillIn, &cornersCount, 0);
+
+    printf("OK2\n");
 
     // display_array_values(cornersArrayToFillIn,chessboardSize.height*chessboardSize.width);
     improve_precision(img, cornersArrayToFillIn, cornersCount);
     // display_array_values(cornersArrayToFillIn,chessboardSize.height*chessboardSize.width);
 
     // visual only part
-//    cvDrawChessboardCorners(img, chessboardSize, cornersArrayToFillIn, cornersCount, patternWasFound);
-//    cvNamedWindow(imageName, CV_WINDOW_AUTOSIZE);
-//    cvMoveWindow(imageName, 100, 100);
-//    cvShowImage(imageName, img );
-//    cvWaitKey(200);
-//    cvDestroyWindow(imageName);
+
+    cvDrawChessboardCorners(img, chessboardSize, cornersArrayToFillIn, cornersCount, patternWasFound);
+    cvNamedWindow(imageName, CV_WINDOW_AUTOSIZE);
+    cvMoveWindow(imageName, 100, 100);
+    cvShowImage(imageName, img );
+    cvWaitKey(200);
+    cvDestroyWindow(imageName);
+
 
     // end
     cvReleaseImage(&img );
