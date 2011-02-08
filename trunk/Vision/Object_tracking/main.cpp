@@ -13,8 +13,7 @@ int main( int argc, char** argv )
     {
         bool test;
         test = Routine(center);
-        std::cout<<center <<"       "<< (bool)test<< std::endl;
-
+        //std::cout<<center <<"       "<< (bool)test<< std::endl;
     }
 
     return 0;
