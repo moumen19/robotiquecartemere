@@ -56,15 +56,10 @@
 	/**
 	 * Definition d'une macro affichant un simple message dans la console
 	 */
-	#define _DISPLAY(message)	{ \
+	#define _DISPLAY(message)	if(_DEBUG_MODE == true) \
+					{ \
 						_DEBUG::lock(); \
 						std::cout << message; \
-						_DEBUG::unlock(); \
-					}
-	
-	#define _CIN(message)		{ \
-						_DEBUG::lock(); \
-						std::cin >> message; \
 						_DEBUG::unlock(); \
 					}
 

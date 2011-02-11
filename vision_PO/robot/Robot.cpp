@@ -152,9 +152,10 @@ void Robot::run()
 	
 	while(this->a_thread_active)
 	{
+		//*	// Affichage graphique des capteurs
 		try
 		{
-			//*
+			
 			messageSensor msg = boost::any_cast<messageSensor>(a_sensorsData.get(48, DataOption::LAST));
 			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());
 
@@ -180,13 +181,14 @@ void Robot::run()
 			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());
 
 			msg = boost::any_cast<messageSensor>(a_sensorsData.get(144, DataOption::LAST));
-			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());//*/
+			this->a_rendererSensor->setSensorDistance((int)msg.id_sensor, (float)msg.data.getValue());
 		}
 		catch(std::exception & e)
 		{
 			//_DEBUG(e.what(), WARNING);
-		}
+		}//*/
 
+		this->a_dataFusion.run();	// Lance la fusion de données
 		this->a_planning.run();		// Lance l'algo de planification
 
 		try

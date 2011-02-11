@@ -25,11 +25,11 @@
 	/**
  	 * Structure point/vitesse
 	 */
-	struct Point
+	typedef struct
 	{
 		float x;
 		float y;
-	};
+	} Point Vitesse;
 
 	/**
   	 * Classe de planification
@@ -48,7 +48,6 @@
 		protected:			
 			void flou();						// Planification flou
 			void track();						// Suivi d'objet a la camera (rotation)
-			void test();
 
 		private:
 			Data & a_environmentData;				// Module de stockage des infos d'environnement

@@ -58,6 +58,9 @@ Strat Strategy::get()
  */
 void Strategy::set(Strat strategy)
 {
+	if(this->a_strategy == NONE)
+		_DEBUG("La strategie n'a pas ete initialisee", WARNING);
+
 	switch(strategy)
 	{
 		case BAU_ON:			

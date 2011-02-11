@@ -32,26 +32,6 @@ int main()
 	robot2010.startCommunication();		// Lancement du dialogue avec les capteurs et l'asservissement
 	robot2010.start();			// Lancement du traitement des informations et de la planification de trajectoire
 
-	
-	/*
-		int a = 7;
-		robot2010.test(3);
-	//*	
-	do{
-		boost::xtime xt;
-		boost::xtime_get(&xt, boost::TIME_UTC);
-		xt.sec += 1;
-		boost::thread::sleep(xt); // Sleep for 1 second
-
-		//sleep(1);
-		_DISPLAY("Envoyer la commande ? ");
-		_CIN(a);
-		_DISPLAY("Commande envoye..." << std::endl);
-		robot2010.test(a);
-
-	}while(a != -1);
-
-	robot2010.stop();//*/
 
 	robot2010.wait();			// Mise en attente du robot
 
