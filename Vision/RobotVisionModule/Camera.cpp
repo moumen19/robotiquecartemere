@@ -1,22 +1,19 @@
 #include "Camera.hpp"
 
 //constructors
-Camera::Camera():cv::VideoCapture(0), m_Name(string("defaultCam")),
-m_ImageCaptureActivated(false),m_VideoCaptureActivated(false)
+Camera::Camera():cv::VideoCapture(0), m_Name(string("defaultCam"))
 {
 
 }
 
-Camera::Camera(int cameraIndex):cv::VideoCapture(cameraIndex),m_Name(string("Cam_")),
-m_ImageCaptureActivated(false),m_VideoCaptureActivated(false)
+Camera::Camera(int cameraIndex):cv::VideoCapture(cameraIndex),m_Name(string("Cam_"))
 {
     stringstream convert; // stringstream used for the conversion
     convert << cameraIndex; //add the value of cameraIndex to the characters in the stream
     m_Name += convert.str(); // m_Name now has the good value
 }
 
-Camera::Camera(const string& filename):cv::VideoCapture(filename),m_Name(filename),
-m_ImageCaptureActivated(false),m_VideoCaptureActivated(false)
+Camera::Camera(const string& filename):cv::VideoCapture(filename),m_Name(filename)
 {
 
 }
@@ -37,6 +34,7 @@ void Camera::LiveDisplay()
         int videoOutputCount = 0;
         cv::VideoWriter videoWriter;
         cv::Mat Frame;
+        bool videoBeingRecorded = false;
 
         // Displaying window
         cv::namedWindow(string("Display ")+ m_Name, CV_WINDOW_AUTOSIZE);
@@ -91,7 +89,6 @@ void Camera::LiveDisplay()
         cerr<<"The camera is not opened !"<<endl;
     }
 }
-
 
 // to be improved
 void Camera::CalibrateFromCamera()
@@ -242,108 +239,108 @@ void Camera::CalibrateFromCamera()
 // to be improved
 void Camera::CalibrateFromImageSet()
 {
-    int i;
-    int ballsPixelsSizes_Left[3] = {0,0,0};
-    int ballsPixelsSizes_Right[3] = {0,0,0};
-    float fx_Left=0,fy_Left=0,fx_Right=0,fy_Right=0;
-    float Z_Left [3][2]= {{0,0},{0,0},{0,0}}, Z_Right [3][2]= {{0,0},{0,0},{0,0}};
-    char imageFileName[200] = "";
-    CvSize imageSize = cvSize(1,1);
-    CvSize chessboardSize = cvSize(nbColumns,nbLines);
-
-    // matrices for corners computation
-    CvPoint2D32f cornersList_Right[nbImages*nbCorners];
-    CvPoint2D32f cornersList_Left[nbImages*nbCorners];
-
-    // matrices for the camera calibration
-    CvMat * intrinsicMatrix_Left  = cvCreateMat(3,3,CV_32FC1);
-    CvMat * intrinsicMatrix_Right  = cvCreateMat(3,3,CV_32FC1);
-    CvMat * distortionCoeffs_Left = cvCreateMat(4,1,CV_32FC1); // only 4 coeffs will be used (5th = 0)
-    CvMat * distortionCoeffs_Right = cvCreateMat(4,1,CV_32FC1);
-    CvMat * nbTotalCorners = cvCreateMat(nbImages,1,CV_32SC1); // array containing the corners count for each picture
-    CvMat * chessboardplanCoordinates = cvCreateMat(nbImages*nbCorners,3,CV_32FC1); // 3D: x, y, z=0
-    CvMat * cornersMat_Left = cvCreateMat(nbImages*nbCorners,2,CV_32FC1);   // 2D: x, y
-    CvMat * cornersMat_Right = cvCreateMat(nbImages*nbCorners,2,CV_32FC1);
-
-    // Chessboard corners computation
-    for(i=0;i<nbImages;i++)
-    {
-        // Left camera
-        sprintf(imageFileName,"calibration//image_calibration/gauche%d.jpg",i+1);
-
-        // this allows to fill in a 1D array for several images, with a function still able to work on individual images
-        compute_and_display_image_corners(imageFileName, &imageSize, chessboardSize, &cornersList_Left[i*nbCorners]);
-
-        // Right camera
-        sprintf(imageFileName,"calibration//image_calibration/droite%d.jpg",i+1);
-
-
-        compute_and_display_image_corners(imageFileName, &imageSize, chessboardSize, &cornersList_Right[i*nbCorners]);
-    }
-
-    // Prepare some matrices
-    initiate_matrices_for_calibration(intrinsicMatrix_Left, distortionCoeffs_Left,
-                                      nbTotalCorners, chessboardplanCoordinates,
-                                      cornersMat_Left, cornersList_Left); // convert list to matrix
-
-    initiate_matrices_for_calibration(intrinsicMatrix_Right, distortionCoeffs_Right,
-                                      nbTotalCorners, chessboardplanCoordinates,
-                                      cornersMat_Right, cornersList_Right);
-
-    // compute intrinsic & distortion parameters
-    cvCalibrateCamera2(chessboardplanCoordinates, cornersMat_Left,
-                        nbTotalCorners, imageSize,
-                        intrinsicMatrix_Left, distortionCoeffs_Left,
-                        NULL, NULL, 0 //CV_CALIB_FIX_ASPECT_RATIO
-                        );
-
-    cvCalibrateCamera2(chessboardplanCoordinates, cornersMat_Right,
-                        nbTotalCorners, imageSize,
-                        intrinsicMatrix_Right, distortionCoeffs_Right,
-                        NULL, NULL, 0 //CV_CALIB_FIX_ASPECT_RATIO
-                        );
-
-    m_intrinsecMatrix_Left = intrinsicMatrix_Left;
-    m_intrinsecMatrix_Right = intrinsicMatrix_Right;
-    m_distortionMatrix_Left = distortionCoeffs_Left;
-    m_distortionMatrix_Right = distortionCoeffs_Right;
-    m_chessboardplanCoordinates = chessboardplanCoordinates;
-    m_cornersMat_Left = cornersMat_Left;
-    m_cornersMat_Right = cornersMat_Right;
-    m_nbTotalCorners = nbTotalCorners;
-
-    m_image_size.width=  imageSize.width;
-    m_image_size.height= imageSize.height;
-
-
-
-    std::cout << "Success: calibration from target..." << std::endl;
-
-
-    cv::FileStorage fs("calibration//Parameters//left_camera.xml", cv::FileStorage::WRITE);
-    if (fs.isOpened())
-    {   fs << "intrinsec" << m_intrinsecMatrix_Left;
-        fs << "distortion" << m_distortionMatrix_Left;
-        fs << "chessboardplanCoordinates" << m_chessboardplanCoordinates;
-        fs << "cornersMat" << m_cornersMat_Left;
-        fs << "nbTotalCorners" << m_nbTotalCorners;
-        fs << "image_size_width" << (int) m_image_size.width;
-        fs << "image_size_height" << (int) m_image_size.height;
-        fs.release();
-    }
-
-	std::cout << "Success: Saved cam_Left..." << std::endl;
-
-	    cv::FileStorage fs2("calibration//Parameters//right_camera.xml", cv::FileStorage::WRITE);
-    if (fs2.isOpened())
-    {   fs2 << "intrinsec" << m_intrinsecMatrix_Right;
-        fs2 << "distortion" << m_distortionMatrix_Right;
-        fs2 << "object_point" << m_chessboardplanCoordinates;
-        fs2 << "cornersMat" << m_cornersMat_Right;
-        fs2.release();
-    }
-
-	std::cout << "Success: Saved cam_Right..." << std::endl;
+//    int i;
+//    int ballsPixelsSizes_Left[3] = {0,0,0};
+//    int ballsPixelsSizes_Right[3] = {0,0,0};
+//    float fx_Left=0,fy_Left=0,fx_Right=0,fy_Right=0;
+//    float Z_Left [3][2]= {{0,0},{0,0},{0,0}}, Z_Right [3][2]= {{0,0},{0,0},{0,0}};
+//    char imageFileName[200] = "";
+//    CvSize imageSize = cvSize(1,1);
+//    CvSize chessboardSize = cvSize(nbColumns,nbLines);
+//
+//    // matrices for corners computation
+//    CvPoint2D32f cornersList_Right[nbImages*nbCorners];
+//    CvPoint2D32f cornersList_Left[nbImages*nbCorners];
+//
+//    // matrices for the camera calibration
+//    CvMat * intrinsicMatrix_Left  = cvCreateMat(3,3,CV_32FC1);
+//    CvMat * intrinsicMatrix_Right  = cvCreateMat(3,3,CV_32FC1);
+//    CvMat * distortionCoeffs_Left = cvCreateMat(4,1,CV_32FC1); // only 4 coeffs will be used (5th = 0)
+//    CvMat * distortionCoeffs_Right = cvCreateMat(4,1,CV_32FC1);
+//    CvMat * nbTotalCorners = cvCreateMat(nbImages,1,CV_32SC1); // array containing the corners count for each picture
+//    CvMat * chessboardplanCoordinates = cvCreateMat(nbImages*nbCorners,3,CV_32FC1); // 3D: x, y, z=0
+//    CvMat * cornersMat_Left = cvCreateMat(nbImages*nbCorners,2,CV_32FC1);   // 2D: x, y
+//    CvMat * cornersMat_Right = cvCreateMat(nbImages*nbCorners,2,CV_32FC1);
+//
+//    // Chessboard corners computation
+//    for(i=0;i<nbImages;i++)
+//    {
+//        // Left camera
+//        sprintf(imageFileName,"calibration//image_calibration/gauche%d.jpg",i+1);
+//
+//        // this allows to fill in a 1D array for several images, with a function still able to work on individual images
+//        compute_and_display_image_corners(imageFileName, &imageSize, chessboardSize, &cornersList_Left[i*nbCorners]);
+//
+//        // Right camera
+//        sprintf(imageFileName,"calibration//image_calibration/droite%d.jpg",i+1);
+//
+//
+//        compute_and_display_image_corners(imageFileName, &imageSize, chessboardSize, &cornersList_Right[i*nbCorners]);
+//    }
+//
+//    // Prepare some matrices
+//    initiate_matrices_for_calibration(intrinsicMatrix_Left, distortionCoeffs_Left,
+//                                      nbTotalCorners, chessboardplanCoordinates,
+//                                      cornersMat_Left, cornersList_Left); // convert list to matrix
+//
+//    initiate_matrices_for_calibration(intrinsicMatrix_Right, distortionCoeffs_Right,
+//                                      nbTotalCorners, chessboardplanCoordinates,
+//                                      cornersMat_Right, cornersList_Right);
+//
+//    // compute intrinsic & distortion parameters
+//    cvCalibrateCamera2(chessboardplanCoordinates, cornersMat_Left,
+//                        nbTotalCorners, imageSize,
+//                        intrinsicMatrix_Left, distortionCoeffs_Left,
+//                        NULL, NULL, 0 //CV_CALIB_FIX_ASPECT_RATIO
+//                        );
+//
+//    cvCalibrateCamera2(chessboardplanCoordinates, cornersMat_Right,
+//                        nbTotalCorners, imageSize,
+//                        intrinsicMatrix_Right, distortionCoeffs_Right,
+//                        NULL, NULL, 0 //CV_CALIB_FIX_ASPECT_RATIO
+//                        );
+//
+//    m_intrinsecMatrix_Left = intrinsicMatrix_Left;
+//    m_intrinsecMatrix_Right = intrinsicMatrix_Right;
+//    m_distortionMatrix_Left = distortionCoeffs_Left;
+//    m_distortionMatrix_Right = distortionCoeffs_Right;
+//    m_chessboardplanCoordinates = chessboardplanCoordinates;
+//    m_cornersMat_Left = cornersMat_Left;
+//    m_cornersMat_Right = cornersMat_Right;
+//    m_nbTotalCorners = nbTotalCorners;
+//
+//    m_image_size.width=  imageSize.width;
+//    m_image_size.height= imageSize.height;
+//
+//
+//
+//    std::cout << "Success: calibration from target..." << std::endl;
+//
+//
+//    cv::FileStorage fs("calibration//Parameters//left_camera.xml", cv::FileStorage::WRITE);
+//    if (fs.isOpened())
+//    {   fs << "intrinsec" << m_intrinsecMatrix_Left;
+//        fs << "distortion" << m_distortionMatrix_Left;
+//        fs << "chessboardplanCoordinates" << m_chessboardplanCoordinates;
+//        fs << "cornersMat" << m_cornersMat_Left;
+//        fs << "nbTotalCorners" << m_nbTotalCorners;
+//        fs << "image_size_width" << (int) m_image_size.width;
+//        fs << "image_size_height" << (int) m_image_size.height;
+//        fs.release();
+//    }
+//
+//	std::cout << "Success: Saved cam_Left..." << std::endl;
+//
+//	    cv::FileStorage fs2("calibration//Parameters//right_camera.xml", cv::FileStorage::WRITE);
+//    if (fs2.isOpened())
+//    {   fs2 << "intrinsec" << m_intrinsecMatrix_Right;
+//        fs2 << "distortion" << m_distortionMatrix_Right;
+//        fs2 << "object_point" << m_chessboardplanCoordinates;
+//        fs2 << "cornersMat" << m_cornersMat_Right;
+//        fs2.release();
+//    }
+//
+//	std::cout << "Success: Saved cam_Right..." << std::endl;
 
 }
 

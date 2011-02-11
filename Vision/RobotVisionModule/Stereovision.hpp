@@ -24,11 +24,12 @@ class Stereovision
         Stereovision();
         virtual ~Stereovision();
 
-        // To implement !
+        // To implement
         virtual void Send(){;} // through Ethernet for instance
         void StereoCalibrate();
         bool SaveMatrix();
         bool LoadStereoMatrices(const string &filename);
+        bool SetCameras(Camera & left, Camera & right);
 
         // Mandatory
         void Setup(int mode);

@@ -20,92 +20,97 @@ Stereovision::~Stereovision()
 //To reimplement
 void Stereovision::StereoCalibrate()
 {
+//    int i;
+//    int ballsPixelsSizes_Left[3] = {0,0,0};
+//    int ballsPixelsSizes_Right[3] = {0,0,0};
+//    float fx_Left=0,fy_Left=0,fx_Right=0,fy_Right=0;
+//    float Z_Left [3][2]= {{0,0},{0,0},{0,0}}, Z_Right [3][2]= {{0,0},{0,0},{0,0}};
+//    int board_w = 6; // Board width in squares
+//	int board_h = 8; // Board height
+//    int n_boards = 15; // Number of boards
+//	int board_n = board_w * board_h;
+//	CvSize image_Size;
+//
+//
+//
+//    image_Size.width = m_image_size.width;
+//    image_Size.height = m_image_size.height;
+//
+//    std::cout << "image Size" << m_image_size.width << m_image_size.height << endl;
+//    printf("image size %d %d\n", image_Size.width, image_Size.height );
+//
+//
+//    CvMat * intrinsicMatrix_Left  = cvCreateMat(3,3,CV_32FC1);
+//    CvMat * intrinsicMatrix_Right  = cvCreateMat(3,3,CV_32FC1);
+//    CvMat * distortionCoeffs_Left = cvCreateMat(4,1,CV_32FC1); // only 4 coeffs will be used (5th = 0)
+//    CvMat * distortionCoeffs_Right = cvCreateMat(4,1,CV_32FC1);
+//    CvMat * nbTotalCorners = cvCreateMat(nbImages,1,CV_32SC1); // array containing the corners count for each picture
+//    CvMat * chessboardplanCoordinates = cvCreateMat(nbImages*nbCorners,3,CV_32FC1); // 3D: x, y, z=0
+//    CvMat * cornersMat_Left = cvCreateMat(nbImages*nbCorners,2,CV_32FC1);   // 2D: x, y
+//    CvMat * cornersMat_Right = cvCreateMat(nbImages*nbCorners,2,CV_32FC1);
+//
+//
+//
+//    CvMat chessboardplanCoordinates_temp = m_chessboardplanCoordinates;
+//    chessboardplanCoordinates = &chessboardplanCoordinates_temp;
+//
+//    CvMat cornersMat_Left_temp = m_cornersMat_Left;
+//    cornersMat_Left = &cornersMat_Left_temp;
+//
+//    CvMat cornersMat_Right_temp = m_cornersMat_Right;
+//    cornersMat_Right = &cornersMat_Right_temp;
+//
+//    CvMat nbTotalCorners_temp = m_nbTotalCorners;
+//    nbTotalCorners = &nbTotalCorners_temp;
+//
+//
+//    CvMat intrinsicMatrix_Left_temp = m_intrinsecMatrix_left;
+//    intrinsicMatrix_Left = &intrinsicMatrix_Left_temp;
+//
+//    CvMat distortionCoeffs_Left_temp = m_distortionMatrix_left;
+//    distortionCoeffs_Left = &distortionCoeffs_Left_temp;
+//
+//    CvMat distortionCoeffs_Right_temp = m_distortionMatrix_right;
+//    distortionCoeffs_Right = &distortionCoeffs_Right_temp;
+//
+//    CvMat * RotationMatrix;// = cvCreateMat(3,3,CV_32FC1); // Matrix
+//    CvMat * TranslationMatrix;// = cvCreateMat(3,1,CV_32FC1); // Vector
+//    CvMat * EssentialMatrix = 0;// = cvCreateMat(3,3,CV_32FC1);
+//    CvMat * FundamentalMatrix = 0;// = cvCreateMat(3,3,CV_32FC1);
+//
+//    std::cout << "test2" << std::endl;
+//
+//
+//    // Stereovision
+//    cvStereoCalibrate (chessboardplanCoordinates,
+//    cornersMat_Left,
+//    cornersMat_Right,
+//    nbTotalCorners,
+//    intrinsicMatrix_Left,
+//    distortionCoeffs_Left,
+//    intrinsicMatrix_Left,
+//    distortionCoeffs_Right,
+//    image_Size,
+//    RotationMatrix,
+//    TranslationMatrix,
+//    EssentialMatrix,
+//    FundamentalMatrix,
+//
+//    //cvTermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 100, 1e-5), // default
+//    cvTermCriteria( CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 30, 1e-6),
+//
+//    //CV_CALIB_FIX_INTRINSIC //can be used if previous cameras calibration was accurate (as in this example)
+//    CV_CALIB_USE_INTRINSIC_GUESS // can be used to refine previous intrinsic/distortion parameters
+//    );
+//
+//
+//    std::cout << "Success: StereoCalibration..." << std::endl;
+}
 
-    int i;
-    int ballsPixelsSizes_Left[3] = {0,0,0};
-    int ballsPixelsSizes_Right[3] = {0,0,0};
-    float fx_Left=0,fy_Left=0,fx_Right=0,fy_Right=0;
-    float Z_Left [3][2]= {{0,0},{0,0},{0,0}}, Z_Right [3][2]= {{0,0},{0,0},{0,0}};
-    int board_w = 6; // Board width in squares
-	int board_h = 8; // Board height
-    int n_boards = 15; // Number of boards
-	int board_n = board_w * board_h;
-	CvSize image_Size;
+//To reimplement
+bool SetCameras(Camera & left, Camera & right)
+{
 
-
-
-    image_Size.width = m_image_size.width;
-    image_Size.height = m_image_size.height;
-
-    std::cout << "image Size" << m_image_size.width << m_image_size.height << endl;
-    printf("image size %d %d\n", image_Size.width, image_Size.height );
-
-
-    CvMat * intrinsicMatrix_Left  = cvCreateMat(3,3,CV_32FC1);
-    CvMat * intrinsicMatrix_Right  = cvCreateMat(3,3,CV_32FC1);
-    CvMat * distortionCoeffs_Left = cvCreateMat(4,1,CV_32FC1); // only 4 coeffs will be used (5th = 0)
-    CvMat * distortionCoeffs_Right = cvCreateMat(4,1,CV_32FC1);
-    CvMat * nbTotalCorners = cvCreateMat(nbImages,1,CV_32SC1); // array containing the corners count for each picture
-    CvMat * chessboardplanCoordinates = cvCreateMat(nbImages*nbCorners,3,CV_32FC1); // 3D: x, y, z=0
-    CvMat * cornersMat_Left = cvCreateMat(nbImages*nbCorners,2,CV_32FC1);   // 2D: x, y
-    CvMat * cornersMat_Right = cvCreateMat(nbImages*nbCorners,2,CV_32FC1);
-
-
-
-    CvMat chessboardplanCoordinates_temp = m_chessboardplanCoordinates;
-    chessboardplanCoordinates = &chessboardplanCoordinates_temp;
-
-    CvMat cornersMat_Left_temp = m_cornersMat_Left;
-    cornersMat_Left = &cornersMat_Left_temp;
-
-    CvMat cornersMat_Right_temp = m_cornersMat_Right;
-    cornersMat_Right = &cornersMat_Right_temp;
-
-    CvMat nbTotalCorners_temp = m_nbTotalCorners;
-    nbTotalCorners = &nbTotalCorners_temp;
-
-
-    CvMat intrinsicMatrix_Left_temp = m_intrinsecMatrix_left;
-    intrinsicMatrix_Left = &intrinsicMatrix_Left_temp;
-
-    CvMat distortionCoeffs_Left_temp = m_distortionMatrix_left;
-    distortionCoeffs_Left = &distortionCoeffs_Left_temp;
-
-    CvMat distortionCoeffs_Right_temp = m_distortionMatrix_right;
-    distortionCoeffs_Right = &distortionCoeffs_Right_temp;
-
-    CvMat * RotationMatrix;// = cvCreateMat(3,3,CV_32FC1); // Matrix
-    CvMat * TranslationMatrix;// = cvCreateMat(3,1,CV_32FC1); // Vector
-    CvMat * EssentialMatrix = 0;// = cvCreateMat(3,3,CV_32FC1);
-    CvMat * FundamentalMatrix = 0;// = cvCreateMat(3,3,CV_32FC1);
-
-    std::cout << "test2" << std::endl;
-
-
-    // Stereovision
-    cvStereoCalibrate (chessboardplanCoordinates,
-    cornersMat_Left,
-    cornersMat_Right,
-    nbTotalCorners,
-    intrinsicMatrix_Left,
-    distortionCoeffs_Left,
-    intrinsicMatrix_Left,
-    distortionCoeffs_Right,
-    image_Size,
-    RotationMatrix,
-    TranslationMatrix,
-    EssentialMatrix,
-    FundamentalMatrix,
-
-    //cvTermCriteria(CV_TERMCRIT_ITER + CV_TERMCRIT_EPS, 100, 1e-5), // default
-    cvTermCriteria( CV_TERMCRIT_ITER+CV_TERMCRIT_EPS, 30, 1e-6),
-
-    //CV_CALIB_FIX_INTRINSIC //can be used if previous cameras calibration was accurate (as in this example)
-    CV_CALIB_USE_INTRINSIC_GUESS // can be used to refine previous intrinsic/distortion parameters
-    );
-
-
-    std::cout << "Success: StereoCalibration..." << std::endl;
 }
 
 // To implement
@@ -406,7 +411,7 @@ void Stereovision::test()
     cv::GoodFeaturesToTrackDetector GFTTdetector(GFTTparams);
 
 
-    cv::Mat mask = GenericImageProcessing::Canny(frameL,false);
+    cv::Mat mask = Canny(frameL,false);
     // cv::Mat(); // erosion of Cany !!!
 
 
@@ -616,13 +621,13 @@ void Stereovision::MatchCorners()
         // cv::Mat() => GFTT; // erosion of Cany !!!
 
         cv::cvtColor(m_LeftFrame, grayScaleL, CV_BGR2GRAY);
-        mask = GenericImageProcessing::Canny(grayScaleL, false);
+        mask = Canny(grayScaleL, false);
         //detector.detect(grayScaleL, keypoints1, mask);
         detector->detect(grayScaleL, keypoints1, mask);
         cv::drawKeypoints( grayScaleL, keypoints1, m_LeftFrame);
 
         cv::cvtColor(m_RightFrame, grayScaleR, CV_BGR2GRAY);
-        mask = GenericImageProcessing::Canny(grayScaleR, false);
+        mask = Canny(grayScaleR, false);
         //detector.detect(grayScaleR, keypoints2, mask);
         detector->detect(grayScaleR, keypoints2, mask);
         cv::drawKeypoints( grayScaleR, keypoints2, m_RightFrame);
