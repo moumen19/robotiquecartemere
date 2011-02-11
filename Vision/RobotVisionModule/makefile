@@ -10,6 +10,7 @@
 CC=gcc
 CPP=g++
 CFLAGS=-W -Wall -g
+# remove the linker options that are not useful :
 LDFLAGS= -lopencv_core -lopencv_imgproc -lopencv_calib3d -lopencv_video -lopencv_features2d -lopencv_ml -lopencv_highgui -lopencv_objdetect -lopencv_contrib -lopencv_legacy
 #-lserial -lboost_thread
 EXEC=RobotVisionModule
@@ -17,7 +18,7 @@ EXEC=RobotVisionModule
 all: $(EXEC)
 
 
-$(EXEC): main.o Stereovision.o Camera.o GenericImageProcessing.o
+$(EXEC): main.o Stereovision.o Camera.o
 	$(CPP) $^ $(LDFLAGS) -o $@
 
 %.o: %.cpp %.hpp

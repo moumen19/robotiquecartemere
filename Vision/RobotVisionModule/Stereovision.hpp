@@ -1,24 +1,19 @@
 #ifndef STEREOVISION_H
 #define STEREOVISION_H
 
-
 #include <string>
 #include <iostream>
 #include <fstream>
 
-
 #include "Camera.hpp"
-#include "GenericImageProcessing.hpp"
 
-// for previous functions
-#include <opencv/cv.h>
+
+#include <opencv/cv.h> // for previous functions
 #include <opencv2/highgui/highgui.hpp>
 
-
+// much of the define are in Camera.hpp
 #define CAMERA_MODE 0
 #define VIDEO_FILE_MODE 1
-
-
 
 
 using namespace std;
@@ -29,29 +24,37 @@ class Stereovision
         Stereovision();
         virtual ~Stereovision();
 
-        // To implement
-        virtual void Send(){;}
+        // To implement !
+        virtual void Send(){;} // through Ethernet for instance
         void StereoCalibrate();
-        void SaveMatrix();
-        void LoadMatrix(const string &filename, const string &filename2);
+        bool SaveMatrix();
+        bool LoadStereoMatrices(const string &filename);
 
         // Mandatory
         void Setup(int mode);
-        void Run();
-
-        // recurrent functions
-        bool AcquireFrames();
-        void RawDisplay();
-        bool GetUserInputs(char key);
+        void Run(); // empty for now, replaced by:
 
         // different video processing tools
-        void ProximityMap();
+        void RawDisplay();
         void CannyEdgeDetection();
-        void FloodFilling();
-        void test();
+        void FloodFilling(); // Seed has to be a parameter
         void BlobTracking(cv::Scalar colorToTrack);
+        void test(); // not working
 
-        // Features
+
+    private:
+        // recurrent functions
+        bool AcquireFrames();
+        bool GetUserInputs(char key); // features recording options, videos or images
+
+        // different image processing tools with optional display
+        cv::Mat Canny(cv::Mat image, bool settingsActivated);
+        cv::Mat MorphologyEx(cv::Mat binaryImage, int operation, // mandatory
+                             const cv::Mat& element =cv::Mat(), cv::Point anchor =cv::Point(-1,-1), int iterations =1);
+        cv::Mat ColorSegmentation(cv::Mat imageToSegment, cv::Scalar colorToFind, bool displaySettingsActivated);// better results with MorphologyEx
+        cv::Mat FindContours(bool displaySettingsActivated){return cv::Mat();} // can be useful to implement, but works only on binary images !
+
+        // for corners detection/matching purpose (unused)
         void MatchCorners();
         void crossCheckMatching( cv::Ptr<cv::DescriptorMatcher>& descriptorMatcher,
                          const cv::Mat& descriptors1, const cv::Mat& descriptors2,
@@ -64,33 +67,15 @@ class Stereovision
         cv::Mat m_LeftFrame;
         cv::Mat m_RightFrame;
 
+        // optional dynamic buffer
+        vector<cv::Mat > m_LeftImageBuffer;
+        vector<cv::Mat > m_RightImageBuffer;
+
+        // stereo attributes
         cv::Mat m_rotationMatrix;
         cv::Mat m_translationMatrix;
         cv::Mat m_essentialMatrix;
         cv::Mat m_fundamentalMatrix;
-
-        cv::Mat m_intrinsecMatrix_left;
-        cv::Mat m_distortionMatrix_left;
-        cv::Mat m_chessboardplanCoordinates;
-        cv::Mat m_cornersMat_Left;
-        cv::Mat m_nbTotalCorners;
-
-        cv::Size m_image_size;
-
-        CvSize image_size;
-
-
-
-
-        cv::Mat m_intrinsecMatrix_right;
-        cv::Mat m_distortionMatrix_right;
-        cv::Mat m_image_points_right;
-        cv::Mat m_cornersMat_Right;
-
-
-        // optional features
-        vector<cv::Mat > m_LeftImageBuffer;
-        vector<cv::Mat > m_RightImageBuffer;
 
         // recording attributes
         cv::VideoWriter m_LeftVideoWriter;
