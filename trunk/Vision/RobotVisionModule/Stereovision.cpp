@@ -1,6 +1,6 @@
 #include "Stereovision.hpp"
 
-//ctor
+//constructor
 Stereovision::Stereovision():m_LeftCamera(NULL),m_RightCamera(NULL),
                             m_videoOutputCount(0),m_imageOutputCount(0),m_videoBeingRecorded (false)
 {
@@ -9,7 +9,7 @@ Stereovision::Stereovision():m_LeftCamera(NULL),m_RightCamera(NULL),
 
 }
 
-//dtor
+//destructor
 Stereovision::~Stereovision()
 {
     delete m_LeftCamera;
@@ -17,8 +17,7 @@ Stereovision::~Stereovision()
 }
 
 
-//To Implement
-
+//To reimplement
 void Stereovision::StereoCalibrate()
 {
 
@@ -106,106 +105,63 @@ void Stereovision::StereoCalibrate()
     );
 
 
-
     std::cout << "Success: StereoCalibration..." << std::endl;
-
-
 }
 
-
-void Stereovision::SaveMatrix()
+// To implement
+bool Stereovision::SaveMatrix()
 {
 
-
-	std::cout << "Success: Saved..." << std::endl;
-
 }
-//
 
-void Stereovision::LoadMatrix(const string &filename, const string &filename2)
+// To implement
+bool Stereovision::LoadStereoMatrices(const string &filename)
 {
 
-    cv::FileStorage fs("calibration//Parameters//left_camera.xml", cv::FileStorage::READ);
-    if (!fs.isOpened())
-    {  fs.open("calibration//Parameters//left_camera.xml", FileStorage::READ);
-    }
-        fs["intrinsec"] >> m_intrinsecMatrix_left;
-        fs["distortion"] >> m_distortionMatrix_left;
-        fs["chessboardplanCoordinates"] >> m_chessboardplanCoordinates;
-        fs["cornersMat"] >> m_cornersMat_Left;
-        fs["nbTotalCorners"] >> m_nbTotalCorners;
-        m_image_size.width = (int)fs["image_size_width"];
-        m_image_size.height = (int)fs["image_size_height"];
-
-
-
-
-        fs.release();
-
- std::cout << "image_size" << m_image_size.width << "\t" << m_image_size.height << std::endl;
-
-    std::cout << "Success: Load Matrice 1..." << std::endl;
-
-    cv::FileStorage fs2("calibration//Parameters//" + filename2  +  ".xml", cv::FileStorage::READ);
-    if (!fs2.isOpened())
-    {  fs2.open("calibration//Parameters//" + filename2 +  ".xml", FileStorage::READ);
-    }
-        fs2["intrinsec"] >> m_intrinsecMatrix_right;
-        fs2["distortion"] >> m_distortionMatrix_right;
-        fs2["cornersMat"] >> m_cornersMat_Right;
-
-
-        fs2.release();
-
-
-	std::cout << "Success: Load Matrice 2..." << std::endl;
-
 }
-
 
 // connects sources, external..
 void Stereovision::Setup(int mode)
 {
-    try{
-
-        if(mode == CAMERA_MODE){  // setup from camera
-
-            // left
-            m_LeftCamera = new Camera(0);
-            if(!m_LeftCamera->isOpened()){
-                cerr<<"Fail to open the left camera !"<<endl;
-                throw (new std::exception());
-            }
-            // right
-            m_RightCamera = new Camera(1);
-            if(!m_RightCamera->isOpened()){
-                cerr<<"Fail to open the right camera !"<<endl;
-                throw (new std::exception());
-            }
+    if(mode == CAMERA_MODE){  // setup from camera
+        // left
+        m_LeftCamera = new Camera(0);
+        if(!m_LeftCamera->isOpened()){
+            cerr<<"Fail to open the left camera !"<<endl;
+            exit(1);
         }
-        else if(mode == VIDEO_FILE_MODE){ // setup from file
-
-            // left
-            m_LeftCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//ground1//Vid_Left_1.avi");
-            if(!m_LeftCamera->isOpened()){
-                cerr<<"Fail to open the left video !"<<endl;
-                throw (new std::exception());
-            }
-            // right
-            m_RightCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//ground1//Vid_Right_1.avi");
-            if(!m_RightCamera->isOpened()){
-                cerr<<"Fail to open the right video !"<<endl;
-                throw (new std::exception());
-            }
-        }
-        else{
-            cerr<<"\nNo video source specified !"; exit(1);
+        // right
+        m_RightCamera = new Camera(1);
+        if(!m_RightCamera->isOpened()){
+            cerr<<"Fail to open the right camera !"<<endl;
+            exit(1);
         }
     }
-    catch(std::exception e){
-        cerr<<e.what(); exit(1);
+    else if(mode == VIDEO_FILE_MODE){ // setup from file
+
+        // left
+        m_LeftCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//ground1//Vid_Left_1.avi");
+        if(!m_LeftCamera->isOpened()){
+            cerr<<"Fail to open the left video !"<<endl;
+            exit(1);
+        }
+        // right
+        m_RightCamera = new Camera("//host//TRAVAIL//M2//Vision//Echantillons//stereo_videos//ground1//Vid_Right_1.avi");
+        if(!m_RightCamera->isOpened()){
+            cerr<<"Fail to open the right video !"<<endl;
+            exit(1);
+        }
+    }
+    else{
+        cerr<<"\nNo video source specified !"; exit(1);
     }
     cout<<"Sources initialised successfuly\n";
+}
+
+// main routine of the video processing module
+void Stereovision::Run()
+{
+
 }
 
 // takes one frame of each Camera
@@ -225,51 +181,18 @@ bool Stereovision::AcquireFrames()
         return false;
     }
 
+// push them into buffers ?
 //    m_LeftImageBuffer.push_back(frameL);
 //    m_RightImageBuffer.push_back(frameR);
     return true;
 }
 
-// called when a key is pressed, returns 'false' if exit is required
-bool Stereovision::GetUserInputs(char key)
-{
-       // Exit loop
-        if(key == STOP_DISPLAY_KEY) return false;
-
-        // Image capture : 'i'
-        if(key == 105){
-            stringstream convert;
-            convert << m_imageOutputCount++ ;
-            imwrite(string("Images/Img_left_") + convert.str() + string(".jpg"), m_LeftFrame); // Writes the image
-            imwrite(string("Images/Img_right_") + convert.str() + string(".jpg"), m_RightFrame); // Writes the image
-        }
-        // Video capture : 'v'
-        if(key == VIDEO_RECORD_KEY){
-                if(!m_videoBeingRecorded){
-                    m_videoBeingRecorded = true; // starts recording
-
-                    stringstream convert;
-                    convert << m_videoOutputCount++ ;
-                    // Opens the video
-                    m_LeftVideoWriter.open(string("Videos/Vid_Left_")+ convert.str() +string(".avi"), CV_FOURCC('M', 'J', 'P', 'G'), 20, m_LeftFrame.size());
-                    m_RightVideoWriter.open(string("Videos/Vid_Right_")+ convert.str() +string(".avi"), CV_FOURCC('M', 'J', 'P', 'G'), 20,  m_RightFrame.size());
-                    if(!m_LeftVideoWriter.isOpened() || !m_RightVideoWriter.isOpened()) { cerr<<"Error trying to open the video writer!" <<endl; return false;}
-                }
-                else{
-                    m_videoBeingRecorded = false; // stops recording
-                }
-
-        }
-
-        return true;
-}
-
-// display both cameras untouched (same as LiveDisplay in class Camera)
+// Same function as LiveDisplay() in Camera.hpp
 void Stereovision::RawDisplay()
 {
     char keyPressed = -1;
-    cv::namedWindow( "rawDisplay_Left", CV_WINDOW_AUTOSIZE);
-    cv::namedWindow( "rawDisplay_Right", CV_WINDOW_AUTOSIZE);
+    cv::namedWindow( "RawDisplay_Left", CV_WINDOW_AUTOSIZE);
+    cv::namedWindow( "RawDisplay_Right", CV_WINDOW_AUTOSIZE);
 
     while(true)
     {
@@ -288,11 +211,12 @@ void Stereovision::RawDisplay()
         }
 
         // display
-        cv::imshow( "rawDisplay_Left", m_LeftFrame );
-        cv::imshow( "rawDisplay_Right", m_RightFrame );
+        cv::imshow( "Canny Left", m_LeftFrame );
+        cv::imshow( "Canny Right", m_RightFrame );
     }
 }
 
+// Simple Canny display
 void Stereovision::CannyEdgeDetection()
 {
     float sigma = 2.5;
@@ -339,6 +263,8 @@ void Stereovision::CannyEdgeDetection()
     }
 }
 
+// for now the seed is hard-coded at the bottom of the image (cf initialisation)
+// this implementation is focused only on 1 camera
 void Stereovision::FloodFilling()
 {
     char keyPressed = -1;
@@ -368,8 +294,6 @@ void Stereovision::FloodFilling()
     cv::Point seed = cv::Point(m_LeftFrame.cols/2 ,m_LeftFrame.rows -10);
     mask.create(m_LeftFrame.rows+2, m_LeftFrame.cols+2, CV_8UC1);
 
-
-
     while(true)
     {
         // takes one frame of each Camera
@@ -379,7 +303,7 @@ void Stereovision::FloodFilling()
         m_LeftFrame.copyTo(image);
         cv::cvtColor(m_LeftFrame, gray, CV_BGR2GRAY);
         cv::Mat dst = isColor ? image : gray;
-        cv::Mat can = GenericImageProcessing::Canny(m_LeftFrame, false);
+        cv::Mat can = Canny(m_LeftFrame, false); // the mask
 
          for(int i = 0; i < can.rows; i++)
             for(int j = 0; j < can.cols; j++){
@@ -389,7 +313,6 @@ void Stereovision::FloodFilling()
         }
 
         //mask.reshape(0, m_LeftFrame.rows +2);
-
         //    cv::rectangle(mask, cv::Point(200,100), cv::Point(300,300), cv::Scalar(b, g, r));
         //    cv::rectangle(mask, cv::Point(350,100), cv::Point(500,300), cv::Scalar(b, g, r));
 
@@ -422,20 +345,25 @@ void Stereovision::FloodFilling()
     }
 }
 
-void Stereovision::ProximityMap()
+void Stereovision::BlobTracking(cv::Scalar colorToTrack)
 {
     char keyPressed = -1;
-    cv::namedWindow( "ProximityMap_Left", CV_WINDOW_AUTOSIZE);
-    cv::namedWindow( "ProximityMap_Right", CV_WINDOW_AUTOSIZE);
-    cv::Mat sample= cv::imread("//host//TRAVAIL//M2//Vision//Echantillons//matchTemplate//groundSample.jpg", 1);
-    cv::Mat result;
+    cv::namedWindow( "BlobTracking_Left", CV_WINDOW_AUTOSIZE);
+    cv::namedWindow( "BlobTracking_Right", CV_WINDOW_AUTOSIZE);
+    cv::Mat SegmentedLeft, SegmentedRight;
 
     while(true)
     {
         // takes one frame of each Camera
         if(!AcquireFrames()) break;
 
-        cv::matchTemplate( m_LeftFrame, sample, result, CV_TM_SQDIFF);
+        ///////////////* Color Segmentation *//////////////////////////////////
+        SegmentedLeft = ColorSegmentation(m_LeftFrame, colorToTrack, false);
+        SegmentedRight = ColorSegmentation(m_RightFrame, colorToTrack, false);
+
+        // improvment ?
+        SegmentedLeft = MorphologyEx(SegmentedLeft, cv::MORPH_CLOSE, cv::Mat(), cv::Point(-1,-1), 3 );
+        ///////////////////////////////////////////////////////////////////////
 
         keyPressed = cv::waitKey(WAITING_TIME_MS);
         if(keyPressed != -1){   // if a key is pressed,
@@ -443,20 +371,211 @@ void Stereovision::ProximityMap()
         }
 
         if(m_videoBeingRecorded){ // recording video
-           m_LeftVideoWriter << result;
-           m_RightVideoWriter << m_RightFrame;
+           m_LeftVideoWriter << SegmentedLeft;
+           m_RightVideoWriter << SegmentedRight;
            cout<< "recording vid ..." <<endl;
         }
 
         // display
-        cv::imshow( "ProximityMap_Left", result );
-        cv::imshow( "ProximityMap_Right", m_RightFrame );
+        cv::imshow( "BlobTracking_Left", SegmentedLeft );
+        cv::imshow( "BlobTracking_Right", SegmentedRight );
     }
 }
 
-// main routine of the video processing module
-void Stereovision::Run(){}
+// used for tests with corners detection/matching
+void Stereovision::test()
+{
+    cv::Mat frameL= cv::imread("//host//TRAVAIL//M2//Vision//Echantillons//stereo_images//L0.jpg", 0);
+    cv::Mat frameR= cv::imread("//host//TRAVAIL//M2//Vision//Echantillons//stereo_images//R0.jpg", 0);
 
+    int apertureSize = 3;
+
+     // params for GFTT
+    int maxCorners=1000;
+    double qualityLevel=0.08;
+    double minDistance=15;
+    int blockSize=7;
+    double k=0.04;
+    bool useHarrisDetector= true;
+    cv::GoodFeaturesToTrackDetector::Params GFTTparams (maxCorners,
+                                qualityLevel, minDistance,
+                                 blockSize,
+                                useHarrisDetector, k);
+    cv::Mat out;
+    vector<cv::KeyPoint> keypoints1;
+    cv::GoodFeaturesToTrackDetector GFTTdetector(GFTTparams);
+
+
+    cv::Mat mask = GenericImageProcessing::Canny(frameL,false);
+    // cv::Mat(); // erosion of Cany !!!
+
+
+    //cv::Ptr<cv::FeatureDetector> detector = cv::FeatureDetector::create( "GFTT" );
+
+    //detector->detect( frameL, keypoints1, mask );
+    GFTTdetector.detect( frameL, keypoints1, mask );
+
+    cout<<keypoints1.size();
+
+    cv::drawKeypoints( frameL, keypoints1, out);
+    cv::imshow("preCorn",out);
+    cv::waitKey(0);
+
+    //    cv::goodFeaturesToTrack( image, cornersVect, maxCorners,
+//                            qualityLevel, minDistance,
+//                            mask, blockSize,
+//                            useHarrisDetector, k );
+    //cv::KeyPoint::convert(cornersVect, keypoints, 2, 2, 0, -1);
+
+    //cv::cornerMinEigenVal( image, corners, 5, 3);
+    //cv::cornerHarris( image, corners, 9, 3, 5 );
+    //cv::cornerEigenValsAndVecs( image, corners, 5, 3);
+    //cv::preCornerDetect(image, corners, 3);
+    //
+
+//    cv::dilate(corners, dilated_corners, cv::Mat(),cv::Point(-1,-1), 1);
+//    cv::Mat corner_mask = corners == dilated_corners;
+
+}
+
+// simple implementation of cv::Canny()
+cv::Mat Stereovision::Canny(cv::Mat image, bool displaySettingsActivated)
+{
+    cv::Mat frame;
+
+    if(image.channels() > 1)
+        cv::cvtColor(image, frame, CV_BGR2GRAY);
+    else
+        image.copyTo(frame);
+
+    // sigma = 1.5
+    // ksize = (sigma * 5)|1 = 7
+    cv::GaussianBlur(frame, frame, cv::Size(7,7), 1.5, 1.5);
+    cv::Canny(frame, frame, 0, 30, 3);
+
+    if(displaySettingsActivated){
+        cv::namedWindow( "Canny", CV_WINDOW_AUTOSIZE);
+        cv::imshow( "Canny", frame );
+        cv::waitKey(0);
+    }
+    return frame;
+}
+
+// simple implementation of cv::MorphologyEx()
+// can be used with cv::getStructuringElement to specify the morphologic element
+cv::Mat Stereovision::MorphologyEx(cv::Mat binaryImage, int operation, const cv::Mat& element, cv::Point anchor, int iterations)
+{
+    if (binaryImage.channels() > 1) {
+        cerr<< "Source must be a binary image for MorphologyEx !\n"; exit(1);
+    }
+    cv::Mat result;
+    cv::morphologyEx( binaryImage, result, operation, element, anchor, iterations);
+    return result;
+}
+
+// need to be improved: needs better adjustable thresolds, open/close on the binary mask...
+cv::Mat ColorSegmentation(cv::Mat imageToSegment, cv::Scalar colorToFind, bool displaySettingsActivated)
+{
+    int colorConfiguration = 0;
+    int  Hmin, Hmax, Smin, Smax, Vmin, Vmax;
+
+    // red
+   if(colorConfiguration==0){
+            Hmin=172;
+            Hmax=3;
+            Smin=113;
+            Smax=237;
+            Vmin = 0;
+            Vmax=255;
+    }
+    // green
+    if(colorConfiguration==1){
+            Hmin=32;
+            Hmax=71;
+            Smin=66;
+            Smax=242;
+            Vmin = 0;
+            Vmax=255;
+    }
+    // blue
+    if(colorConfiguration==2){
+            Hmin=108;
+            Hmax=118;
+            Smin=99;
+            Smax=201;
+            Vmin= 80;
+            Vmax=255;
+    }
+
+    CvScalar pix = cvScalar(0,0,0,0);
+    int i,j,detection;
+    int H=0,S=0,V=0;
+
+    // Method to convert from the C++ API to the C one
+    IplImage imageConvertedFromMat = imageToSegment; // Warning ! However, if the data of imageToSegement are lost, so will be those of imgBGR, as it is only a copy of the header !
+    IplImage * imgBGR = &imageConvertedFromMat;
+    IplImage * imgHSV = cvCloneImage(imgBGR);
+    //////////////////////////////////////////////////
+
+    cvCvtColor(imgBGR, imgHSV, CV_BGR2HSV);
+    IplImage * grayMaskHSV = cvCreateImage(cvSize(imgHSV->width, imgHSV->height), imgHSV->depth, 1);
+    IplImage * improvedMaskOnBGR = cvCloneImage(imgBGR);
+    int maskInversion = 1;
+
+    for(i=0;i<imgHSV->height;i++)
+    {
+        for(j=0;j<imgHSV->width;j++)
+        {
+            H = cvGet2D(imgHSV,i,j).val[0];
+            S = cvGet2D(imgHSV,i,j).val[1];
+            V = cvGet2D(imgHSV,i,j).val[2];
+
+            // Valide cases for a parameter:
+            // 0 <min <X <max <255
+            // 0 X <Hmax <Hmin <255
+            // 0 <Hmax <Hmin <X <255
+
+            /////////// Hue ///////////////////////////
+            if(Hmin <=H && H <=Hmax)
+                detection = 1;
+            else if (Hmax <Hmin && (H <=Hmax ||H >=Hmin))
+                detection = 1;
+            else
+                detection = 0;
+
+            /////////// Saturation /////////////////////
+            if(detection){
+                if(Smin <=S && S <=Smax)
+                    detection = 1;
+                else if (Smax <Smin && (S <=Smax ||S >=Smin))
+                    detection = 1;
+                else
+                    detection = 0;
+            }
+
+            /////////// Value /////////////////////
+            if(detection){
+                if(Vmin <=V && V <=Vmax)
+                    detection = 1;
+                else if (Vmax <Vmin && (V <=Vmax ||V >=Vmin))
+                    detection = 1;
+                else
+                    detection = 0;
+            }
+
+            if(maskInversion)
+                detection = !detection;
+            if(detection)
+                pix.val[0]= 0;
+            else
+                pix.val[0] = 255;
+            cvSet2D(grayMaskHSV,i,j,pix);
+        }
+    }
+    return cv::Mat(grayMaskHSV);
+}
+
+// for corners detection/matching
 void Stereovision::MatchCorners()
 {
     char keyPressed = -1;
@@ -536,6 +655,7 @@ void Stereovision::MatchCorners()
     }
 }
 
+// used for tests with corners detection/matching
 void Stereovision::crossCheckMatching( cv::Ptr<cv::DescriptorMatcher>& descriptorMatcher,
                          const cv::Mat& descriptors1, const cv::Mat& descriptors2,
                          vector<cv::DMatch>& filteredMatches12, int knn )
@@ -565,97 +685,4 @@ void Stereovision::crossCheckMatching( cv::Ptr<cv::DescriptorMatcher>& descripto
         }
     }
 }
-
-void Stereovision::test()
-{
-    cv::Mat frameL= cv::imread("//host//TRAVAIL//M2//Vision//Echantillons//stereo_images//L0.jpg", 0);
-    cv::Mat frameR= cv::imread("//host//TRAVAIL//M2//Vision//Echantillons//stereo_images//R0.jpg", 0);
-
-    int apertureSize = 3;
-
-     // params for GFTT
-    int maxCorners=1000;
-    double qualityLevel=0.08;
-    double minDistance=15;
-    int blockSize=7;
-    double k=0.04;
-    bool useHarrisDetector= true;
-    cv::GoodFeaturesToTrackDetector::Params GFTTparams (maxCorners,
-                                qualityLevel, minDistance,
-                                 blockSize,
-                                useHarrisDetector, k);
-    cv::Mat out;
-    vector<cv::KeyPoint> keypoints1;
-    cv::GoodFeaturesToTrackDetector GFTTdetector(GFTTparams);
-
-
-    cv::Mat mask = GenericImageProcessing::Canny(frameL,false);
-    // cv::Mat(); // erosion of Cany !!!
-
-
-    //cv::Ptr<cv::FeatureDetector> detector = cv::FeatureDetector::create( "GFTT" );
-
-    //detector->detect( frameL, keypoints1, mask );
-    GFTTdetector.detect( frameL, keypoints1, mask );
-
-    cout<<keypoints1.size();
-
-    cv::drawKeypoints( frameL, keypoints1, out);
-    cv::imshow("preCorn",out);
-    cv::waitKey(0);
-
-
-    //    cv::goodFeaturesToTrack( image, cornersVect, maxCorners,
-//                            qualityLevel, minDistance,
-//                            mask, blockSize,
-//                            useHarrisDetector, k );
-    //cv::KeyPoint::convert(cornersVect, keypoints, 2, 2, 0, -1);
-
-    //cv::cornerMinEigenVal( image, corners, 5, 3);
-    //cv::cornerHarris( image, corners, 9, 3, 5 );
-    //cv::cornerEigenValsAndVecs( image, corners, 5, 3);
-    //cv::preCornerDetect(image, corners, 3);
-    //
-
-//    cv::dilate(corners, dilated_corners, cv::Mat(),cv::Point(-1,-1), 1);
-//    cv::Mat corner_mask = corners == dilated_corners;
-
-}
-
-void Stereovision::BlobTracking(cv::Scalar colorToTrack)
-{
-    char keyPressed = -1;
-    cv::namedWindow( "rawDisplay_Left", CV_WINDOW_AUTOSIZE);
-    cv::namedWindow( "rawDisplay_Right", CV_WINDOW_AUTOSIZE);
-    cv::Mat SegmentedLeft, SegmentedRight;
-
-    while(true)
-    {
-        // takes one frame of each Camera
-        if(!AcquireFrames()) break;
-
-        ///////////////* Color Segmentation *//////////////////////////////////
-        SegmentedLeft = GenericImageProcessing::ColorSegmentation(m_LeftFrame, colorToTrack, false);
-        SegmentedRight = GenericImageProcessing::ColorSegmentation(m_RightFrame, colorToTrack, false);
-
-        SegmentedLeft = GenericImageProcessing::MorphologyEx(SegmentedLeft, cv::MORPH_CLOSE, cv::Mat(), cv::Point(-1,-1), 3 );
-        ///////////////////////////////////////////////////////////////////////
-
-        keyPressed = cv::waitKey(WAITING_TIME_MS);
-        if(keyPressed != -1){   // if a key is pressed,
-            if(!GetUserInputs(keyPressed)) break; // get the key value
-        }
-
-        if(m_videoBeingRecorded){ // recording video
-           m_LeftVideoWriter << SegmentedLeft;
-           m_RightVideoWriter << SegmentedRight;
-           cout<< "recording vid ..." <<endl;
-        }
-
-        // display
-        cv::imshow( "rawDisplay_Left", SegmentedLeft );
-        cv::imshow( "rawDisplay_Right", SegmentedRight );
-    }
-}
-
 

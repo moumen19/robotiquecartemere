@@ -9,14 +9,17 @@
 #include <fstream>
 
 
-///////////////// Values for recording modes ////////////
 #define WAITING_TIME_MS 2 // 2 ms minimum between frames
-#define RECORDING_FPS 15.0
 
+// Values for recording modes ////////
+#define RECORDING_FPS 15.0
 #define STOP_DISPLAY_KEY 27 // Escape
 #define VIDEO_RECORD_KEY 118 // V
 #define IMAGE_RECORD_KEY 105 // I
+//////////////////////////////////////
 
+
+// to remove //////////////////////////////////////////////////////
 #define nbImages 19
 #define nbLines 6
 #define nbColumns 8
@@ -27,14 +30,11 @@
 
 #define ratioPixelOverUnit 3 // size of a single square = 3x3 (cm)
 #define D 60 // ball real diameter (mm)
+///////////////////////////////////////////////////////////////////
 
-
-
-////////////////////////////////////////////////////////
 
 using namespace std;
 using namespace cv;
-
 
 
 class Camera: public cv::VideoCapture
@@ -46,49 +46,35 @@ class Camera: public cv::VideoCapture
         Camera(const string& filename);
         virtual ~Camera();
 
-        // not presently used
+        // basic display of the video stream, which can be recorded ('i'mage and/or 'v'ideo)
         void LiveDisplay();
-        void SetImageCapture(bool activated);
-        void SetVideoCapture(bool activated);
 
-        // useful for stereovision
-        void CalibrateFromImageSet();
-        void compute_and_display_image_corners(char * imageName, CvSize * imageSize, CvSize chessboardSize, CvPoint2D32f * cornersArrayToFillIn);
-        void initiate_matrices_for_calibration(CvMat * intrinsicMatrix, CvMat * distortionCoeffs,CvMat * nbTotalCorners, CvMat * objectRealCoordinates,CvMat * cornersMat, CvPoint2D32f * cornersList);
-        void improve_precision(IplImage *image, CvPoint2D32f * cornersArray, int cornersCount);
-
+        // frome C-langage. Need to be changed ?
         void CalibrateFromCamera();
-        void UndistorFrame(){;} // useful, even if imperfections can't be seen?
+        void CalibrateFromImageSet();
+
+        // to be implemented
+        void Undistort(){;} // useful, even if imperfections can't be seen?
         void SaveMatrix(const string &filename);
-        void test();
+        void LoadMatrices(const string &filename){;}
 
 
     protected:
-        string m_Name;
-        // communication protocole: e.g USB for camera, none for file
+        // communication protocole to add here ?
+        // e.g USB for camera, none for file?
+
+        string m_Name; // formed with the constructor
+
+        // attributes for camera device calibration
         cv::Mat m_intrinsecMatrix;
         cv::Mat m_distortionMatrix;
-        cv::Mat m_chessboardplanCoordinates;
-        cv::Mat m_cornersMat_Left;
-        cv::Mat m_cornersMat_Right;
 
+        // those are to remove ?
+        cv::Mat m_chessboardplanCoordinates;
         cv::Mat m_cornersMat;
         cv::Mat m_nbTotalCorners;
-
-        cv::Mat m_intrinsecMatrix_Right;
-        cv::Mat m_intrinsecMatrix_Left;
-        cv::Mat m_distortionMatrix_Right;
-        cv::Mat m_distortionMatrix_Left;
-
         cv::Size m_image_size;
         CvSize image_size;
-
-//        int m_image_size.width;
-//        int m_image_size.height;
-
-        // to record frames
-        bool m_ImageCaptureActivated;
-        bool m_VideoCaptureActivated;
 };
 
 #endif // CAMERA_H

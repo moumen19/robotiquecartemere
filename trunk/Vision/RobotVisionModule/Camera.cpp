@@ -21,234 +21,79 @@ m_ImageCaptureActivated(false),m_VideoCaptureActivated(false)
 
 }
 
-
-
 //destructor
 Camera::~Camera()
 {
 
 }
 
-
-void Camera::CalibrateFromImageSet()
+// Allows also
+void Camera::LiveDisplay()
 {
-    int i;
-    int ballsPixelsSizes_Left[3] = {0,0,0};
-    int ballsPixelsSizes_Right[3] = {0,0,0};
-    float fx_Left=0,fy_Left=0,fx_Right=0,fy_Right=0;
-    float Z_Left [3][2]= {{0,0},{0,0},{0,0}}, Z_Right [3][2]= {{0,0},{0,0},{0,0}};
-    char imageFileName[200] = "";
-    CvSize imageSize = cvSize(1,1);
-    CvSize chessboardSize = cvSize(nbColumns,nbLines);
+    if(this->isOpened()){
 
-    // matrices for corners computation
-    CvPoint2D32f cornersList_Right[nbImages*nbCorners];
-    CvPoint2D32f cornersList_Left[nbImages*nbCorners];
+        char keyPressed = -1;
+        int imageOutputCount = 0;
+        int videoOutputCount = 0;
+        cv::VideoWriter videoWriter;
+        cv::Mat Frame;
 
-    // matrices for the camera calibration
-    CvMat * intrinsicMatrix_Left  = cvCreateMat(3,3,CV_32FC1);
-    CvMat * intrinsicMatrix_Right  = cvCreateMat(3,3,CV_32FC1);
-    CvMat * distortionCoeffs_Left = cvCreateMat(4,1,CV_32FC1); // only 4 coeffs will be used (5th = 0)
-    CvMat * distortionCoeffs_Right = cvCreateMat(4,1,CV_32FC1);
-    CvMat * nbTotalCorners = cvCreateMat(nbImages,1,CV_32SC1); // array containing the corners count for each picture
-    CvMat * chessboardplanCoordinates = cvCreateMat(nbImages*nbCorners,3,CV_32FC1); // 3D: x, y, z=0
-    CvMat * cornersMat_Left = cvCreateMat(nbImages*nbCorners,2,CV_32FC1);   // 2D: x, y
-    CvMat * cornersMat_Right = cvCreateMat(nbImages*nbCorners,2,CV_32FC1);
+        // Displaying window
+        cv::namedWindow(string("Display ")+ m_Name, CV_WINDOW_AUTOSIZE);
 
-    // Chessboard corners computation
-    for(i=0;i<nbImages;i++)
-    {
-        // Left camera
-        sprintf(imageFileName,"calibration//image_calibration/gauche%d.jpg",i+1);
+        while(true)
+        {
+            // grab a frame
+            *this >> Frame;
 
-        // this allows to fill in a 1D array for several images, with a function still able to work on individual images
-        compute_and_display_image_corners(imageFileName, &imageSize, chessboardSize, &cornersList_Left[i*nbCorners]);
+            // checks
+            if(Frame.empty() || !this->isOpened()) break;
 
-        // Right camera
-        sprintf(imageFileName,"calibration//image_calibration/droite%d.jpg",i+1);
+            // Get key presses value
+            keyPressed = cv::waitKey(WAITING_TIME_MS);
 
+            // Exit loop
+            if(keyPressed == STOP_DISPLAY_KEY) break;
 
-        compute_and_display_image_corners(imageFileName, &imageSize, chessboardSize, &cornersList_Right[i*nbCorners]);
+            // Image Capture
+            if(keyPressed == IMAGE_RECORD_KEY){
+                stringstream convert;
+                convert << imageOutputCount++ ;
+                imwrite(string("Images/Img_") + convert.str() + string(".jpg"), Frame); // Writes the image
+            }
+
+            // Video Capture
+            if(keyPressed == VIDEO_RECORD_KEY){
+                if(!videoBeingRecorded){
+                    videoBeingRecorded = true; // starts recording
+
+                    // opens file for writer
+                    stringstream convert;
+                    convert << videoOutputCount++ ;
+                    videoWriter.open(string("Videos/Vid_")+ convert.str() +string(".avi"), CV_FOURCC('M', 'J', 'P', 'G'), RECORDING_FPS, Frame.size()); // Opens the video
+
+                    if(!videoWriter.isOpened()) { cerr<<"Error trying to open the video writer!" <<endl; break;}
+                }
+                else{
+                    videoBeingRecorded = false; // stops recording
+                }
+            }
+            if(videoBeingRecorded){ // records
+               videoWriter << Frame;
+               cout<< "recording video stream..." <<endl;
+            }
+
+            // Display frame
+            cv::imshow(string("Display ")+ m_Name, Frame );
+        }
     }
-
-    // Prepare some matrices
-    initiate_matrices_for_calibration(intrinsicMatrix_Left, distortionCoeffs_Left,
-                                      nbTotalCorners, chessboardplanCoordinates,
-                                      cornersMat_Left, cornersList_Left); // convert list to matrix
-
-    initiate_matrices_for_calibration(intrinsicMatrix_Right, distortionCoeffs_Right,
-                                      nbTotalCorners, chessboardplanCoordinates,
-                                      cornersMat_Right, cornersList_Right);
-
-    // compute intrinsic & distortion parameters
-    cvCalibrateCamera2(chessboardplanCoordinates, cornersMat_Left,
-                        nbTotalCorners, imageSize,
-                        intrinsicMatrix_Left, distortionCoeffs_Left,
-                        NULL, NULL, 0 //CV_CALIB_FIX_ASPECT_RATIO
-                        );
-
-    cvCalibrateCamera2(chessboardplanCoordinates, cornersMat_Right,
-                        nbTotalCorners, imageSize,
-                        intrinsicMatrix_Right, distortionCoeffs_Right,
-                        NULL, NULL, 0 //CV_CALIB_FIX_ASPECT_RATIO
-                        );
-
-    m_intrinsecMatrix_Left = intrinsicMatrix_Left;
-    m_intrinsecMatrix_Right = intrinsicMatrix_Right;
-    m_distortionMatrix_Left = distortionCoeffs_Left;
-    m_distortionMatrix_Right = distortionCoeffs_Right;
-    m_chessboardplanCoordinates = chessboardplanCoordinates;
-    m_cornersMat_Left = cornersMat_Left;
-    m_cornersMat_Right = cornersMat_Right;
-    m_nbTotalCorners = nbTotalCorners;
-
-    m_image_size.width=  imageSize.width;
-    m_image_size.height= imageSize.height;
-
-
-
-std::cout << "Success: calibration from target..." << std::endl;
-
-
-    cv::FileStorage fs("calibration//Parameters//left_camera.xml", cv::FileStorage::WRITE);
-    if (fs.isOpened())
-    {   fs << "intrinsec" << m_intrinsecMatrix_Left;
-        fs << "distortion" << m_distortionMatrix_Left;
-        fs << "chessboardplanCoordinates" << m_chessboardplanCoordinates;
-        fs << "cornersMat" << m_cornersMat_Left;
-        fs << "nbTotalCorners" << m_nbTotalCorners;
-        fs << "image_size_width" << (int) m_image_size.width;
-        fs << "image_size_height" << (int) m_image_size.height;
-        fs.release();
+    else{
+        cerr<<"The camera is not opened !"<<endl;
     }
-
-	std::cout << "Success: Saved cam_Left..." << std::endl;
-
-	    cv::FileStorage fs2("calibration//Parameters//right_camera.xml", cv::FileStorage::WRITE);
-    if (fs2.isOpened())
-    {   fs2 << "intrinsec" << m_intrinsecMatrix_Right;
-        fs2 << "distortion" << m_distortionMatrix_Right;
-        fs2 << "object_point" << m_chessboardplanCoordinates;
-        fs2 << "cornersMat" << m_cornersMat_Right;
-        fs2.release();
-    }
-
-	std::cout << "Success: Saved cam_Right..." << std::endl;
-
-
-
-
-}
-
-void Camera::compute_and_display_image_corners(char * imageName, CvSize * imageSize, CvSize chessboardSize, CvPoint2D32f * cornersArrayToFillIn)
-{
-    IplImage * img = 0;
-    int cornersCount = 0;
-    int patternWasFound = 0;
-    int i;
-
-    img = cvLoadImage(imageName, -1);
-
-    *imageSize = cvGetSize(img); // useful only for calibration function
-
-
-    //initialisation of the given array
-    for(i=0;i<chessboardSize.height*chessboardSize.width;i++){ cornersArrayToFillIn[i].x= 0; cornersArrayToFillIn[i].y= 0; }
-
-    // core algorithm
-    patternWasFound = cvFindChessboardCorners(img, chessboardSize, cornersArrayToFillIn, &cornersCount, 0);
-
-    // display_array_values(cornersArrayToFillIn,chessboardSize.height*chessboardSize.width);
-    improve_precision(img, cornersArrayToFillIn, cornersCount);
-    // display_array_values(cornersArrayToFillIn,chessboardSize.height*chessboardSize.width);
-
-    // visual only part
-//    cvDrawChessboardCorners(img, chessboardSize, cornersArrayToFillIn, cornersCount, patternWasFound);
-//    cvNamedWindow(imageName, CV_WINDOW_AUTOSIZE);
-//    cvMoveWindow(imageName, 100, 100);
-//    cvShowImage(imageName, img );
-//    cvWaitKey(200);
-//    cvDestroyWindow(imageName);
-
-    // end
-    cvReleaseImage(&img );
-
-}
-
-void Camera::improve_precision(IplImage *image, CvPoint2D32f * cornersArray, int cornersCount)
-{
-  // subPix tool requires a gray scale:
-  IplImage * gray_image = cvCreateImage(cvSize(image->width,image->height), 8, 1);
-  cvCvtColor(image, gray_image, CV_BGR2GRAY);
-
-  // we use 2 different terminal criteria: nomber of iterations and/or precision (first to be reached)
-  cvFindCornerSubPix(gray_image, cornersArray, cornersCount,cvSize(11,11),cvSize(-1,-1), cvTermCriteria(CV_TERMCRIT_EPS +CV_TERMCRIT_ITER, 30, 0.1 ));
-
 }
 
 
-
-void Camera::initiate_matrices_for_calibration(CvMat * intrinsicMatrix, CvMat * distortionCoeffs,
-                                       CvMat * nbTotalCorners, CvMat * objectRealCoordinates,
-                                       CvMat * cornersMat, CvPoint2D32f * cornersList)
-{
-    int i,j,t;
-
-    /*////////////// Initialisation of intrinsic matrix //////////////////////////
-    Focal lengths set to 1 => corresponds to the camera's aspect (normal) ratio
-    Matrix aspect:
-    [fx 0  Cx]
-    [0  fy Cy]
-    [0  0   1] */
-    cvmSet(intrinsicMatrix,0,0 , 1); //fx
-    cvmSet(intrinsicMatrix,1,1 , 1); //fy
-
-    /*/////////////   CvMat * possible accessors  //////////////////////////
-    => Float Matrix only:
-    void cvmSet( CvMat* mat, int row, int col, double value )
-    double cvmGet( const CvMat* mat, int row, int col )
-    void cvSetReal2D(CvArr* arr, int idx0, int idx1, double value)
-    double cvGetReal2D(CvArr* arr, int idx0, int idx1)
-
-    => All:
-    CV_MAT_ELEM( *data, double, x, y) = 1     */
-
-    /*/////////////// Initialisation of distortion coeffs ////////////////////////*/
-    cvmSet(distortionCoeffs,0,0,  0); // k1
-    cvmSet(distortionCoeffs,1,0,  0); // k2
-    cvmSet(distortionCoeffs,2,0,  0); // p1
-    cvmSet(distortionCoeffs,3,0,  0); // p2
-    // cvmSet(distortionCoeffs,4,0,  0); // k3
-
-	for (t=0;t<nbImages;t++) {
-		for (j=0;j<nbLines;j++) {   // 3D-matrives stored in 1D-ones (index: columnN° + offset1*LineN° + offset2*imageN°)
-			for (i=0;i<nbColumns;i++) {
-
-                /*/////////////// Description of the real chessboard matrix ////////////////////////
-                Here we initialise the pattern object's real 2D-coordinates, specified in the chessboard plan
-                Coordinates of a 6x8 chessboard with square of 1[unit] for a single image:
-                [(0;0) (0;1) (0;2) ... (0;7)]
-                [(1;0) (1;1) (1;2) ... (1;7)]
-                [       ...                 ]
-                [(4;0) (4;1) (4;2) ... (4;7)]
-                That implies the calibration result will be in [unit] too  */
-				cvmSet(objectRealCoordinates, t*nbCorners +j*nbColumns +i , 0 , j *ratioPixelOverUnit); // x (squares of 3x3cm)
-				cvmSet(objectRealCoordinates, t*nbCorners +j*nbColumns +i , 1 , i *ratioPixelOverUnit); // y
-				cvmSet(objectRealCoordinates, t*nbCorners +j*nbColumns +i , 2 , 0); // z=0
-
-                /*///////// Conversion from CvPoint2D32f to CvMat for corners coordinates //////////////*/
-                cvmSet(cornersMat, t*nbCorners +j*nbColumns +i , 0 , cornersList[t*nbCorners +j*nbColumns +i].x);
-                cvmSet(cornersMat, t*nbCorners +j*nbColumns +i , 1 , cornersList[t*nbCorners +j*nbColumns +i].y);
-
-                //printf("(%.1f;%.1f)\t",cvmGet(cornersMat_Left,t*nbImages +j*nbColumns +i,0),cvmGet(cornersMat_Left,t*nbImages +j*nbColumns +i,1));
-			}
-		}
-		CV_MAT_ELEM( *nbTotalCorners, int, t, 0)= nbCorners;  // save nb of corners for each image
-	}
-}
-
-
-
+// to be improved
 void Camera::CalibrateFromCamera()
 {
 
@@ -287,7 +132,7 @@ void Camera::CalibrateFromCamera()
 
 	std::cout << "Started calibration of Intrinsic parameters" << std::endl;
 
-while( successes < n_boards ){
+    while( successes < n_boards ){
 
     *this>>capture;
 
@@ -394,7 +239,115 @@ while( successes < n_boards ){
 	std::cout << "Success: calibration from target..." << std::endl;
 }
 
+// to be improved
+void Camera::CalibrateFromImageSet()
+{
+    int i;
+    int ballsPixelsSizes_Left[3] = {0,0,0};
+    int ballsPixelsSizes_Right[3] = {0,0,0};
+    float fx_Left=0,fy_Left=0,fx_Right=0,fy_Right=0;
+    float Z_Left [3][2]= {{0,0},{0,0},{0,0}}, Z_Right [3][2]= {{0,0},{0,0},{0,0}};
+    char imageFileName[200] = "";
+    CvSize imageSize = cvSize(1,1);
+    CvSize chessboardSize = cvSize(nbColumns,nbLines);
 
+    // matrices for corners computation
+    CvPoint2D32f cornersList_Right[nbImages*nbCorners];
+    CvPoint2D32f cornersList_Left[nbImages*nbCorners];
+
+    // matrices for the camera calibration
+    CvMat * intrinsicMatrix_Left  = cvCreateMat(3,3,CV_32FC1);
+    CvMat * intrinsicMatrix_Right  = cvCreateMat(3,3,CV_32FC1);
+    CvMat * distortionCoeffs_Left = cvCreateMat(4,1,CV_32FC1); // only 4 coeffs will be used (5th = 0)
+    CvMat * distortionCoeffs_Right = cvCreateMat(4,1,CV_32FC1);
+    CvMat * nbTotalCorners = cvCreateMat(nbImages,1,CV_32SC1); // array containing the corners count for each picture
+    CvMat * chessboardplanCoordinates = cvCreateMat(nbImages*nbCorners,3,CV_32FC1); // 3D: x, y, z=0
+    CvMat * cornersMat_Left = cvCreateMat(nbImages*nbCorners,2,CV_32FC1);   // 2D: x, y
+    CvMat * cornersMat_Right = cvCreateMat(nbImages*nbCorners,2,CV_32FC1);
+
+    // Chessboard corners computation
+    for(i=0;i<nbImages;i++)
+    {
+        // Left camera
+        sprintf(imageFileName,"calibration//image_calibration/gauche%d.jpg",i+1);
+
+        // this allows to fill in a 1D array for several images, with a function still able to work on individual images
+        compute_and_display_image_corners(imageFileName, &imageSize, chessboardSize, &cornersList_Left[i*nbCorners]);
+
+        // Right camera
+        sprintf(imageFileName,"calibration//image_calibration/droite%d.jpg",i+1);
+
+
+        compute_and_display_image_corners(imageFileName, &imageSize, chessboardSize, &cornersList_Right[i*nbCorners]);
+    }
+
+    // Prepare some matrices
+    initiate_matrices_for_calibration(intrinsicMatrix_Left, distortionCoeffs_Left,
+                                      nbTotalCorners, chessboardplanCoordinates,
+                                      cornersMat_Left, cornersList_Left); // convert list to matrix
+
+    initiate_matrices_for_calibration(intrinsicMatrix_Right, distortionCoeffs_Right,
+                                      nbTotalCorners, chessboardplanCoordinates,
+                                      cornersMat_Right, cornersList_Right);
+
+    // compute intrinsic & distortion parameters
+    cvCalibrateCamera2(chessboardplanCoordinates, cornersMat_Left,
+                        nbTotalCorners, imageSize,
+                        intrinsicMatrix_Left, distortionCoeffs_Left,
+                        NULL, NULL, 0 //CV_CALIB_FIX_ASPECT_RATIO
+                        );
+
+    cvCalibrateCamera2(chessboardplanCoordinates, cornersMat_Right,
+                        nbTotalCorners, imageSize,
+                        intrinsicMatrix_Right, distortionCoeffs_Right,
+                        NULL, NULL, 0 //CV_CALIB_FIX_ASPECT_RATIO
+                        );
+
+    m_intrinsecMatrix_Left = intrinsicMatrix_Left;
+    m_intrinsecMatrix_Right = intrinsicMatrix_Right;
+    m_distortionMatrix_Left = distortionCoeffs_Left;
+    m_distortionMatrix_Right = distortionCoeffs_Right;
+    m_chessboardplanCoordinates = chessboardplanCoordinates;
+    m_cornersMat_Left = cornersMat_Left;
+    m_cornersMat_Right = cornersMat_Right;
+    m_nbTotalCorners = nbTotalCorners;
+
+    m_image_size.width=  imageSize.width;
+    m_image_size.height= imageSize.height;
+
+
+
+    std::cout << "Success: calibration from target..." << std::endl;
+
+
+    cv::FileStorage fs("calibration//Parameters//left_camera.xml", cv::FileStorage::WRITE);
+    if (fs.isOpened())
+    {   fs << "intrinsec" << m_intrinsecMatrix_Left;
+        fs << "distortion" << m_distortionMatrix_Left;
+        fs << "chessboardplanCoordinates" << m_chessboardplanCoordinates;
+        fs << "cornersMat" << m_cornersMat_Left;
+        fs << "nbTotalCorners" << m_nbTotalCorners;
+        fs << "image_size_width" << (int) m_image_size.width;
+        fs << "image_size_height" << (int) m_image_size.height;
+        fs.release();
+    }
+
+	std::cout << "Success: Saved cam_Left..." << std::endl;
+
+	    cv::FileStorage fs2("calibration//Parameters//right_camera.xml", cv::FileStorage::WRITE);
+    if (fs2.isOpened())
+    {   fs2 << "intrinsec" << m_intrinsecMatrix_Right;
+        fs2 << "distortion" << m_distortionMatrix_Right;
+        fs2 << "object_point" << m_chessboardplanCoordinates;
+        fs2 << "cornersMat" << m_cornersMat_Right;
+        fs2.release();
+    }
+
+	std::cout << "Success: Saved cam_Right..." << std::endl;
+
+}
+
+// to be improved
 void Camera::SaveMatrix(const string &filename)
 {
 
@@ -411,95 +364,6 @@ void Camera::SaveMatrix(const string &filename)
     }
 
 	std::cout << "Success: Saved..." << std::endl;
-
 }
 
 
-void Camera::LiveDisplay()
-{
-    if(this->isOpened()){
-
-        char keyPressed = -1;
-        int imageOutputCount = 0;
-        int videoOutputCount = 0;
-        bool videoBeingRecorded = false;
-        cv::VideoWriter videoWriter;
-        cv::Mat Frame;
-
-        // Displaying window
-        cv::namedWindow(string("Display ")+ m_Name, CV_WINDOW_AUTOSIZE);
-
-        while(true)
-        {
-            // grab a frame
-            *this >> Frame;
-
-            // checks
-            if(Frame.empty() || !this->isOpened()) break;
-
-            // Get key presses value
-            keyPressed = cv::waitKey(WAITING_TIME_MS);
-
-            // Exit loop
-            if(keyPressed == STOP_DISPLAY_KEY) break;
-
-            // Image Capture
-            if(keyPressed == IMAGE_RECORD_KEY){
-
-                if(m_ImageCaptureActivated){
-                    stringstream convert;
-                    convert << imageOutputCount++ ;
-
-                    imwrite(string("Images/Img_") + convert.str() + string(".jpg"), Frame); // Writes the image
-                }
-                else{
-                    cout<<"The capture mode need to be activated before recording !";
-                }
-            }
-
-            // Video Capture
-            if(keyPressed == VIDEO_RECORD_KEY){
-                if(m_VideoCaptureActivated){
-
-                    if(!videoBeingRecorded){
-                        videoBeingRecorded = true; // starts recording
-
-                        stringstream convert;
-                        convert << videoOutputCount++ ;
-                        videoWriter.open(string("Videos/Vid_")+ convert.str() +string(".avi"), CV_FOURCC('M', 'J', 'P', 'G'), RECORDING_FPS, Frame.size()); // Opens the video
-
-                        if(!videoWriter.isOpened()) { cerr<<"Error trying to open the video writer!" <<endl; break;}
-                    }
-                    else{
-                        videoBeingRecorded = false; // stops recording
-                    }
-                }
-                else{
-                    cout<<"The capture mode need to be activated before recording !";
-                }
-            }
-            if(videoBeingRecorded){
-               videoWriter << Frame;
-               cout<< "recording" <<endl;
-            }
-
-            // Display frame
-            cv::imshow(string("Display ")+ m_Name, Frame );
-        }
-    }
-    else{
-        cerr<<"The camera is not opened !"<<endl;
-    }
-}
-
-
-
-// Activates capture modes
-void Camera::SetImageCapture(bool activated)
-{
-    m_ImageCaptureActivated = activated;
-}
-void Camera::SetVideoCapture(bool activated)
-{
-    m_VideoCaptureActivated = activated;
-}
