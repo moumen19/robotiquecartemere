@@ -453,8 +453,11 @@ void floue(float capteurs[10],float *x,float *y,float *position_angle,float obje
 	val_repulsion = repulsion(fabs(vecteur_r));
 	if(distance > 1) speed = speed_r;
 	else speed = speed_r * distance;
-	//turnrate = ((val_attraction * vecteur_a/2) + (val_repulsion * vecteur_r));
-	turnrate = vecteur_r;
+
+	if(objectif_x == 0 && objectif_y == 0)
+		turnrate = vecteur_r;
+	else
+		turnrate = ((val_attraction * vecteur_a/2) + (val_repulsion * vecteur_r));
 
 	// calcul de la vitesse et de la rotation
 

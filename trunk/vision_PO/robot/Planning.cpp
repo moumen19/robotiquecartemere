@@ -64,10 +64,9 @@ void Planning::run()
 		case BAU_ON:
 			break;
 		// Strategie principale
-		case GO_AHEAD:
-			//this->test();			
-			this->track();
-			//this->flou();
+		case GO_AHEAD:	
+			//this->track();
+			this->flou();		// Attention
 			break;
 		default:
 			_DEBUG("La strategie ne correspond à aucune", WARNING);
@@ -87,16 +86,9 @@ Point Planning::get()
 	return a_trajectory.at(a_trajectory.size()-1);
 }
 
-void Planning::test()
-{
-	float capteurs[10];
-
-	messageSensor msg = boost::any_cast<messageSensor>(a_environmentData.get(50, DataOption::LAST));
-	capteurs[0] += (float)msg.data.getValue()/1000;	
-}
 
 /**
- * Suivi de balle a la camera
+ * Suivi de balle a la camera par régulation proportionnelle
  */
 void Planning::track()
 {
@@ -122,6 +114,7 @@ void Planning::track()
 	vitesse.y = -1*correction/2;
 	a_trajectory.push_back(vitesse);	// Stocke la trajectoire
 	
+	// Debuggage, affichage des vitesses
 	_DISPLAY(vitesse.x << " :: " << vitesse.y << std::endl);
 }
 
@@ -197,8 +190,9 @@ void Planning::flou()
 		*position_angle = -1*msgA.alpha.value;	// Changement de referentiel (conferer les specifications)
 
 		Point vitesse;
-		floue(capteurs, x, y, position_angle, 3, 4, &vitesse.x, &vitesse.y);	// Planifie
+		floue(capteurs, x, y, position_angle, 0, 0, &vitesse.x, &vitesse.y);	// Planifie
 		
+		// Mode debug : Affichage de la vitesse stocke
 		//_DISPLAY(10*vitesse.x << " | " << 10*vitesse.y << std::endl);
 
 		a_trajectory.push_back(vitesse);	// Stocke la trajectoire
@@ -208,4 +202,3 @@ void Planning::flou()
 		//_DEBUG(e.what(), WARNING);
 	}
 }
-

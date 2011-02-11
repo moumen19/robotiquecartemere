@@ -11,8 +11,6 @@
  */
 
 #include "Communication.hpp"
-#include <sstream>
-#include <fstream>
 #include <time.h>
 
 using namespace std;
@@ -116,11 +114,7 @@ void Communication::run()
 	bool stop_obs = false;
 
 
-	ofstream fichier("sensors_data.txt", ios::out | ios::trunc);  // ouverture en écriture avec effacement du fichier ouvert
- 
-        if(!fichier)
-                cerr << "Impossible d'ouvrir le fichier !" << endl;
-
+	
 
 	// Tant qu'on a pas arrete le thread
 	while(this->a_thread_active)
@@ -168,22 +162,14 @@ void Communication::run()
 		{
 			try
 			{
-				boost::any msg_boost = this->a_RS232Sensor.getData();
+				boost::any msg_boost = this->a_RS232Sensor.getData();			// a commenter... !!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 				messageSensor msg = boost::any_cast<messageSensor>(msg_boost);
 				
 				// Stockage du message capteur dans le module de stockage de donnee capteur
 				a_sensorsData.set((int)msg.id_sensor, msg);
 
-				if(fichier)
-				{
-					struct timeval tim;
-					gettimeofday(&tim, NULL);
-					if(msg.id_sensor != 144 && msg.id_sensor != 62)
-						fichier << (int)msg.id_sensor << ";" << (float)msg.data.getValue() << ";" << tim.tv_usec <<  std::endl;
-				}
-
-				_DISPLAY((int)msg.id << " : ");
-				_DISPLAY((int)msg.id_sensor << " : ");
+				//_DISPLAY((int)msg.id << " : ");
+				//_DISPLAY((int)msg.id_sensor << " : ");
 				/*
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.time.getData(i) << " : ");
@@ -192,13 +178,13 @@ void Communication::run()
 				for(int i = 0; i < 4; i++)
 					_DISPLAY((int)msg.crc.getData(i) << " : ");
 				//*/
-				_DISPLAY(msg.time.getValue() << " : " << msg.data.getValue() << " : " << msg.crc.getValue());
-				_DISPLAY(std::endl);
+				//_DISPLAY(msg.time.getValue() << " : " << msg.data.getValue() << " : " << msg.crc.getValue());
+				//_DISPLAY(std::endl);
 				
 
 				// Traitement du message capteur
 				messageAsservissement msgSend;
-				switch(msg.id_sensor)
+				switch(msg.id_sensor)			// Juste pour l'arret d'urgence capteurs ou BAU
 				{
 					// Capteur BAU
 					case 144:
@@ -294,8 +280,7 @@ void Communication::run()
 		}	    	
 	}
 
-	if(fichier)	
-                fichier.close();
+	
 	this->a_RS232Asservissement.close();
 	this->a_RS232Sensor.close();
 	_DEBUG("Fin de la routine d'ecoute des ports de communications", INFORMATION);
